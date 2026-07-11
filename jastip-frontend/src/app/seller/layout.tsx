@@ -42,9 +42,9 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
         </nav>
         
         <div className="p-4 mt-auto">
-          <button className="w-full bg-brand-navy text-white flex items-center justify-center gap-2 py-3 rounded-md font-medium text-sm hover:bg-gray-800 smooth-hover shadow-sm">
+          <Link href="/seller/listings" className="w-full bg-brand-navy text-white flex items-center justify-center gap-2 py-3 rounded-md font-medium text-sm hover:bg-gray-800 smooth-hover shadow-sm">
             <Plus className="w-4 h-4" /> Add New Listing
-          </button>
+          </Link>
         </div>
       </aside>
 

@@ -105,7 +105,7 @@ export default function SellerDashboardPage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-brand-navy">Active Orders</h3>
-              <button className="text-sm text-gray-600 hover:text-brand-navy">View All &rarr;</button>
+              <Link href="/seller/orders" className="text-sm text-gray-600 hover:text-brand-navy">View All &rarr;</Link>
             </div>
             
             <div className="bg-white border border-gray-200 p-8 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
@@ -136,7 +136,7 @@ export default function SellerDashboardPage() {
                 </div>
               ) : (
                 upcomingTrips.map(trip => (
-                  <div key={trip.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                  <div key={trip.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
                     <div className="h-24 relative bg-brand-navy">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                       <div className="absolute bottom-3 left-4 z-20">
@@ -151,9 +151,9 @@ export default function SellerDashboardPage() {
                           <p className="font-bold text-brand-navy text-sm">{trip.status}</p>
                         </div>
                       </div>
-                      <button className="bg-brand-navy text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-800">
+                      <Link href={`/seller/trips/${trip.id}`} className="bg-brand-navy text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-800 transition-colors">
                         Manage
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))
