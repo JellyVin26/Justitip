@@ -52,22 +52,35 @@ export default function ExplorePage() {
           </button>
         </div>
 
-        {/* Display dynamic trips or fallback to mock if API returns empty array */}
-        {trips.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Display dynamic trips */}
+        {trips.length === 0 ? (
+          <div className="text-center py-20 bg-white border border-gray-200 rounded-2xl">
+            <h3 className="text-lg font-bold text-gray-700">No active trips found</h3>
+            <p className="text-gray-500">Check back later or explore other destinations.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (
-              <div key={trip.id} className="relative h-[250px] rounded-xl overflow-hidden shadow-sm border border-gray-200">
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
-                 <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80" alt="Destination" className="object-cover w-full h-full" />
-                 <div className="absolute bottom-4 left-4 z-20">
-                    <h3 className="text-white text-lg font-bold">{trip.destinationCountry}</h3>
-                    <p className="text-gray-300 text-xs">Seller ID: {trip.sellerId.substring(0,6)}</p>
+              <div key={trip.id} className="relative h-[280px] rounded-2xl overflow-hidden shadow-sm border border-gray-200 group cursor-pointer hover:shadow-md transition-all">
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                 <img src={trip.image || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80'} alt={trip.destinationCountry} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
+                 
+                 <div className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-md px-2 py-1 rounded-full">
+                   <div className="w-5 h-5 rounded-full bg-brand-navy flex items-center justify-center text-[10px] font-bold text-white">
+                     {trip.seller?.name?.charAt(0) || 'S'}
+                   </div>
+                   <span className="text-[10px] font-bold text-brand-navy pr-1">{trip.seller?.name?.split(' ')[0] || 'Seller'}</span>
+                 </div>
+
+                 <div className="absolute bottom-4 left-4 right-4 z-20">
+                    <h3 className="text-white text-lg font-bold leading-tight mb-1">{trip.destinationCountry}</h3>
+                    <p className="text-gray-300 text-[11px] font-medium tracking-wide">
+                      {new Date(trip.startDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})} - {new Date(trip.endDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
+                    </p>
                  </div>
               </div>
             ))}
           </div>
-        ) : (
-          <p className="text-gray-500 italic text-sm">Waiting for live trips from API... (Start backend server to load data)</p>
         )}
       </section>
       

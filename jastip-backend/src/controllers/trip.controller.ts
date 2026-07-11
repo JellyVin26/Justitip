@@ -21,11 +21,15 @@ export const createTrip = async (req: Request, res: Response) => {
 
 export const getTrips = async (req: Request, res: Response) => {
   try {
-    const { country, followingOnly, followerId } = req.query;
+    const { country, followingOnly, followerId, sellerId } = req.query;
     let whereClause: any = { status: 'UPCOMING' };
     
     if (country) {
       whereClause.destinationCountry = country as string;
+    }
+
+    if (sellerId) {
+      whereClause.sellerId = sellerId as string;
     }
 
     if (followingOnly === 'true' && followerId) {

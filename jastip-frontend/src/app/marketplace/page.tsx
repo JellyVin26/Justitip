@@ -1,88 +1,36 @@
 "use client";
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Package, ShieldCheck, Star } from 'lucide-react';
-
-const mockListings = [
-  {
-    id: 'list-1',
-    productName: 'Tokyo Banana - Original Flavor (8 pcs)',
-    price: 15,
-    localCurrency: 'USD',
-    seller: 'Alex M.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80',
-    verified: true,
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1582283086938-163e9f45d5a7?w=300&q=80', 
-    tripDestination: 'Tokyo, Japan',
-    stockLeft: 10,
-  },
-  {
-    id: 'list-2',
-    productName: 'Gentle Monster Margiela Sunglasses',
-    price: 320,
-    localCurrency: 'USD',
-    seller: 'Jessica L.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
-    verified: true,
-    rating: 5.0,
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300&q=80', 
-    tripDestination: 'Seoul, South Korea',
-    stockLeft: 2,
-  },
-  {
-    id: 'list-3',
-    productName: 'Pop Mart Hirono City of Mercy Blind Box',
-    price: 18,
-    localCurrency: 'USD',
-    seller: 'Budi H.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80',
-    verified: false,
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=300&q=80', 
-    tripDestination: 'Shanghai, China',
-    stockLeft: 15,
-  },
-  {
-    id: 'list-4',
-    productName: 'Glossier You Perfume 50ml',
-    price: 68,
-    localCurrency: 'USD',
-    seller: 'Emily R.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80',
-    verified: true,
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=300&q=80', 
-    tripDestination: 'New York City, USA',
-    stockLeft: 5,
-  },
-  {
-    id: 'list-5',
-    productName: 'Nike Air Force 1 Low Off-White',
-    price: 1200,
-    localCurrency: 'USD',
-    seller: 'Michael B.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80',
-    verified: false,
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&q=80', 
-    tripDestination: 'Paris, France',
-    stockLeft: 1,
-  },
-  {
-    id: 'list-6',
-    productName: 'Blackmores Fish Oil 1000mg',
-    price: 35,
-    localCurrency: 'USD',
-    seller: 'Sarah W.',
-    sellerAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80',
-    verified: true,
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1584362917165-526a968579e8?w=300&q=80', 
-    tripDestination: 'Sydney, Australia',
-    stockLeft: 20,
-  }
-];
+import { useAuth } from '@/context/AuthContext';
+import api from '@/lib/api';
 
 export default function MarketplacePage() {
+  const [listings, setListings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [followingOnly, setFollowingOnly] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    fetchListings();
+  }, [followingOnly]);
+
+  const fetchListings = async () => {
+    try {
+      setLoading(true);
+      let endpoint = '/listings';
+      
+      if (followingOnly && isAuthenticated && user) {
+        endpoint += `?followingOnly=true&followerId=${user.id}`;
+      }
+      
+      const response = await api.get(endpoint);
+      setListings(response.data);
+    } catch (error) {
+      console.error('Failed to fetch listings', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="max-w-6xl mx-auto px-8 py-10">
       {/* Header Section */}
@@ -109,8 +57,18 @@ export default function MarketplacePage() {
           
           {/* Following Toggle */}
           <div className="flex items-center gap-2 bg-gray-100 p-1.5 rounded-xl border border-gray-200">
-            <button className="px-6 py-2.5 rounded-lg text-sm font-bold bg-white text-brand-navy shadow-sm">All Items</button>
-            <button className="px-6 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700">Following</button>
+            <button 
+              onClick={() => setFollowingOnly(false)}
+              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${!followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              All Items
+            </button>
+            <button 
+              onClick={() => setFollowingOnly(true)}
+              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Following
+            </button>
           </div>
 
           <button className="bg-white border border-gray-200 text-gray-700 px-6 py-4 rounded-xl flex items-center gap-2 font-medium hover:bg-gray-50 smooth-hover shadow-sm">
@@ -136,7 +94,7 @@ export default function MarketplacePage() {
       {/* Results Header */}
       <div className="flex justify-between items-end mb-6">
         <div>
-          <p className="text-sm font-medium text-gray-500">Showing {mockListings.length} available items</p>
+          <p className="text-sm font-medium text-gray-500">Showing {listings.length} available items</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-500">Sort by:</span>
@@ -149,72 +107,84 @@ export default function MarketplacePage() {
       </div>
 
       {/* Results Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockListings.map((listing) => (
-          <div key={listing.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
-            
-            {/* Image Header */}
-            <div className="h-56 relative overflow-hidden bg-gray-100">
-              <img src={listing.image} alt={listing.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div>
+        </div>
+      ) : listings.length === 0 ? (
+        <div className="text-center py-20 bg-white border border-gray-200 rounded-2xl">
+          <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-bold text-gray-700">No items found</h3>
+          <p className="text-gray-500">Check back later or adjust your filters.</p>
+        </div>
+      ) : (
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {listings.map((listing) => (
+            <div key={listing.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
               
-              {/* Origin Badge */}
-              <div className="absolute bottom-3 left-3 z-20 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                <MapPin className="w-3 h-3 text-brand-accent" /> From {listing.tripDestination}
+              {/* Image Header */}
+              <div className="h-56 relative overflow-hidden bg-gray-100">
+                <img src={listing.imageUrl || 'https://images.unsplash.com/photo-1582283086938-163e9f45d5a7?w=300&q=80'} alt={listing.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                
+                {/* Origin Badge */}
+                <div className="absolute bottom-3 left-3 z-20 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                  <MapPin className="w-3 h-3 text-brand-accent" /> From {listing.trip?.destinationCountry || 'Unknown'}
+                </div>
               </div>
-            </div>
 
-            {/* Content Body */}
-            <div className="p-5 flex-1 flex flex-col">
-              <div className="mb-4">
-                <h3 className="font-bold text-brand-navy text-lg leading-tight mb-2 line-clamp-2">
-                  {listing.productName}
-                </h3>
-                <p className="font-black text-brand-accent text-2xl">
-                  ${listing.price} <span className="text-sm text-gray-400 font-medium">({listing.localCurrency})</span>
-                </p>
-              </div>
-              
-              {/* Seller Info */}
-              <div className="flex items-center justify-between py-4 border-t border-gray-100 mt-auto">
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <img src={listing.sellerAvatar} alt={listing.seller} className="w-8 h-8 rounded-full object-cover bg-gray-200" />
-                    {listing.verified && (
+              {/* Content Body */}
+              <div className="p-5 flex-1 flex flex-col">
+                <div className="mb-4">
+                  <h3 className="font-bold text-brand-navy text-lg leading-tight mb-2 line-clamp-2">
+                    {listing.productName}
+                  </h3>
+                  <p className="font-black text-brand-accent text-2xl">
+                    ${listing.price} <span className="text-sm text-gray-400 font-medium">({listing.localCurrency})</span>
+                  </p>
+                </div>
+                
+                {/* Seller Info */}
+                <div className="flex items-center justify-between py-4 border-t border-gray-100 mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-xs">
+                        {listing.seller?.name?.charAt(0) || 'S'}
+                      </div>
                       <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
                         <ShieldCheck className="w-3 h-3 text-blue-500" />
                       </div>
-                    )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-xs font-bold text-brand-navy">{listing.seller?.name || 'Unknown'}</p>
+                        <button className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
+                        <span className="text-[10px] font-bold text-gray-700">5.0</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <p className="text-xs font-bold text-brand-navy">{listing.seller}</p>
-                      <button className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
-                      <span className="text-[10px] font-bold text-gray-700">{listing.rating}</span>
-                    </div>
+                  
+                  <div className="text-right">
+                    <p className="text-xs text-gray-400 font-medium flex items-center gap-1 justify-end">
+                      <Package className="w-3.5 h-3.5" /> Stock
+                    </p>
+                    <p className="font-bold text-brand-navy text-sm leading-none mt-1">{listing.maxQuantity} left</p>
                   </div>
                 </div>
-                
-                <div className="text-right">
-                  <p className="text-xs text-gray-400 font-medium flex items-center gap-1 justify-end">
-                    <Package className="w-3.5 h-3.5" /> Stock
-                  </p>
-                  <p className="font-bold text-brand-navy text-sm leading-none mt-1">{listing.stockLeft} left</p>
-                </div>
-              </div>
 
-              {/* Action Button */}
-              <div className="mt-4">
-                <button className="w-full bg-brand-navy text-white font-bold text-sm py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm smooth-hover">
-                  Order Now
-                </button>
+                {/* Action Button */}
+                <div className="mt-4">
+                  <button className="w-full bg-brand-navy text-white font-bold text-sm py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm smooth-hover">
+                    Order Now
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
       
       {/* Custom Request Banner */}
       <div className="mt-12 bg-blue-50 border border-blue-100 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
