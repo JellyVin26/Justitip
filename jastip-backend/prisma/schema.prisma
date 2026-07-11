@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+}
+
+enum TripStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum OrderStatus {
+  REQUEST_SUBMITTED
+  ACCEPTED
+  SEARCHING_FOR_ITEM
+  ITEM_FOUND
+  PURCHASED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id            String    @id @default(uuid())
+  role          Role
+  name          String
+  email         String    @unique
+  password      String    // Hashed password for auth
+  phoneNumber   String?
+  trips         Trip[]    // If role is SELLER
+  orders        Order[]   // If role is BUYER
+  createdAt     DateTime  @default(now())
+}
+
+model Trip {
+  id                 String      @id @default(uuid())
+  sellerId           String
+  seller             User        @relation(fields: [sellerId], references: [id])
+  destinationCountry String
+  startDate          DateTime
+  endDate            DateTime
+  markupRules        Json        // e.g., { "percentage": 10, "fixed_min": 50000 }
+  status             TripStatus  @default(UPCOMING)
+  orders             Order[]
+  createdAt          DateTime    @default(now())
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  tripId          String
+  trip            Trip        @relation(fields: [tripId], references: [id])
+  buyerId         String
+  buyer           User        @relation(fields: [buyerId], references: [id])
+  
+  // Product Details
+  productName     String
+  productLink     String?
+  productImageUrl String?
+  quantity        Int         @default(1)
+  
+  // Pricing & Currency
+  originalPrice   Float?      // In local currency of destination
+  localCurrency   String      // e.g., "JPY"
+  exchangeRate    Float?      // Rate used to convert to IDR
+  markupFee       Float?      // In IDR
+  shippingFee     Float?      // In IDR
+  totalPriceIdr   Float?      // Total in IDR
+  
+  status          OrderStatus @default(REQUEST_SUBMITTED)
+  payments        Payment[]
+  messages        Message[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Payment {
+  id            String    @id @default(uuid())
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id])
+  amountIdr     Float
+  method        String    // e.g., "QRIS"
+  qrImageUrl    String?   // URL to the generated QR code
+  status        String    // PENDING, SUCCESS, FAILED
+  paymentId     String?   // External ID from payment gateway
+  createdAt     DateTime  @default(now())
+}
+
+model Message {
+  id            String    @id @default(uuid())
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id])
+  senderId      String
+  content       String
+  createdAt     DateTime  @default(now())
+}
