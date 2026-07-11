@@ -21,8 +21,22 @@ export const createTrip = async (req: Request, res: Response) => {
 
 export const getTrips = async (req: Request, res: Response) => {
   try {
-    const { country } = req.query;
-    const whereClause = country ? { destinationCountry: country as string, status: 'UPCOMING' as any } : { status: 'UPCOMING' as any };
+    const { country, followingOnly, followerId } = req.query;
+    let whereClause: any = { status: 'UPCOMING' };
+    
+    if (country) {
+      whereClause.destinationCountry = country as string;
+    }
+
+    if (followingOnly === 'true' && followerId) {
+      const follows = await prisma.follows.findMany({
+        where: { followerId: followerId as string },
+        select: { followingId: true }
+      });
+      const followingIds = follows.map(f => f.followingId);
+      whereClause.sellerId = { in: followingIds };
+    }
+
     const trips = await prisma.trip.findMany({ where: whereClause, include: { seller: true } });
     res.status(200).json(trips);
   } catch (error: any) {

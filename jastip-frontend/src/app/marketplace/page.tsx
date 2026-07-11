@@ -101,11 +101,15 @@ export default function MarketplacePage() {
               className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm"
             />
           </div>
+          
+          {/* Following Toggle */}
+          <div className="flex items-center gap-2 bg-gray-100 p-1.5 rounded-xl border border-gray-200">
+            <button className="px-6 py-2.5 rounded-lg text-sm font-bold bg-white text-brand-navy shadow-sm">All Requests</button>
+            <button className="px-6 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700">Following</button>
+          </div>
+
           <button className="bg-white border border-gray-200 text-gray-700 px-6 py-4 rounded-xl flex items-center gap-2 font-medium hover:bg-gray-50 smooth-hover shadow-sm">
-            <Filter className="w-5 h-5" /> Filters
-          </button>
-          <button className="bg-brand-navy text-white px-8 py-4 rounded-xl font-bold tracking-wide hover:bg-gray-800 smooth-hover shadow-sm">
-            Search
+            <Filter className="w-5 h-5" />
           </button>
         </div>
       </section>
@@ -176,7 +180,10 @@ export default function MarketplacePage() {
                 <div className="flex items-center gap-2">
                   <img src={req.buyerAvatar} alt={req.buyer} className="w-8 h-8 rounded-full object-cover bg-gray-200" />
                   <div>
-                    <p className="text-xs font-medium text-brand-navy">{req.buyer}</p>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs font-bold text-brand-navy">{req.buyer}</p>
+                      <button className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
+                    </div>
                     <p className="text-[10px] text-gray-400">{req.postedAt}</p>
                   </div>
                 </div>

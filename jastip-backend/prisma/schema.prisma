@@ -39,7 +39,18 @@ model User {
   phoneNumber   String?
   trips         Trip[]    // If role is SELLER
   orders        Order[]   // If role is BUYER
+  followers     Follows[] @relation("following")
+  following     Follows[] @relation("follower")
   createdAt     DateTime  @default(now())
+}
+
+model Follows {
+  followerId  String
+  followingId String
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  following   User @relation("following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
 }
 
 model Trip {
