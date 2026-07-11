@@ -20,6 +20,7 @@ export default function AddListingModal({ isOpen, onClose, onSuccess, preSelecte
   const [tripId, setTripId] = useState('');
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('Trending');
   const [price, setPrice] = useState('');
   const [localCurrency, setLocalCurrency] = useState('USD');
   const [maxQuantity, setMaxQuantity] = useState('0');
@@ -94,6 +95,7 @@ export default function AddListingModal({ isOpen, onClose, onSuccess, preSelecte
         description,
         price: parseFloat(price),
         localCurrency,
+        category,
         imageUrl: finalImageUrl,
         maxQuantity: parseInt(maxQuantity) || 0
       });
@@ -103,6 +105,7 @@ export default function AddListingModal({ isOpen, onClose, onSuccess, preSelecte
       setTripId('');
       setProductName('');
       setDescription('');
+      setCategory('Trending');
       setPrice('');
       setLocalCurrency('USD');
       setMaxQuantity('0');
@@ -171,6 +174,23 @@ export default function AddListingModal({ isOpen, onClose, onSuccess, preSelecte
                 placeholder="e.g., Tokyo Banana 8pcs, Rare Matcha KitKat"
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Category <span className="text-red-500">*</span></label>
+              <select 
+                value={category}
+                onChange={e => setCategory(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
+              >
+                <option value="Trending">Trending</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Beauty">Beauty</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Snacks & Food">Snacks & Food</option>
+                <option value="Toys & Collectibles">Toys & Collectibles</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

@@ -3,7 +3,7 @@ import prisma from '../prisma';
 
 export const createListing = async (req: Request, res: Response) => {
   try {
-    const { tripId, sellerId, productName, description, price, localCurrency, imageUrl, maxQuantity } = req.body;
+    const { tripId, sellerId, productName, description, price, localCurrency, imageUrl, maxQuantity, category } = req.body;
     const listing = await prisma.listing.create({
       data: {
         tripId,
@@ -12,6 +12,7 @@ export const createListing = async (req: Request, res: Response) => {
         description,
         price,
         localCurrency,
+        category: category || 'Other',
         imageUrl,
         maxQuantity
       }
@@ -24,7 +25,7 @@ export const createListing = async (req: Request, res: Response) => {
 
 export const getListings = async (req: Request, res: Response) => {
   try {
-    const { followingOnly, followerId, sellerId, tripId } = req.query;
+    const { followingOnly, followerId, sellerId, tripId, category, search } = req.query;
     let whereClause: any = {};
     
     if (followingOnly === 'true' && followerId) {
@@ -40,6 +41,16 @@ export const getListings = async (req: Request, res: Response) => {
 
     if (tripId) {
       whereClause.tripId = tripId as string;
+    }
+
+    if (category && category !== 'All Items' && category !== 'All') {
+      whereClause.category = category as string;
+    }
+
+    if (search) {
+      whereClause.productName = {
+        contains: search as string
+      };
     }
 
     const listings = await prisma.listing.findMany({ 

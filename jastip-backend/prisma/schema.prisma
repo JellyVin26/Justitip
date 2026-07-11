@@ -56,6 +56,7 @@ model Listing {
   description     String?
   price           Float    // Base price in local currency
   localCurrency   String   // e.g., "JPY"
+  category        String   @default("Other")
   imageUrl        String?
   maxQuantity     Int      @default(0) // 0 means unlimited or unknown
   createdAt       DateTime @default(now())

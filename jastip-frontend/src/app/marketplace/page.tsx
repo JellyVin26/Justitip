@@ -8,21 +8,34 @@ export default function MarketplacePage() {
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [followingOnly, setFollowingOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Items');
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     fetchListings();
-  }, [followingOnly]);
+  }, [followingOnly, selectedCategory]);
 
   const fetchListings = async () => {
     try {
       setLoading(true);
-      let endpoint = '/listings';
+      let endpoint = '/listings?';
       
       if (followingOnly && isAuthenticated && user) {
-        endpoint += `?followingOnly=true&followerId=${user.id}`;
+        endpoint += `followingOnly=true&followerId=${user.id}&`;
       }
       
+      if (selectedCategory && selectedCategory !== 'All Items') {
+        endpoint += `category=${encodeURIComponent(selectedCategory)}&`;
+      }
+
+      if (searchQuery) {
+        endpoint += `search=${encodeURIComponent(searchQuery)}&`;
+      }
+      
+      // Remove trailing ? or &
+      endpoint = endpoint.replace(/[?&]$/, '');
+
       const response = await api.get(endpoint);
       setListings(response.data);
     } catch (error) {
@@ -50,6 +63,13 @@ export default function MarketplacePage() {
             </div>
             <input 
               type="text" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  fetchListings();
+                }
+              }}
               placeholder="Search by product name, brand, or country..."
               className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm"
             />
@@ -79,11 +99,12 @@ export default function MarketplacePage() {
 
       {/* Categories / Tags */}
       <div className="flex gap-3 overflow-x-auto pb-6 mb-8 hide-scrollbar">
-        {['All Items', 'Trending', 'Electronics', 'Beauty', 'Fashion', 'Snacks & Food', 'Toys & Collectibles'].map((tag, i) => (
+        {['All Items', 'Trending', 'Electronics', 'Beauty', 'Fashion', 'Snacks & Food', 'Toys & Collectibles', 'Other'].map((tag) => (
           <button 
             key={tag} 
+            onClick={() => setSelectedCategory(tag)}
             className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              i === 0 ? 'bg-brand-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              selectedCategory === tag ? 'bg-brand-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {tag}
