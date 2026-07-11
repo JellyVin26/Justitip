@@ -48,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    window.location.href = '/login';
   };
 
   if (!isMounted) return null; // Avoid hydration mismatch
