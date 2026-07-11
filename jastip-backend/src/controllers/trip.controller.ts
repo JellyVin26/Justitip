@@ -3,14 +3,15 @@ import prisma from '../prisma';
 
 export const createTrip = async (req: Request, res: Response) => {
   try {
-    const { sellerId, destinationCountry, startDate, endDate, markupRules } = req.body;
+    const { sellerId, destinationCountry, startDate, endDate, markupRules, notes } = req.body;
     const trip = await prisma.trip.create({
       data: {
         sellerId,
         destinationCountry,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        markupRules
+        markupRules,
+        notes
       }
     });
     res.status(201).json(trip);

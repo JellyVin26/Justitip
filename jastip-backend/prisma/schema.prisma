@@ -39,6 +39,7 @@ model Trip {
   startDate          DateTime
   endDate            DateTime
   markupRules        String      // Stored as JSON string
+  notes              String?     // e.g., "Only accepting cosmetics or medicine"
   status             String      @default("UPCOMING")
   orders             Order[]
   listings           Listing[]

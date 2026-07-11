@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 
+import PostTripModal from '@/components/PostTripModal';
+
 export default function SellerDashboardPage() {
   const { user } = useAuth();
   const [upcomingTrips, setUpcomingTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPostTripModalOpen, setIsPostTripModalOpen] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -116,7 +119,7 @@ export default function SellerDashboardPage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-brand-navy">Upcoming Trips</h3>
-              <button className="text-sm text-gray-600 hover:text-brand-navy flex items-center gap-1"><Plus className="w-3 h-3"/> New Trip</button>
+              <button onClick={() => setIsPostTripModalOpen(true)} className="text-sm text-gray-600 hover:text-brand-navy flex items-center gap-1"><Plus className="w-3 h-3"/> New Trip</button>
             </div>
 
             <div className="space-y-4">
@@ -129,7 +132,7 @@ export default function SellerDashboardPage() {
                   <Calendar className="w-12 h-12 text-gray-300 mb-3" />
                   <p className="font-bold text-gray-700">No upcoming trips</p>
                   <p className="text-sm text-gray-500 mb-4">Post your first trip to start earning.</p>
-                  <button className="bg-brand-navy text-white px-4 py-2 rounded font-medium text-sm hover:bg-gray-800">Post Trip</button>
+                  <button onClick={() => setIsPostTripModalOpen(true)} className="bg-brand-navy text-white px-4 py-2 rounded font-medium text-sm hover:bg-gray-800">Post Trip</button>
                 </div>
               ) : (
                 upcomingTrips.map(trip => (
@@ -159,6 +162,15 @@ export default function SellerDashboardPage() {
           </div>
           
         </div>
+
+        <PostTripModal 
+          isOpen={isPostTripModalOpen}
+          onClose={() => setIsPostTripModalOpen(false)}
+          onSuccess={() => {
+            setIsPostTripModalOpen(false);
+            fetchDashboardData();
+          }}
+        />
       </main>
     
   );
