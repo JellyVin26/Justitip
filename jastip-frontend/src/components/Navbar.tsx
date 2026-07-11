@@ -28,9 +28,11 @@ export default function Navbar() {
         <Link href="/seller" className="text-sm font-medium text-gray-600 hover:text-brand-navy smooth-hover">
           Become a Seller
         </Link>
-        <button className="bg-brand-navy text-white px-5 py-2 rounded font-medium text-sm hover:bg-gray-800 smooth-hover tracking-wider">
-          POST TRIP
-        </button>
+        {pathname?.includes('/seller') && (
+          <button className="bg-brand-navy text-white px-5 py-2 rounded font-medium text-sm hover:bg-gray-800 smooth-hover tracking-wider">
+            POST TRIP
+          </button>
+        )}
         <div className="flex items-center gap-4 text-gray-500">
           <Bell className="w-5 h-5 cursor-pointer hover:text-brand-navy smooth-hover" />
           <MessageSquare className="w-5 h-5 cursor-pointer hover:text-brand-navy smooth-hover" />
