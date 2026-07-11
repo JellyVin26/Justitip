@@ -9,6 +9,7 @@ import tripRoutes from './routes/trip.routes';
 import orderRoutes from './routes/order.routes';
 import paymentRoutes from './routes/payment.routes';
 import userRoutes from './routes/user.routes';
+import listingRoutes from './routes/listing.routes';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/listings', listingRoutes);
 
 // Socket.io for Real-Time Chat
 io.on('connection', (socket) => {

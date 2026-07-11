@@ -39,6 +39,7 @@ model User {
   phoneNumber   String?
   trips         Trip[]    // If role is SELLER
   orders        Order[]   // If role is BUYER
+  listings      Listing[] // If role is SELLER
   followers     Follows[] @relation("following")
   following     Follows[] @relation("follower")
   createdAt     DateTime  @default(now())
@@ -63,7 +64,23 @@ model Trip {
   markupRules        Json        // e.g., { "percentage": 10, "fixed_min": 50000 }
   status             TripStatus  @default(UPCOMING)
   orders             Order[]
+  listings           Listing[]
   createdAt          DateTime    @default(now())
+}
+
+model Listing {
+  id              String   @id @default(uuid())
+  tripId          String
+  trip            Trip     @relation(fields: [tripId], references: [id])
+  sellerId        String
+  seller          User     @relation(fields: [sellerId], references: [id])
+  productName     String
+  description     String?
+  price           Float    // Base price in local currency
+  localCurrency   String   // e.g., "JPY"
+  imageUrl        String?
+  maxQuantity     Int      @default(0) // 0 means unlimited or unknown
+  createdAt       DateTime @default(now())
 }
 
 model Order {
