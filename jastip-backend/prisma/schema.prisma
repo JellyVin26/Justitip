@@ -3,36 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-enum Role {
-  BUYER
-  SELLER
-}
-
-enum TripStatus {
-  UPCOMING
-  ACTIVE
-  COMPLETED
-  CANCELLED
-}
-
-enum OrderStatus {
-  REQUEST_SUBMITTED
-  ACCEPTED
-  SEARCHING_FOR_ITEM
-  ITEM_FOUND
-  PURCHASED
-  SHIPPED
-  DELIVERED
-  CANCELLED
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
   id            String    @id @default(uuid())
-  role          Role
+  role          String    // BUYER, SELLER
   name          String
   email         String    @unique
   password      String    // Hashed password for auth
@@ -61,8 +38,8 @@ model Trip {
   destinationCountry String
   startDate          DateTime
   endDate            DateTime
-  markupRules        Json        // e.g., { "percentage": 10, "fixed_min": 50000 }
-  status             TripStatus  @default(UPCOMING)
+  markupRules        String      // Stored as JSON string
+  status             String      @default("UPCOMING")
   orders             Order[]
   listings           Listing[]
   createdAt          DateTime    @default(now())
@@ -104,7 +81,7 @@ model Order {
   shippingFee     Float?      // In IDR
   totalPriceIdr   Float?      // Total in IDR
   
-  status          OrderStatus @default(REQUEST_SUBMITTED)
+  status          String      @default("REQUEST_SUBMITTED")
   payments        Payment[]
   messages        Message[]
   createdAt       DateTime    @default(now())

@@ -29,42 +29,7 @@ export default function SellerDashboardPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)]">
-      
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-gray-200 bg-white flex flex-col pt-8">
-        <div className="px-6 mb-8">
-          <h2 className="text-sm font-bold text-brand-navy mb-1">Seller Studio</h2>
-          <p className="text-xs text-gray-500 font-mono tracking-wider">Manage your deliveries</p>
-        </div>
-        
-        <nav className="flex-1 space-y-1 px-4">
-          <Link href="/seller/dashboard" className="flex items-center gap-3 px-4 py-3 bg-blue-100 text-brand-navy rounded-md font-bold text-sm">
-            <LayoutDashboard className="w-5 h-5" /> Dashboard
-          </Link>
-          <Link href="/seller/orders" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md font-medium text-sm smooth-hover">
-            <Package className="w-5 h-5" /> Active Orders
-          </Link>
-          <Link href="/seller/listings" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md font-medium text-sm smooth-hover">
-            <List className="w-5 h-5" /> My Listings
-          </Link>
-          <Link href="/seller/wallet" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md font-medium text-sm smooth-hover">
-            <Wallet className="w-5 h-5" /> Wallet
-          </Link>
-          <Link href="/seller/settings" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md font-medium text-sm smooth-hover">
-            <Settings className="w-5 h-5" /> Settings
-          </Link>
-        </nav>
-        
-        <div className="p-4">
-          <button className="w-full bg-brand-navy text-white flex items-center justify-center gap-2 py-3 rounded-md font-medium text-sm hover:bg-gray-800 smooth-hover">
-            <Plus className="w-4 h-4" /> Add New Listing
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 bg-[#F8F9FA] p-10">
+    <main className="p-10">
         
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -195,7 +160,6 @@ export default function SellerDashboardPage() {
           
         </div>
 
-      </main>
-    </div>
+    
   );
 }

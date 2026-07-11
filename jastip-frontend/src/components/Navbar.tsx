@@ -17,12 +17,14 @@ export default function Navbar() {
         <Link href="/" className="text-2xl font-bold tracking-tight text-brand-navy">
           Justitip
         </Link>
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
-          <Link href="/marketplace" className={isActive('/marketplace') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Marketplace</Link>
-          <Link href="/explore" className={isActive('/explore') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Explore</Link>
-          <Link href="/trips" className={isActive('/trips') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Trips</Link>
-          <Link href="/orders" className={isActive('/orders') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Orders</Link>
-        </div>
+        {!pathname?.includes('/seller') && (
+          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+            <Link href="/marketplace" className={isActive('/marketplace') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Marketplace</Link>
+            <Link href="/explore" className={isActive('/explore') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Explore</Link>
+            <Link href="/trips" className={isActive('/trips') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Trips</Link>
+            <Link href="/orders" className={isActive('/orders') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}>Orders</Link>
+          </div>
+        )}
       </div>
 
       {/* Right side */}

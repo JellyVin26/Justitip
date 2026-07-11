@@ -58,7 +58,7 @@ export default function RegisterPage() {
           <span className="text-brand-navy font-bold text-2xl tracking-tight bg-white/80 px-2 rounded-md">Justitip</span>
         </div>
 
-        <div className="absolute bottom-16 left-12 right-12 z-20 text-white max-w-xl">
+        <div className="absolute inset-y-0 left-12 right-12 z-20 text-white max-w-xl flex flex-col justify-center">
           <h1 className="text-5xl font-bold leading-tight mb-6 tracking-tight">
             Join the global community.
           </h1>
