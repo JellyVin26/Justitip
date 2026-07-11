@@ -24,7 +24,7 @@ export const createListing = async (req: Request, res: Response) => {
 
 export const getListings = async (req: Request, res: Response) => {
   try {
-    const { followingOnly, followerId } = req.query;
+    const { followingOnly, followerId, sellerId, tripId } = req.query;
     let whereClause: any = {};
     
     if (followingOnly === 'true' && followerId) {
@@ -34,6 +34,12 @@ export const getListings = async (req: Request, res: Response) => {
       });
       const followingIds = follows.map(f => f.followingId);
       whereClause.sellerId = { in: followingIds };
+    } else if (sellerId) {
+      whereClause.sellerId = sellerId as string;
+    }
+
+    if (tripId) {
+      whereClause.tripId = tripId as string;
     }
 
     const listings = await prisma.listing.findMany({ 
