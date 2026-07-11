@@ -14,10 +14,10 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
       : "flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-md font-medium text-sm smooth-hover";
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] pt-16">
+    <div className="flex min-h-[calc(100vh-64px)]">
       
       {/* Sidebar */}
-      <aside className="w-64 border-r border-gray-200 bg-white flex flex-col pt-8 fixed h-[calc(100vh-64px)] overflow-y-auto z-10">
+      <aside className="w-64 border-r border-gray-200 bg-white flex flex-col pt-8 fixed top-16 h-[calc(100vh-64px)] overflow-y-auto z-10">
         <div className="px-6 mb-8">
           <h2 className="text-sm font-bold text-brand-navy mb-1">Seller Studio</h2>
           <p className="text-xs text-gray-500 font-mono tracking-wider">Manage your deliveries</p>
