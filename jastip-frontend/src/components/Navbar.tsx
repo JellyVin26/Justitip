@@ -19,7 +19,7 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-8">
         {/* Left side */}
         <div className="flex items-center gap-10">
-          <Link href="/" className="text-2xl font-bold tracking-tight text-brand-navy">
+          <Link href={pathname?.includes('/seller') ? "/seller/dashboard" : "/"} className="text-2xl font-bold tracking-tight text-brand-navy">
             Justitip
           </Link>
           {!pathname?.includes('/seller') && (
