@@ -159,7 +159,7 @@ export default function SellerDashboardPage() {
           </div>
           
         </div>
-
+      </main>
     
   );
 }
