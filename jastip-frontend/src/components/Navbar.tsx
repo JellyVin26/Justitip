@@ -45,11 +45,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              {user?.role === 'SELLER' && (
-                <Link href="/seller/dashboard" className="text-sm font-bold text-brand-accent hover:text-orange-600 smooth-hover bg-orange-50 px-3 py-1.5 rounded-md">
-                  Seller Dashboard
-                </Link>
-              )}
+
               {pathname?.includes('/seller') && (
                 <button 
                   onClick={() => setIsPostTripModalOpen(true)}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 import AddListingModal from '@/components/AddListingModal';
-import { Package } from 'lucide-react';
+import { Package, Trash2 } from 'lucide-react';
 
 export default function SellerListingsPage() {
   const { user } = useAuth();
@@ -26,6 +26,17 @@ export default function SellerListingsPage() {
       console.error('Failed to fetch listings', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteListing = async (listingId: string) => {
+    if (!confirm('Are you sure you want to delete this listing?')) return;
+    try {
+      await api.delete(`/listings/${listingId}`);
+      fetchListings();
+    } catch (error) {
+      console.error('Failed to delete listing', error);
+      alert('Failed to delete listing');
     }
   };
 
@@ -69,7 +80,16 @@ export default function SellerListingsPage() {
                 <div className="mt-auto pt-4 border-t border-gray-100">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-gray-500">Trip: <span className="font-bold text-gray-700">{listing.trip?.destinationCountry || 'Unknown'}</span></span>
-                    {listing.maxQuantity > 0 && <span className="text-brand-accent font-medium">Max: {listing.maxQuantity}</span>}
+                    <div className="flex items-center gap-2">
+                      {listing.maxQuantity > 0 && <span className="text-brand-accent font-medium">Max: {listing.maxQuantity}</span>}
+                      <button 
+                        onClick={() => handleDeleteListing(listing.id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                        title="Delete Listing"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

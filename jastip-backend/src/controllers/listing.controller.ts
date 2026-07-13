@@ -68,3 +68,15 @@ export const getListings = async (req: Request, res: Response) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const deleteListing = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.listing.delete({
+      where: { id }
+    });
+    res.status(200).json({ message: 'Listing deleted successfully' });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};

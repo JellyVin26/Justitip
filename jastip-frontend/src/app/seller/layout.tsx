@@ -37,9 +37,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
           <Link href="/seller/listings" className={linkClass('/seller/listings')}>
             <List className="w-5 h-5" /> My Listings
           </Link>
-          <Link href="/seller/wallet" className={linkClass('/seller/wallet')}>
-            <Wallet className="w-5 h-5" /> Wallet
-          </Link>
+
           <Link href="/seller/settings" className={linkClass('/seller/settings')}>
             <Settings className="w-5 h-5" /> Settings
           </Link>
