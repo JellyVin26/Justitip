@@ -73,9 +73,11 @@ model Order {
   productName     String
   productLink     String?
   productImageUrl String?
+  category        String?
   quantity        Int         @default(1)
   
   // Pricing & Currency
+  estimatedPrice  Float?      // In local currency of destination
   originalPrice   Float?      // In local currency of destination
   localCurrency   String      // e.g., "JPY"
   exchangeRate    Float?      // Rate used to convert to IDR
@@ -83,11 +85,21 @@ model Order {
   shippingFee     Float?      // In IDR
   totalPriceIdr   Float?      // Total in IDR
   
+  paymentQrUrl    String?
   status          String      @default("REQUEST_SUBMITTED")
   payments        Payment[]
   messages        Message[]
+  history         OrderStatusHistory[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+}
+
+model OrderStatusHistory {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  status    String
+  createdAt DateTime @default(now())
 }
 
 model Payment {

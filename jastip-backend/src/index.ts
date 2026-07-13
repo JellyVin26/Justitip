@@ -3,6 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
+import prisma from './prisma';
+import multer from 'multer';
+import path from 'path';
 
 import authRoutes from './routes/auth.routes';
 import tripRoutes from './routes/trip.routes';
@@ -32,6 +35,24 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/listings', listingRoutes);
 
+// Static file serving for uploads
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
+// File upload endpoint
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads/')),
+  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+});
+const upload = multer({ storage });
+
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  res.json({ url: fileUrl });
+});
+
 // Socket.io for Real-Time Chat
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -41,10 +62,21 @@ io.on('connection', (socket) => {
     console.log(`Socket ${socket.id} joined room ${orderId}`);
   });
 
-  socket.on('send_message', (data) => {
+  socket.on('send_message', async (data) => {
     // data should contain { orderId, senderId, content }
     io.to(data.orderId).emit('receive_message', data);
-    // In a real app, you would also save the message to the database here
+    
+    try {
+      await prisma.message.create({
+        data: {
+          orderId: data.orderId,
+          senderId: data.senderId,
+          content: data.content
+        }
+      });
+    } catch (err) {
+      console.error('Failed to save message:', err);
+    }
   });
 
   socket.on('disconnect', () => {

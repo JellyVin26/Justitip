@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Search } from 'lucide-react';
 import api from '@/lib/api';
 
@@ -47,9 +48,9 @@ export default function ExplorePage() {
             <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-1">Live Now</p>
             <h2 className="text-2xl font-bold text-brand-navy">Active Trips</h2>
           </div>
-          <button className="text-sm font-medium text-gray-600 hover:text-brand-navy">
+          <Link href="/trips" className="text-sm font-medium text-gray-600 hover:text-brand-navy">
             View All Trips &rarr;
-          </button>
+          </Link>
         </div>
 
         {/* Display dynamic trips */}
@@ -61,7 +62,7 @@ export default function ExplorePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (
-              <div key={trip.id} className="relative h-[280px] rounded-2xl overflow-hidden shadow-sm border border-gray-200 group cursor-pointer hover:shadow-md transition-all">
+              <Link href={`/trips/${trip.id}`} key={trip.id} className="relative h-[280px] rounded-2xl overflow-hidden shadow-sm border border-gray-200 group cursor-pointer hover:shadow-md transition-all block">
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                  <img src={trip.image || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80'} alt={trip.destinationCountry} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
                  
@@ -78,7 +79,7 @@ export default function ExplorePage() {
                       {new Date(trip.startDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})} - {new Date(trip.endDate).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
                     </p>
                  </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

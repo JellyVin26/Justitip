@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Calendar, Weight, Star, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 
@@ -106,7 +107,7 @@ export default function TripsPage() {
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {trips.map((trip) => (
-            <div key={trip.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+            <Link href={`/trips/${trip.id}`} key={trip.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col block">
               
               {/* Destination Image */}
               <div className="h-48 relative overflow-hidden bg-gray-100">
@@ -155,7 +156,7 @@ export default function TripsPage() {
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </section>
       )}
