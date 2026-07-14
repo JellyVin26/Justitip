@@ -1,21 +1,36 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import prisma from '../prisma';
 
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, name, role, phoneNumber } = req.body;
-    // Basic mock logic - normally hash password
+    
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
       data: {
         email,
-        password, // raw for mock
+        password: hashedPassword,
         name,
         role,
         phoneNumber
       }
     });
-    res.status(201).json({ user, token: 'mock-jwt-token-123' });
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET || 'supersecretjwtkey',
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({ user, token });
   } catch (error: any) {
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: 'This email is already registered.' });
+    }
     res.status(400).json({ error: error.message });
   }
 };
@@ -24,10 +39,22 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || user.password !== password) {
+    if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    res.status(200).json({ user, token: 'mock-jwt-token-123' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET || 'supersecretjwtkey',
+      { expiresIn: '1d' }
+    );
+
+    res.status(200).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

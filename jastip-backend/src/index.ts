@@ -3,9 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
-import prisma from './prisma';
+import prisma from '../src/prisma'; // prisma client path
 import multer from 'multer';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 import authRoutes from './routes/auth.routes';
 import tripRoutes from './routes/trip.routes';
@@ -38,19 +39,44 @@ app.use('/api/listings', listingRoutes);
 // Static file serving for uploads
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
-// File upload endpoint
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads/')),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
-});
-const upload = multer({ storage });
+// Initialize Supabase Client
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-app.post('/api/upload', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' });
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post('/api/upload', upload.single('file'), async (req: any, res: any) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const file = req.file;
+    const fileExt = path.extname(file.originalname);
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('uploads')
+      .upload(filePath, file.buffer, {
+        contentType: file.mimetype,
+        upsert: true,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(filePath);
+
+    res.json({ url: publicUrl });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to upload file to cloud storage.' });
   }
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-  res.json({ url: fileUrl });
 });
 
 // Socket.io for Real-Time Chat
