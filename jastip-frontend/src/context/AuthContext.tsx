@@ -8,6 +8,11 @@ interface User {
   name: string;
   email: string;
   role: 'BUYER' | 'SELLER';
+  phoneNumber?: string;
+  avatarUrl?: string;
+  country?: string;
+  city?: string;
+  bio?: string;
 }
 
 interface AuthContextType {
@@ -15,6 +20,7 @@ interface AuthContextType {
   token: string | null;
   login: (token: string, user: User) => void;
   logout: () => void;
+  updateUser: (updatedUserFields: Partial<User>) => void;
   isAuthenticated: boolean;
 }
 
@@ -51,10 +57,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.location.href = '/login';
   };
 
+  const updateUser = (updatedUserFields: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...updatedUserFields };
+      setUser(updatedUser);
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
   if (!isMounted) return null; // Avoid hydration mismatch
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

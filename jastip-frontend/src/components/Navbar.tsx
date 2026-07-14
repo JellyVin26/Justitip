@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, MessageSquare, UserCircle, LogOut } from 'lucide-react';
+import { Bell, MessageSquare, UserCircle, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 import { useState } from 'react';
@@ -60,9 +60,17 @@ export default function Navbar() {
                 
                 <div className="group relative">
                   <div className="flex items-center gap-2 cursor-pointer">
-                    <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-sm">
-                      {user?.name?.charAt(0) || 'U'}
-                    </div>
+                    {user?.avatarUrl ? (
+                      <img 
+                        src={user.avatarUrl} 
+                        alt={user.name} 
+                        className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-sm">
+                        {user?.name?.charAt(0) || 'U'}
+                      </div>
+                    )}
                   </div>
                   
                   {/* Dropdown */}
@@ -71,7 +79,10 @@ export default function Navbar() {
                       <p className="text-sm font-bold text-brand-navy truncate">{user?.name}</p>
                       <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                     </div>
-                    <div className="p-2">
+                    <div className="p-2 space-y-1">
+                      <Link href="/settings" className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-2 font-medium">
+                        <Settings className="w-4 h-4" /> Settings
+                      </Link>
                       <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 font-medium">
                         <LogOut className="w-4 h-4" /> Sign Out
                       </button>

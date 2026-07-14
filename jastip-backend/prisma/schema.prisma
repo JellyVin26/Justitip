@@ -15,6 +15,10 @@ model User {
   email         String    @unique
   password      String    // Hashed password for auth
   phoneNumber   String?
+  avatarUrl     String?
+  country       String?
+  city          String?
+  bio           String?
   trips         Trip[]    // If role is SELLER
   orders        Order[]   // If role is BUYER
   listings      Listing[] // If role is SELLER
