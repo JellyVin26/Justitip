@@ -189,28 +189,33 @@ export default function TripDetailsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Estimated Price</label>
-                  <div className="flex bg-gray-50 border border-gray-200 rounded-xl focus-within:ring-2 focus-within:ring-brand-accent/50 focus-within:border-brand-accent transition-all">
-                    <select 
-                      value={formData.localCurrency}
-                      onChange={(e) => setFormData({...formData, localCurrency: e.target.value})}
-                      className="bg-transparent pl-3 pr-2 py-3 border-r border-gray-200 text-sm font-bold text-brand-navy focus:outline-none"
-                    >
-                      <option value="USD">USD</option>
-                      <option value="EUR">EUR</option>
-                      <option value="GBP">GBP</option>
-                      <option value="SGD">SGD</option>
-                      <option value="JPY">JPY</option>
-                      <option value="AUD">AUD</option>
-                    </select>
-                    <input 
-                      type="number" 
-                      value={formData.estimatedPrice}
-                      onChange={(e) => setFormData({...formData, estimatedPrice: e.target.value})}
-                      className="w-full px-3 py-3 bg-transparent focus:outline-none"
-                      placeholder="e.g. 50"
-                    />
-                  </div>
+                  <input 
+                    type="number" 
+                    value={formData.estimatedPrice}
+                    onChange={(e) => setFormData({...formData, estimatedPrice: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                    placeholder="e.g. 50"
+                  />
                 </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Local Currency</label>
+                  <select 
+                    value={formData.localCurrency}
+                    onChange={(e) => setFormData({...formData, localCurrency: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                  >
+                    <option value="USD">USD ($)</option>
+                    <option value="JPY">JPY (¥)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="KRW">KRW (₩)</option>
+                    <option value="SGD">SGD (S$)</option>
+                    <option value="AUD">AUD (A$)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Quantity</label>
                   <input 
@@ -222,21 +227,20 @@ export default function TripDetailsPage() {
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Category</label>
-                <select 
-                  value={formData.category}
-                  onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
-                >
-                  <option>Beauty & Cosmetics</option>
-                  <option>Fashion & Apparel</option>
-                  <option>Electronics</option>
-                  <option>Food & Snacks</option>
-                  <option>Other</option>
-                </select>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Category</label>
+                  <select 
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                  >
+                    <option>Beauty & Cosmetics</option>
+                    <option>Fashion & Apparel</option>
+                    <option>Electronics</option>
+                    <option>Food & Snacks</option>
+                    <option>Other</option>
+                  </select>
+                </div>
               </div>
 
               <div className="pt-4 flex gap-3">
