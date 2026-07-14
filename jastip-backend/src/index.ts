@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';
-import prisma from '../src/prisma'; // prisma client path
+import prisma from './prisma';
 import multer from 'multer';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
