@@ -19,7 +19,7 @@ export default function TripDetailsPage() {
     estimatedPrice: '',
     localCurrency: 'USD',
     quantity: 1,
-    category: 'Beauty & Cosmetics'
+    category: 'Trending'
   });
 
   useEffect(() => {
@@ -234,11 +234,13 @@ export default function TripDetailsPage() {
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
                   >
-                    <option>Beauty & Cosmetics</option>
-                    <option>Fashion & Apparel</option>
-                    <option>Electronics</option>
-                    <option>Food & Snacks</option>
-                    <option>Other</option>
+                    <option value="Trending">Trending</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Snacks & Food">Snacks & Food</option>
+                    <option value="Toys & Collectibles">Toys & Collectibles</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
               </div>

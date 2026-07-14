@@ -186,12 +186,12 @@ export default function SellerOrderDetailsPage() {
     }
   };
 
-  if (loading) return <div className="flex justify-center h-[calc(100vh-129px)] items-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div></div>;
+  if (loading) return <div className="flex justify-center h-full items-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div></div>;
   if (!order) return <div className="text-center py-20 text-gray-500 font-medium">Order not found</div>;
   if (user && order.trip?.sellerId !== user.id) return <div className="text-center py-20 text-red-500 font-bold text-lg tracking-wide uppercase">Unauthorized. You are not the seller of this order.</div>;
 
   return (
-    <div className="flex flex-col md:flex-row h-[calc(100vh-129px)] w-full overflow-hidden bg-white">
+    <div className="flex flex-col md:flex-row h-full w-full overflow-hidden bg-white">
       {/* Left Sidebar */}
       <div className="w-full md:w-[380px] lg:w-[450px] border-r border-gray-200 bg-white p-6 md:p-8 overflow-y-auto shrink-0 flex flex-col">
         {/* Item Info */}
