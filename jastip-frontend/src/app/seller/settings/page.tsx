@@ -1,6 +1,6 @@
 export default function SellerSettingsPage() {
   return (
-    <main className="p-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <h1 className="text-3xl font-bold text-brand-navy mb-8">Settings</h1>
       <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm max-w-2xl">
         <h2 className="font-bold text-lg text-brand-navy mb-6">Profile Information</h2>
@@ -18,6 +18,6 @@ export default function SellerSettingsPage() {
           </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

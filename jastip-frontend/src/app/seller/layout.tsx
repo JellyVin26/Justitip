@@ -7,9 +7,9 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   const isFullPage = pathname?.match(/\/seller\/orders\/[a-zA-Z0-9-]+/);
 
   return (
-    <div className={`flex flex-col bg-[#F8F9FA] ${isFullPage ? 'h-[calc(100vh-64px)] overflow-hidden' : 'min-h-[calc(100vh-64px)]'}`}>
+    <div className={`flex flex-col ${isFullPage ? 'h-[calc(100vh-64px)] overflow-hidden' : 'min-h-[calc(100vh-64px)]'}`}>
       {/* Main Content Area */}
-      <div className={`flex-1 w-full flex flex-col ${isFullPage ? 'h-full' : 'max-w-7xl mx-auto p-8'}`}>
+      <div className={`flex-1 w-full flex flex-col ${isFullPage ? 'h-full' : ''}`}>
         {children}
       </div>
     </div>

@@ -41,7 +41,7 @@ export default function SellerListingsPage() {
   };
 
   return (
-    <main className="p-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-brand-navy">My Listings</h1>
         <button onClick={() => setIsModalOpen(true)} className="bg-brand-navy text-white px-5 py-2.5 rounded-lg font-bold text-sm hover:bg-gray-800 smooth-hover tracking-wide shadow-sm">
@@ -106,6 +106,6 @@ export default function SellerListingsPage() {
           fetchListings();
         }}
       />
-    </main>
+      </div>
   );
 }

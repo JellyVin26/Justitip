@@ -33,7 +33,7 @@ export default function ManageTripPage() {
   };
 
   return (
-    <main className="p-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link href="/seller/dashboard" className="text-sm text-gray-500 hover:text-brand-navy mb-2 block">&larr; Back to Dashboard</Link>
@@ -113,6 +113,6 @@ export default function ManageTripPage() {
           fetchListings();
         }}
       />
-    </main>
+    </div>
   );
 }

@@ -45,7 +45,7 @@ export default function MarketplacePage() {
     }
   };
   return (
-    <div className="max-w-6xl mx-auto px-8 py-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       {/* Header Section */}
       <section className="mb-12">
         <h1 className="text-4xl font-bold text-brand-navy mb-4">

@@ -27,7 +27,7 @@ export default function OrdersPage() {
   if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-navy"></div></div>;
 
   return (
-    <main className="p-10 max-w-6xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <h1 className="text-3xl font-bold text-brand-navy mb-8">My Orders</h1>
       {orders.length === 0 ? (
         <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm flex flex-col items-center text-center">
@@ -81,6 +81,6 @@ export default function OrdersPage() {
           </table>
         </div>
       )}
-    </main>
+    </div>
   );
 }

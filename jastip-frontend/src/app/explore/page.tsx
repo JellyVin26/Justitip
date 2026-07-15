@@ -22,7 +22,7 @@ export default function ExplorePage() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <section className="mb-14">
         <h1 className="text-4xl font-bold text-brand-navy mb-4">
           Discover your next <span className="italic text-gray-500 font-serif">global courier.</span>

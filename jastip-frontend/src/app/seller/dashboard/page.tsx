@@ -76,7 +76,7 @@ export default function SellerDashboardPage() {
   };
 
   return (
-    <main className="p-10">
+    <div className="w-full max-w-6xl mx-auto px-8 py-10">
         
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -241,7 +241,7 @@ export default function SellerDashboardPage() {
             fetchDashboardData();
           }}
         />
-      </main>
+      </div>
     
   );
 }
