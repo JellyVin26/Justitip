@@ -26,7 +26,9 @@ export const register = async (req: Request, res: Response) => {
       { expiresIn: '1d' }
     );
 
-    res.status(201).json({ user, token });
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.status(201).json({ user: userWithoutPassword, token });
   } catch (error: any) {
     if (error.code === 'P2002') {
       return res.status(400).json({ error: 'This email is already registered.' });
@@ -54,7 +56,9 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: '1d' }
     );
 
-    res.status(200).json({ user, token });
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.status(200).json({ user: userWithoutPassword, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
