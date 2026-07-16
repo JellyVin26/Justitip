@@ -12,6 +12,7 @@ export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Items');
   const [sortOption, setSortOption] = useState('Newest First');
+  const [followedSellers, setFollowedSellers] = useState<Set<string>>(new Set());
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
@@ -101,11 +102,24 @@ export default function MarketplacePage() {
       router.push('/login');
       return;
     }
+    
+    // Optimistic UI update
+    setFollowedSellers(prev => {
+      const newSet = new Set(prev);
+      newSet.add(sellerId);
+      return newSet;
+    });
+
     try {
       await api.post(`/users/${sellerId}/follow`);
-      alert("Successfully followed seller!");
     } catch (error) {
       console.error('Failed to follow seller', error);
+      // Revert on failure
+      setFollowedSellers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(sellerId);
+        return newSet;
+      });
       alert('Failed to follow seller.');
     }
   };
@@ -248,7 +262,11 @@ export default function MarketplacePage() {
                     <div>
                       <div className="flex items-center gap-1.5">
                         <p className="text-xs font-bold text-brand-navy">{listing.seller?.name || 'Unknown'}</p>
-                        <button onClick={() => handleFollow(listing.sellerId)} className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
+                        {followedSellers.has(listing.sellerId) ? (
+                          <span className="text-[10px] font-bold text-gray-400">Following</span>
+                        ) : (
+                          <button onClick={() => handleFollow(listing.sellerId)} className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
+                        )}
                       </div>
                       <div className="flex items-center gap-1">
                         <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />

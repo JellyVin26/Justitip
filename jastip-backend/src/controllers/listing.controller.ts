@@ -50,7 +50,8 @@ export const getListings = async (req: Request, res: Response) => {
 
     if (search) {
       whereClause.productName = {
-        contains: search as string
+        contains: search as string,
+        mode: 'insensitive'
       };
     }
 
