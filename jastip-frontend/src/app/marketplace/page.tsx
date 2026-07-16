@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Package, ShieldCheck, Star } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 
 export default function MarketplacePage() {
@@ -10,7 +11,9 @@ export default function MarketplacePage() {
   const [followingOnly, setFollowingOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Items');
+  const [sortOption, setSortOption] = useState('Newest First');
   const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     fetchListings();
@@ -37,13 +40,76 @@ export default function MarketplacePage() {
       endpoint = endpoint.replace(/[?&]$/, '');
 
       const response = await api.get(endpoint);
-      setListings(response.data);
+      
+      let fetchedListings = response.data;
+      if (sortOption === 'Lowest Price') {
+        fetchedListings = fetchedListings.sort((a: any, b: any) => a.price - b.price);
+      } else if (sortOption === 'Highest Price') {
+        fetchedListings = fetchedListings.sort((a: any, b: any) => b.price - a.price);
+      } else {
+        // Newest First (default from backend usually, but let's enforce)
+        fetchedListings = fetchedListings.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      
+      setListings(fetchedListings);
     } catch (error) {
       console.error('Failed to fetch listings', error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    let sorted = [...listings];
+    if (sortOption === 'Lowest Price') {
+      sorted = sorted.sort((a: any, b: any) => a.price - b.price);
+    } else if (sortOption === 'Highest Price') {
+      sorted = sorted.sort((a: any, b: any) => b.price - a.price);
+    } else {
+      sorted = sorted.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+    setListings(sorted);
+  }, [sortOption]);
+
+  const handleOrder = async (listing: any) => {
+    if (!isAuthenticated || !user) {
+      alert("Please log in to place an order.");
+      router.push('/login');
+      return;
+    }
+    
+    try {
+      const res = await api.post('/orders', {
+        tripId: listing.tripId,
+        buyerId: user.id,
+        productName: listing.productName,
+        estimatedPrice: listing.price,
+        localCurrency: listing.localCurrency,
+        quantity: 1,
+        category: listing.category
+      });
+      router.push(`/orders/${res.data.id}`);
+    } catch (error) {
+      console.error('Failed to order item', error);
+      alert('Failed to place order. Please try again.');
+    }
+  };
+
+  const handleFollow = async (sellerId: string) => {
+    if (!isAuthenticated || !user) {
+      alert("Please log in to follow sellers.");
+      router.push('/login');
+      return;
+    }
+    try {
+      await api.post(`/users/${sellerId}/follow`);
+      alert("Successfully followed seller!");
+    } catch (error) {
+      console.error('Failed to follow seller', error);
+      alert('Failed to follow seller.');
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-8 py-10">
       {/* Header Section */}
@@ -119,7 +185,11 @@ export default function MarketplacePage() {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-500">Sort by:</span>
-          <select className="text-sm font-bold text-brand-navy bg-transparent outline-none cursor-pointer">
+          <select 
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="text-sm font-bold text-brand-navy bg-transparent outline-none cursor-pointer"
+          >
             <option>Newest First</option>
             <option>Lowest Price</option>
             <option>Highest Price</option>
@@ -178,7 +248,7 @@ export default function MarketplacePage() {
                     <div>
                       <div className="flex items-center gap-1.5">
                         <p className="text-xs font-bold text-brand-navy">{listing.seller?.name || 'Unknown'}</p>
-                        <button className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
+                        <button onClick={() => handleFollow(listing.sellerId)} className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
                       </div>
                       <div className="flex items-center gap-1">
                         <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
@@ -197,7 +267,7 @@ export default function MarketplacePage() {
 
                 {/* Action Button */}
                 <div className="mt-4">
-                  <button className="w-full bg-brand-navy text-white font-bold text-sm py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm smooth-hover">
+                  <button onClick={() => handleOrder(listing)} className="w-full bg-brand-navy text-white font-bold text-sm py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm smooth-hover">
                     Order Now
                   </button>
                 </div>
@@ -215,18 +285,12 @@ export default function MarketplacePage() {
             You can still submit a custom request directly to a seller going to your desired country. Head over to the Trips page to browse active routes.
           </p>
         </div>
-        <button className="bg-white text-blue-600 font-bold px-6 py-3 rounded-xl border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-transparent smooth-hover whitespace-nowrap shadow-sm">
+        <button onClick={() => router.push('/trips')} className="bg-white text-blue-600 font-bold px-6 py-3 rounded-xl border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-transparent smooth-hover whitespace-nowrap shadow-sm">
           Browse Trips
         </button>
       </div>
 
-      {/* Load More */}
-      <div className="mt-12 text-center">
-        <button className="bg-white border border-gray-200 text-brand-navy font-bold px-8 py-3 rounded-xl hover:bg-gray-50 shadow-sm smooth-hover">
-          Load More Items
-        </button>
-      </div>
-
+      {/* Load More Removed - Pagination not supported yet */}
     </div>
   );
 }

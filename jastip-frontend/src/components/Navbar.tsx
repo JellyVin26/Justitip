@@ -47,9 +47,6 @@ export default function Navbar() {
               <Link href="/seller/listings" className={`flex items-center gap-1.5 px-2 ${isActive('/seller/listings') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}`}>
                 <List className="w-4 h-4" /> My Listings
               </Link>
-              <Link href="/seller/settings" className={`flex items-center gap-1.5 px-2 ${isActive('/seller/settings') ? "text-brand-navy font-semibold border-b-2 border-brand-navy pb-5 translate-y-[10px]" : "hover:text-brand-navy smooth-hover"}`}>
-                <Settings className="w-4 h-4" /> Settings
-              </Link>
             </div>
           )}
         </div>

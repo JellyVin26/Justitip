@@ -3,21 +3,28 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 
 export default function ExplorePage() {
   const [trips, setTrips] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const fetchTrips = async (country?: string) => {
+    try {
+      let endpoint = '/trips';
+      if (country) {
+        endpoint += `?country=${encodeURIComponent(country)}`;
+      }
+      const response = await api.get(endpoint);
+      setTrips(response.data);
+    } catch (error) {
+      console.error("Error fetching trips:", error);
+    }
+  };
 
   useEffect(() => {
-    // Fetch live trips from the backend API
-    const fetchTrips = async () => {
-      try {
-        const response = await api.get('/trips');
-        setTrips(response.data);
-      } catch (error) {
-        console.error("Error fetching trips:", error);
-      }
-    };
     fetchTrips();
   }, []);
 
@@ -33,10 +40,18 @@ export default function ExplorePage() {
           </div>
           <input 
             type="text" 
-            placeholder="Where do you need things from? (e.g. Tokyo, Paris, NYC)"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') fetchTrips(searchQuery);
+            }}
+            placeholder="Where do you need things from? (e.g. Japan, France, USA)"
             className="w-full pl-12 pr-32 py-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm"
           />
-          <button className="absolute inset-y-2 right-2 bg-brand-navy text-white px-6 rounded text-sm font-medium hover:bg-gray-800 smooth-hover">
+          <button 
+            onClick={() => fetchTrips(searchQuery)}
+            className="absolute inset-y-2 right-2 bg-brand-navy text-white px-6 rounded text-sm font-medium hover:bg-gray-800 smooth-hover"
+          >
             Search
           </button>
         </div>
@@ -91,7 +106,13 @@ export default function ExplorePage() {
           <h2 className="text-3xl font-bold text-white mb-4">Can't find your destination?</h2>
           <p className="text-gray-300 mb-8 max-w-xl mx-auto text-sm">Create a custom request and let our global community of sellers reach out to you.</p>
           <div className="flex justify-center gap-4">
-            <button className="bg-white text-brand-navy px-6 py-3 rounded text-sm font-bold tracking-wide hover:bg-gray-100 smooth-hover">
+            <button 
+              onClick={() => {
+                alert("Please select a specific trip to request an item.");
+                router.push('/trips');
+              }}
+              className="bg-white text-brand-navy px-6 py-3 rounded text-sm font-bold tracking-wide hover:bg-gray-100 smooth-hover"
+            >
               POST CUSTOM REQUEST
             </button>
           </div>
