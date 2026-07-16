@@ -5,11 +5,9 @@ import prisma from '../prisma';
 export const followUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params; // ID of the user to follow
-    // In a real app, followerId comes from req.user.id (JWT)
-    // For prototype, we pass it in body
-    const { followerId } = req.body; 
+    const followerId = req.user?.id;
 
-    if (!followerId) return res.status(400).json({ error: 'followerId is required' });
+    if (!followerId) return res.status(401).json({ error: 'Unauthorized' });
 
     const follow = await prisma.follows.create({
       data: {
@@ -27,9 +25,9 @@ export const followUser = async (req: Request, res: Response) => {
 export const unfollowUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params; 
-    const { followerId } = req.body; 
+    const followerId = req.user?.id; 
 
-    if (!followerId) return res.status(400).json({ error: 'followerId is required' });
+    if (!followerId) return res.status(401).json({ error: 'Unauthorized' });
 
     await prisma.follows.delete({
       where: {
