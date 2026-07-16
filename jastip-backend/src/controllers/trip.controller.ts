@@ -27,7 +27,10 @@ export const getTrips = async (req: Request, res: Response) => {
     let whereClause: any = { status: 'UPCOMING' };
     
     if (country) {
-      whereClause.destinationCountry = country as string;
+      whereClause.destinationCountry = {
+        contains: country as string,
+        mode: 'insensitive'
+      };
     }
 
     if (sellerId) {
