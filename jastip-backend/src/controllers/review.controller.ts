@@ -4,7 +4,7 @@ import prisma from '../prisma';
 export const createReview = async (req: Request, res: Response): Promise<void> => {
   try {
     const { orderId, rating, comment } = req.body;
-    const buyerId = req.user.userId;
+    const buyerId = req.user.id;
 
     if (!orderId || !rating || rating < 1 || rating > 5) {
       res.status(400).json({ error: 'Invalid review data. Rating must be 1-5.' });
