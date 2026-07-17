@@ -11,7 +11,7 @@ api.interceptors.request.use(
   (config) => {
     // Only run on client side
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
