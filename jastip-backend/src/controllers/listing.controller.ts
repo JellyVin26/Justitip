@@ -58,14 +58,38 @@ export const getListings = async (req: Request, res: Response) => {
     const listings = await prisma.listing.findMany({ 
       where: whereClause, 
       include: { 
-        seller: true,
+        seller: {
+          include: {
+            sellerReviews: { select: { rating: true } }
+          }
+        },
         trip: true
       },
       orderBy: {
         createdAt: 'desc'
       }
     });
-    res.status(200).json(listings);
+
+    const listingsWithRating = listings.map(listing => {
+      const reviews = listing.seller.sellerReviews;
+      const averageRating = reviews.length > 0 
+        ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length 
+        : 0;
+      
+      // Clean up sellerReviews from the response
+      const { sellerReviews, ...sellerData } = listing.seller;
+      
+      return {
+        ...listing,
+        seller: {
+          ...sellerData,
+          averageRating,
+          reviewCount: reviews.length
+        }
+      };
+    });
+
+    res.status(200).json(listingsWithRating);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

@@ -65,7 +65,8 @@ export const getOrderById = async (req: Request, res: Response) => {
           orderBy: {
             createdAt: 'desc'
           }
-        }
+        },
+        review: true
       }
     });
     if (!order) {

@@ -22,6 +22,8 @@ model User {
   trips         Trip[]    // If role is SELLER
   orders        Order[]   // If role is BUYER
   listings      Listing[] // If role is SELLER
+  sellerReviews Review[]  @relation("SellerReviews")
+  buyerReviews  Review[]  @relation("BuyerReviews")
   followers     Follows[] @relation("following")
   following     Follows[] @relation("follower")
   createdAt     DateTime  @default(now())
@@ -95,6 +97,7 @@ model Order {
   payments        Payment[]
   messages        Message[]
   history         OrderStatusHistory[]
+  review          Review?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
@@ -125,5 +128,18 @@ model Message {
   order         Order     @relation(fields: [orderId], references: [id])
   senderId      String
   content       String
+  createdAt     DateTime  @default(now())
+}
+
+model Review {
+  id            String    @id @default(uuid())
+  orderId       String    @unique
+  order         Order     @relation(fields: [orderId], references: [id])
+  sellerId      String
+  seller        User      @relation("SellerReviews", fields: [sellerId], references: [id])
+  buyerId       String
+  buyer         User      @relation("BuyerReviews", fields: [buyerId], references: [id])
+  rating        Int
+  comment       String?
   createdAt     DateTime  @default(now())
 }

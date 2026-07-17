@@ -14,6 +14,7 @@ import orderRoutes from './routes/order.routes';
 import paymentRoutes from './routes/payment.routes';
 import userRoutes from './routes/user.routes';
 import listingRoutes from './routes/listing.routes';
+import reviewRoutes from './routes/review.routes';
 import { authMiddleware } from './middleware/auth.middleware';
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/listings', listingRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));

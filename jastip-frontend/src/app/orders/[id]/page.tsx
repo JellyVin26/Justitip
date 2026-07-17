@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, Phone, Info, Paperclip, ImageIcon, Send, Check, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Phone, Info, Paperclip, ImageIcon, Send, Check, ArrowRight, Star } from 'lucide-react';
 import api from '@/lib/api';
+import ReviewModal from '@/components/ReviewModal';
 import { useAuth } from '@/context/AuthContext';
 import { io, Socket } from 'socket.io-client';
 
@@ -15,6 +16,7 @@ export default function OrderDetailsPage() {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [updatingPayment, setUpdatingPayment] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const socketRef = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -237,6 +239,29 @@ export default function OrderDetailsPage() {
             })}
           </div>
         </div>
+
+        {/* Review Section */}
+        {(order.status === 'COMPLETED' || order.status === 'DELIVERED') && !order.review && (
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <button 
+              onClick={() => setIsReviewModalOpen(true)}
+              className="w-full bg-brand-navy text-white text-[15px] font-bold px-6 py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
+            >
+              Rate Your Experience
+            </button>
+          </div>
+        )}
+        {order.review && (
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <h3 className="text-[13px] font-bold text-gray-900 mb-2 tracking-wide uppercase">Your Review</h3>
+            <div className="flex items-center gap-1 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className={`w-4 h-4 ${i < order.review.rating ? 'text-yellow-400 fill-current' : 'text-gray-200'}`} />
+              ))}
+            </div>
+            {order.review.comment && <p className="text-[13px] text-gray-600 italic">"{order.review.comment}"</p>}
+          </div>
+        )}
       </div>
 
       {/* Right Chat Area */}
@@ -334,6 +359,17 @@ export default function OrderDetailsPage() {
           </form>
         </div>
       </div>
+      
+      <ReviewModal 
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        orderId={order.id}
+        sellerName={order.trip.seller?.name || 'Seller'}
+        onSuccess={() => {
+          // Refresh order data
+          api.get(`/orders/${orderId}`).then(res => setOrder(res.data));
+        }}
+      />
     </div>
   );
 }

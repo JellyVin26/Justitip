@@ -218,7 +218,7 @@ export default function LoginPage() {
 
         {/* Absolute Footer */}
         <div className="absolute bottom-6 left-8 right-8 flex justify-between items-center text-[10px] text-gray-400 uppercase tracking-wider font-semibold hidden sm:flex">
-          <p>© 2024 Justitip Inc.</p>
+          <p>© {new Date().getFullYear()} Justitip Inc.</p>
           <div className="flex gap-4">
             <Link href="#" className="hover:text-gray-600">Privacy</Link>
             <Link href="#" className="hover:text-gray-600">Terms</Link>

@@ -95,9 +95,27 @@ export default function TripsPage() {
 
       {/* Trips Grid */}
       {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div>
-        </div>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-[280px]">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-12 w-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                <div className="flex-1">
+                  <div className="h-5 bg-gray-200 rounded w-2/3 animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+                </div>
+              </div>
+              <div className="space-y-3 mb-6">
+                <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+              </div>
+              <div className="mt-auto border-t border-gray-100 pt-4 flex justify-between">
+                <div className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="h-10 w-32 bg-gray-200 rounded-xl animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </section>
       ) : trips.length === 0 ? (
         <div className="text-center py-20 bg-white border border-gray-200 rounded-2xl">
           <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -143,7 +161,15 @@ export default function TripsPage() {
                       </div>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-xs font-bold text-gray-700">5.0</span>
+                        <span className="text-[11px] font-bold text-gray-700">
+                          {trip.seller?.averageRating > 0 ? trip.seller.averageRating.toFixed(1) : 'New'}
+                        </span>
+                        {trip.seller?.reviewCount > 0 && (
+                          <span className="text-[11px] text-gray-400">({trip.seller.reviewCount})</span>
+                        )}
+                        {trip.seller?.completedTripsCount > 0 && (
+                          <span className="text-[11px] text-gray-400 ml-1">• {trip.seller.completedTripsCount} trips</span>
+                        )}
                       </div>
                     </div>
                   </div>

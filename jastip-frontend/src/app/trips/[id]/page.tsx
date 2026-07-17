@@ -148,11 +148,20 @@ export default function TripDetailsPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-brand-navy tracking-tight">{trip.seller?.name || 'Verified Seller'}</h3>
-                  <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex items-center gap-1 mt-1">
                     <Star className="w-3.5 h-3.5 text-yellow-400 fill-current" />
-                    <span className="text-sm font-bold text-gray-700">5.0</span>
-                    <span className="text-[11px] font-semibold text-gray-400">(24 completed trips)</span>
+                    <span className="text-xs font-bold text-gray-700">
+                      {trip.seller?.averageRating > 0 ? trip.seller.averageRating.toFixed(1) : 'New'}
+                    </span>
+                    {trip.seller?.reviewCount > 0 && (
+                      <span className="text-xs text-gray-400">({trip.seller.reviewCount})</span>
+                    )}
                   </div>
+                  {trip.seller?.completedTripsCount > 0 && (
+                    <p className="text-[11px] text-gray-400 font-medium mt-1">
+                      {trip.seller.completedTripsCount} Completed Trips
+                    </p>
+                  )}
                 </div>
               </div>
               <button 

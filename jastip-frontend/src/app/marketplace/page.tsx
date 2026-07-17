@@ -213,9 +213,24 @@ export default function MarketplacePage() {
 
       {/* Results Grid */}
       {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div>
-        </div>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col h-[400px]">
+              <div className="h-56 bg-gray-200 animate-pulse"></div>
+              <div className="p-5 flex-1 flex flex-col gap-4">
+                <div className="h-6 bg-gray-200 animate-pulse rounded w-3/4"></div>
+                <div className="h-8 bg-gray-200 animate-pulse rounded w-1/3"></div>
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 animate-pulse rounded w-20"></div>
+                  </div>
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-12"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
       ) : listings.length === 0 ? (
         <div className="text-center py-20 bg-white border border-gray-200 rounded-2xl">
           <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -268,9 +283,14 @@ export default function MarketplacePage() {
                           <button onClick={() => handleFollow(listing.sellerId)} className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
                         )}
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
-                        <span className="text-[10px] font-bold text-gray-700">5.0</span>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                        <span className="text-[11px] font-bold text-gray-700">
+                          {listing.seller?.averageRating > 0 ? listing.seller.averageRating.toFixed(1) : 'New'}
+                        </span>
+                        {listing.seller?.reviewCount > 0 && (
+                          <span className="text-[11px] text-gray-400">({listing.seller.reviewCount})</span>
+                        )}
                       </div>
                     </div>
                   </div>
