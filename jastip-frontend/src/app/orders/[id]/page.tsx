@@ -91,6 +91,17 @@ export default function OrderDetailsPage() {
     }
   };
 
+  const handleCancelOrder = async () => {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    try {
+      const res = await api.patch(`/orders/${orderId}/status`, { status: 'CANCELLED' });
+      setOrder(res.data);
+    } catch (err: any) {
+      console.error('Failed to cancel order', err);
+      alert(`Failed to cancel order: ${err.response?.data?.error || err.message}`);
+    }
+  };
+
   if (loading) return <div className="flex justify-center h-[calc(100vh-64px)] items-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div></div>;
   if (!order) return <div className="text-center py-20 text-gray-500 font-medium">Order not found</div>;
   if (user && order.buyerId !== user.id) return <div className="text-center py-20 text-red-500 font-bold text-lg tracking-wide uppercase">Unauthorized. You are not the buyer of this order.</div>;
@@ -146,6 +157,13 @@ export default function OrderDetailsPage() {
           </div>
         </div>
 
+        {order.status === 'CANCELLED' && (
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 text-center">
+            <h3 className="text-red-600 font-bold text-lg mb-1">Order Cancelled</h3>
+            <p className="text-sm text-red-400 font-medium">This order has been cancelled and can no longer be processed.</p>
+          </div>
+        )}
+
         {/* Payment Summary */}
         <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-gray-100">
           <h3 className="text-[13px] font-bold text-gray-900 mb-5 tracking-wide">Payment Summary</h3>
@@ -172,8 +190,19 @@ export default function OrderDetailsPage() {
         </div>
 
         {/* Order Progress */}
+        {order.status !== 'CANCELLED' && (
         <div className="flex-1">
-          <h3 className="text-xs font-bold text-gray-900 tracking-widest mb-8 uppercase">Order Progress</h3>
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-xs font-bold text-gray-900 tracking-widest uppercase">Order Progress</h3>
+            {(order.status === 'REQUEST_SUBMITTED' || order.status === 'TRIP_CONFIRMED') && (
+              <button 
+                onClick={handleCancelOrder}
+                className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors bg-red-50 px-3 py-1.5 rounded-lg"
+              >
+                Cancel Order
+              </button>
+            )}
+          </div>
           <div className="space-y-0 relative ml-3">
             {STATUS_STAGES.map((stage, idx) => {
               const isCompleted = idx < activeStageIndex;
@@ -237,8 +266,9 @@ export default function OrderDetailsPage() {
                 </div>
               )
             })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Review Section */}
         {(order.status === 'COMPLETED' || order.status === 'DELIVERED') && !order.review && (

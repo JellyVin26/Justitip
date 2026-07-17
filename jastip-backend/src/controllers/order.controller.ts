@@ -96,6 +96,14 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status } = req.body;
     
+    if (status === 'CANCELLED') {
+      const currentOrder = await prisma.order.findUnique({ where: { id } });
+      if (!currentOrder) return res.status(404).json({ error: 'Order not found' });
+      if (currentOrder.status !== 'REQUEST_SUBMITTED' && currentOrder.status !== 'TRIP_CONFIRMED') {
+        return res.status(400).json({ error: 'Order cannot be cancelled once paid.' });
+      }
+    }
+
     const order = await prisma.order.update({
       where: { id },
       data: { 

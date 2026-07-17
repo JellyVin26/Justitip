@@ -130,6 +130,20 @@ export default function SellerOrderDetailsPage() {
     }
   };
 
+  const handleCancelOrder = async () => {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    try {
+      setUpdatingStatus(true);
+      const res = await api.patch(`/orders/${orderId}/status`, { status: 'CANCELLED' });
+      setOrder({ ...order, status: res.data.status });
+    } catch (err: any) {
+      console.error('Failed to cancel order', err);
+      alert(`Failed to cancel order: ${err.response?.data?.error || err.message}`);
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
   const handleUpdatePricing = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -238,7 +252,25 @@ export default function SellerOrderDetailsPage() {
         </div>
 
         {/* Status Management */}
-        <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-gray-100 text-center">
+        {order.status === 'CANCELLED' ? (
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 text-center">
+            <h3 className="text-[14px] font-bold text-red-600 mb-2 tracking-wide uppercase">Order Status</h3>
+            <span className="bg-red-100 text-red-700 px-4 py-2 rounded-lg text-xs font-bold tracking-widest uppercase border border-red-200 inline-block mb-3">
+              CANCELLED
+            </span>
+            <p className="text-sm text-red-500 font-medium">This order has been cancelled and requires no further action.</p>
+          </div>
+        ) : (
+        <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-gray-100 text-center relative">
+          {(order.status === 'REQUEST_SUBMITTED' || order.status === 'TRIP_CONFIRMED') && (
+            <button 
+              onClick={handleCancelOrder}
+              disabled={updatingStatus}
+              className="absolute top-6 right-6 text-[11px] font-bold text-red-500 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              Cancel Order
+            </button>
+          )}
           <h3 className="text-[14px] font-bold text-gray-900 mb-5 tracking-wide">Order Status</h3>
           <div className="flex justify-center mb-6">
             <span className="bg-blue-100/60 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold tracking-widest uppercase border border-blue-200">
@@ -291,6 +323,7 @@ export default function SellerOrderDetailsPage() {
             );
           })()}
         </div>
+        )}
 
         {/* Pricing & Fees */}
         <div className="bg-slate-50 rounded-2xl p-6 border border-gray-100">
