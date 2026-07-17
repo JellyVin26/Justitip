@@ -90,9 +90,9 @@ export default function MarketplacePage() {
         category: listing.category
       });
       router.push(`/orders/${res.data.id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to order item', error);
-      alert('Failed to place order. Please try again.');
+      alert(`Failed to place order: ${error.response?.data?.error || error.message}`);
     }
   };
 
