@@ -11,7 +11,7 @@ export default function SettingsPage() {
   const { user, updateUser } = useAuth();
   
   // Form states
-  const [name, setName] = useState('');
+  const [name, setName] = useState(user?.name || '');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
