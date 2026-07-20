@@ -20,9 +20,12 @@ export const register = async (req: Request, res: Response) => {
       }
     });
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'supersecretjwtkey',
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -50,9 +53,12 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'supersecretjwtkey',
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 

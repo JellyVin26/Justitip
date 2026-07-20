@@ -21,9 +21,12 @@ async function main() {
       });
   }
 
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
   const token = jwt.sign(
     { userId: buyer.id, email: buyer.email, role: buyer.role },
-    process.env.JWT_SECRET || 'supersecretjwtkey',
+    process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
 

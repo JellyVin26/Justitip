@@ -24,7 +24,10 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
       return;
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey');
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     
     next();

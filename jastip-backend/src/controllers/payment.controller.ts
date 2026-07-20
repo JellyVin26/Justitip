@@ -31,6 +31,14 @@ export const generateQR = async (req: Request, res: Response) => {
 
 export const handleWebhook = async (req: Request, res: Response) => {
   try {
+    const signature = req.headers['x-payment-signature'];
+    if (!process.env.PAYMENT_WEBHOOK_SECRET) {
+      throw new Error('PAYMENT_WEBHOOK_SECRET is not set');
+    }
+    if (signature !== process.env.PAYMENT_WEBHOOK_SECRET) {
+      return res.status(403).json({ error: 'Invalid webhook signature' });
+    }
+
     const { paymentId, status } = req.body;
     
     // Update payment status (e.g. from Midtrans callback)
