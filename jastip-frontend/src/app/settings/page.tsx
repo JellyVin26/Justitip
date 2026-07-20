@@ -16,6 +16,7 @@ export default function SettingsPage() {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [bio, setBio] = useState('');
+  const [preferredCurrency, setPreferredCurrency] = useState(user?.preferredCurrency || 'USD');
   const [avatarUrl, setAvatarUrl] = useState('');
   
   // UI states
@@ -37,6 +38,7 @@ export default function SettingsPage() {
         setCountry(data.country || '');
         setCity(data.city || '');
         setBio(data.bio || '');
+        setPreferredCurrency(data.preferredCurrency || 'USD');
         setAvatarUrl(data.avatarUrl || '');
       } catch (err: any) {
         console.error('Failed to load profile details:', err);
@@ -96,6 +98,7 @@ export default function SettingsPage() {
         country,
         city,
         bio,
+        preferredCurrency,
       });
 
       // Update local auth context
@@ -281,6 +284,27 @@ export default function SettingsPage() {
                     className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium resize-none"
                     disabled={saving}
                   />
+                </div>
+              </div>
+
+              {/* Preferences */}
+              <div>
+                <h3 className="text-lg font-bold text-brand-navy mb-4 border-b border-gray-100 pb-2">Preferences</h3>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Preferred Currency</label>
+                  <select
+                    value={preferredCurrency}
+                    onChange={(e) => setPreferredCurrency(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium bg-white"
+                    disabled={saving}
+                  >
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="IDR">IDR - Indonesian Rupiah</option>
+                    <option value="GBP">GBP - British Pound</option>
+                    <option value="SGD">SGD - Singapore Dollar</option>
+                    <option value="JPY">JPY - Japanese Yen</option>
+                  </select>
                 </div>
               </div>
 

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Package, ShieldCheck, Star } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { formatCurrency } from '@/lib/currency';
 
 export default function MarketplacePage() {
   const [listings, setListings] = useState<any[]>([]);
@@ -35,6 +35,10 @@ export default function MarketplacePage() {
 
       if (searchQuery) {
         endpoint += `search=${encodeURIComponent(searchQuery)}&`;
+      }
+      
+      if (user?.preferredCurrency) {
+        endpoint += `currency=${encodeURIComponent(user.preferredCurrency)}&`;
       }
       
       // Remove trailing ? or &
@@ -259,7 +263,7 @@ export default function MarketplacePage() {
                     {listing.productName}
                   </h3>
                   <p className="font-black text-brand-accent text-2xl">
-                    ${listing.price} <span className="text-sm text-gray-400 font-medium">({listing.localCurrency})</span>
+                    {formatCurrency(listing.price, listing.localCurrency)}
                   </p>
                 </div>
                 

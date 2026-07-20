@@ -59,6 +59,7 @@ export const getUserById = async (req: Request, res: Response) => {
         country: true,
         city: true,
         bio: true,
+        preferredCurrency: true,
         createdAt: true,
         _count: {
           select: {
@@ -83,7 +84,7 @@ export const getUserById = async (req: Request, res: Response) => {
 export const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, phoneNumber, avatarUrl, country, city, bio } = req.body;
+    const { name, phoneNumber, avatarUrl, country, city, bio, preferredCurrency } = req.body;
 
     const user = await prisma.user.update({
       where: { id },
@@ -94,6 +95,7 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         country,
         city,
         bio,
+        preferredCurrency,
       },
       select: {
         id: true,
@@ -105,6 +107,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         country: true,
         city: true,
         bio: true,
+        preferredCurrency: true,
+        createdAt: true,
       }
     });
 

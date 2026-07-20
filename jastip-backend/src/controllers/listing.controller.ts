@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Request, Response } from 'express';
 import prisma from '../prisma';
+import { ExchangeService } from '../services/exchange.service';
 
 export const createListing = async (req: Request, res: Response) => {
   try {
@@ -70,6 +71,8 @@ export const getListings = async (req: Request, res: Response) => {
       }
     });
 
+    const targetCurrency = req.query.currency as string;
+
     const listingsWithRating = listings.map(listing => {
       const reviews = listing.seller.sellerReviews;
       const averageRating = reviews.length > 0 
@@ -79,8 +82,18 @@ export const getListings = async (req: Request, res: Response) => {
       // Clean up sellerReviews from the response
       const { sellerReviews, ...sellerData } = listing.seller;
       
+      let convertedPrice = listing.price;
+      let convertedCurrency = listing.localCurrency;
+
+      if (targetCurrency !== listing.localCurrency && targetCurrency) {
+        convertedPrice = ExchangeService.convert(listing.price, listing.localCurrency, targetCurrency);
+        convertedCurrency = targetCurrency;
+      }
+
       return {
         ...listing,
+        price: convertedPrice,
+        localCurrency: convertedCurrency,
         seller: {
           ...sellerData,
           averageRating,

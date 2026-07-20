@@ -16,9 +16,10 @@ model User {
   password      String    // Hashed password for auth
   phoneNumber   String?
   avatarUrl     String?
-  country       String?
-  city          String?
-  bio           String?
+  country           String?
+  city              String?
+  bio               String?
+  preferredCurrency String?   @default("USD")
   trips         Trip[]    // If role is SELLER
   orders        Order[]   // If role is BUYER
   listings      Listing[] // If role is SELLER

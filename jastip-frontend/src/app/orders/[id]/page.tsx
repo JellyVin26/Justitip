@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Phone, Info, Paperclip, ImageIcon, Send, Check, ArrowRight, Star } from 'lucide-react';
 import api from '@/lib/api';
+import { formatCurrency } from '@/lib/currency';
 import ReviewModal from '@/components/ReviewModal';
 import { useAuth } from '@/context/AuthContext';
 import { io, Socket } from 'socket.io-client';
@@ -170,21 +171,21 @@ export default function OrderDetailsPage() {
           <div className="space-y-3.5 text-sm mb-5">
             <div className="flex justify-between items-center">
               <span className="text-gray-500 font-medium">Local Item Price</span>
-              <span className="font-bold text-gray-900">{order.localCurrency || 'USD'} {(order.originalPrice || order.estimatedPrice || 0).toLocaleString()}</span>
+              <span className="font-bold text-gray-900">{formatCurrency(order.originalPrice || order.estimatedPrice || 0, order.localCurrency || 'USD')}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-500 font-medium">Shopper Markup (15%)</span>
-              <span className="font-bold text-gray-900">{order.localCurrency || 'USD'} {((order.originalPrice || order.estimatedPrice || 0) * 0.15).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+              <span className="font-bold text-gray-900">{formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 0.15, order.localCurrency || 'USD')}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-500 font-medium">Global Shipping</span>
-              <span className="font-bold text-gray-900">{order.localCurrency || 'USD'} 45.00</span>
+              <span className="font-bold text-gray-900">{formatCurrency(45, order.localCurrency || 'USD')}</span>
             </div>
           </div>
           <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
             <span className="font-bold text-gray-900 text-[15px]">Total Amount</span>
             <span className="font-bold text-gray-900 text-2xl tracking-tight">
-              {order.localCurrency || 'USD'} {((order.originalPrice || order.estimatedPrice || 0) * 1.15 + 45).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              {formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 1.15 + 45, order.localCurrency || 'USD')}
             </span>
           </div>
         </div>
