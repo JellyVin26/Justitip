@@ -262,7 +262,7 @@ export default function SellerOrderDetailsPage() {
           </div>
         ) : (
         <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-gray-100 text-center relative">
-          {(order.status === 'REQUEST_SUBMITTED' || order.status === 'TRIP_CONFIRMED') && (
+          {(order.status === 'TRIP_CONFIRMED') && (
             <button 
               onClick={handleCancelOrder}
               disabled={updatingStatus}
@@ -293,7 +293,7 @@ export default function SellerOrderDetailsPage() {
 
             const getNextStatusText = (status: string) => {
               switch (status) {
-                case 'TRIP_CONFIRMED': return 'Confirm Trip';
+                case 'TRIP_CONFIRMED': return 'Accept Order';
                 case 'PAID': return 'Awaiting Payment';
                 case 'ITEM_PURCHASED': return 'Mark as Purchased';
                 case 'IN_TRANSIT': return 'Mark as In Transit';
@@ -309,6 +309,23 @@ export default function SellerOrderDetailsPage() {
                   <div className="text-center p-3 bg-amber-50 rounded-xl border border-amber-100">
                     <p className="font-bold text-amber-700 text-sm">Awaiting Buyer Payment</p>
                     <p className="text-[11px] text-amber-600 mt-1">Waiting for the buyer to scan and pay.</p>
+                  </div>
+                ) : order.status === 'REQUEST_SUBMITTED' ? (
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleCancelOrder}
+                      disabled={updatingStatus}
+                      className="flex-1 bg-red-50 text-red-600 border border-red-200 font-bold py-3.5 rounded-xl hover:bg-red-100 transition-colors tracking-wide text-sm disabled:opacity-50"
+                    >
+                      Reject Order
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(nextStatus)}
+                      disabled={updatingStatus}
+                      className="flex-1 bg-[#0A192F] text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm tracking-wide text-sm disabled:opacity-50"
+                    >
+                      {updatingStatus ? 'UPDATING...' : 'Accept Order'}
+                    </button>
                   </div>
                 ) : (
                   <button

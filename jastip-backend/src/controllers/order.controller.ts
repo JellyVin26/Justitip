@@ -6,6 +6,14 @@ export const createOrder = async (req: Request, res: Response) => {
   try {
     const { tripId, buyerId, productName, productLink, productImageUrl, quantity, localCurrency, category, estimatedPrice } = req.body;
     
+    const trip = await prisma.trip.findUnique({ where: { id: tripId } });
+    if (!trip) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+    if (trip.sellerId === buyerId) {
+      return res.status(403).json({ error: 'Sellers cannot order from their own trips' });
+    }
+
     const order = await prisma.order.create({
       data: {
         tripId,
