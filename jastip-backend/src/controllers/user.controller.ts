@@ -9,6 +9,19 @@ export const followUser = async (req: Request, res: Response) => {
 
     if (!followerId) return res.status(401).json({ error: 'Unauthorized' });
 
+    const existing = await prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId,
+          followingId: id,
+        }
+      }
+    });
+
+    if (existing) {
+      return res.status(200).json({ message: 'Already following', follow: existing });
+    }
+
     const follow = await prisma.follows.create({
       data: {
         followerId,
@@ -39,6 +52,22 @@ export const unfollowUser = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ message: 'User unfollowed successfully' });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const getFollowing = async (req: Request, res: Response) => {
+  try {
+    const followerId = req.user?.id;
+    if (!followerId) return res.status(401).json({ error: 'Unauthorized' });
+
+    const following = await prisma.follows.findMany({
+      where: { followerId },
+      select: { followingId: true }
+    });
+
+    res.status(200).json(following.map(f => f.followingId));
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

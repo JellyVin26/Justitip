@@ -19,7 +19,15 @@ export default function MarketplacePage() {
 
   useEffect(() => {
     fetchListings();
-  }, [followingOnly, selectedCategory]);
+    
+    if (isAuthenticated && user) {
+      api.get('/users/me/following')
+        .then(res => {
+          setFollowedSellers(new Set(res.data));
+        })
+        .catch(err => console.error('Failed to fetch following', err));
+    }
+  }, [followingOnly, selectedCategory, isAuthenticated, user]);
 
   const fetchListings = async () => {
     try {
