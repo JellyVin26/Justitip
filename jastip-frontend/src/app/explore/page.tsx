@@ -81,7 +81,10 @@ export default function ExplorePage() {
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                  <img src={trip.image || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80'} alt={trip.destinationCountry} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
                  
-                 <div className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-md px-2 py-1 rounded-full">
+                 <div 
+                   className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-md px-2 py-1 rounded-full cursor-pointer hover:bg-white"
+                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/seller/${trip.sellerId}`; }}
+                 >
                    <div className="w-5 h-5 rounded-full bg-brand-navy flex items-center justify-center text-[10px] font-bold text-white">
                      {trip.seller?.name?.charAt(0) || 'S'}
                    </div>

@@ -279,7 +279,10 @@ export default function MarketplacePage() {
                 {/* Seller Info */}
                 <div className="flex items-center justify-between py-4 border-t border-gray-100 mt-auto">
                   <div className="flex items-center gap-2">
-                    <div className="relative">
+                    <div 
+                      className="relative cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); router.push(`/seller/${listing.sellerId}`); }}
+                    >
                       <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-xs">
                         {listing.seller?.name?.charAt(0) || 'S'}
                       </div>
@@ -289,7 +292,12 @@ export default function MarketplacePage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <p className="text-xs font-bold text-brand-navy">{listing.seller?.name || 'Unknown'}</p>
+                        <p 
+                          className="text-xs font-bold text-brand-navy cursor-pointer hover:underline"
+                          onClick={(e) => { e.stopPropagation(); router.push(`/seller/${listing.sellerId}`); }}
+                        >
+                          {listing.seller?.name || 'Unknown'}
+                        </p>
                         {followedSellers.has(listing.sellerId) ? (
                           <span className="text-[10px] font-bold text-gray-400">Following</span>
                         ) : (

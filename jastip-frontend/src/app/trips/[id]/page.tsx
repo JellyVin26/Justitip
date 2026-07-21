@@ -140,14 +140,22 @@ export default function TripDetailsPage() {
           <div className="space-y-6 relative">
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm sticky top-24">
               <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                <div className="w-12 h-12 shrink-0 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-lg relative shadow-inner">
+                <div 
+                  className="w-12 h-12 shrink-0 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-lg relative shadow-inner cursor-pointer"
+                  onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
+                >
                   {trip.seller?.name?.charAt(0) || 'S'}
                   <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
                     <ShieldCheck className="w-4 h-4 text-blue-500" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-brand-navy tracking-tight">{trip.seller?.name || 'Verified Seller'}</h3>
+                  <h3 
+                    className="font-bold text-brand-navy tracking-tight cursor-pointer hover:underline"
+                    onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
+                  >
+                    {trip.seller?.name || 'Verified Seller'}
+                  </h3>
                   <div className="flex items-center gap-1 mt-1">
                     <Star className="w-3.5 h-3.5 text-yellow-400 fill-current" />
                     <span className="text-xs font-bold text-gray-700">

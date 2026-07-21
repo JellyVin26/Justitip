@@ -146,7 +146,10 @@ export default function TripsPage() {
                 {/* Seller Info */}
                 <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
                   <div className="flex items-center gap-3">
-                    <div className="relative">
+                    <div 
+                      className="relative cursor-pointer"
+                      onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
+                    >
                       <div className="w-10 h-10 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold">
                         {trip.seller?.name?.charAt(0) || 'S'}
                       </div>
@@ -156,7 +159,12 @@ export default function TripsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold text-brand-navy">{trip.seller?.name || 'Unknown'}</p>
+                        <p 
+                          className="text-sm font-bold text-brand-navy cursor-pointer hover:underline"
+                          onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
+                        >
+                          {trip.seller?.name || 'Unknown'}
+                        </p>
                         <button className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold hover:bg-blue-100">Follow</button>
                       </div>
                       <div className="flex items-center gap-1 mt-0.5">

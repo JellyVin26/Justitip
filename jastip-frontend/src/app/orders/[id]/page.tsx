@@ -300,7 +300,10 @@ export default function OrderDetailsPage() {
         {/* Chat Header */}
         <div className="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold relative text-lg shrink-0 overflow-hidden">
+            <div 
+              className="w-11 h-11 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold relative text-lg shrink-0 overflow-hidden cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); router.push(`/seller/${order.trip.sellerId}`); }}
+            >
               {order.trip.seller?.avatarUrl ? (
                 <img src={order.trip.seller.avatarUrl} className="w-full h-full object-cover" alt="avatar" />
               ) : (
@@ -309,7 +312,12 @@ export default function OrderDetailsPage() {
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
             </div>
             <div className="flex flex-col">
-              <h3 className="font-bold text-gray-900 text-[15px] leading-tight">{order.trip.seller?.name || 'Seller'}</h3>
+              <h3 
+                className="font-bold text-gray-900 text-[15px] leading-tight cursor-pointer hover:underline"
+                onClick={(e) => { e.stopPropagation(); router.push(`/seller/${order.trip.sellerId}`); }}
+              >
+                {order.trip.seller?.name || 'Seller'}
+              </h3>
               <p className="text-[13px] text-gray-500 font-medium flex items-center gap-1 mt-0.5">
                 Verified Shopper <span className="text-gray-300">•</span> 4.9 ★
               </p>
