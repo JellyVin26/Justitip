@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Calendar, Weight, Star, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 
 export default function TripsPage() {
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const [followingOnly, setFollowingOnly] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
