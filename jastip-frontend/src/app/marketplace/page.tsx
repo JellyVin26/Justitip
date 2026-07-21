@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Package, ShieldCheck, Star } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
 
