@@ -6,6 +6,9 @@ const rates: Record<string, number> = {
   GBP: 0.8,
   JPY: 150,
   SGD: 1.34,
+  KRW: 1380,
+  AUD: 1.5,
+  THB: 35,
 };
 
 export class ExchangeService {
@@ -16,9 +19,16 @@ export class ExchangeService {
    * @param to The currency code to convert to
    * @returns The converted amount
    */
-  static convert(amount: number, from: string, to: string): number {
-    const fromRate = rates[from?.toUpperCase()] || 1;
-    const toRate = rates[to?.toUpperCase()] || 1;
+  static convert(amount: number, from: string, to: string): number | null {
+    const fromUpper = from?.toUpperCase();
+    const toUpper = to?.toUpperCase();
+    
+    if (!rates[fromUpper] || !rates[toUpper]) {
+      return null;
+    }
+
+    const fromRate = rates[fromUpper];
+    const toRate = rates[toUpper];
     
     const amountInUSD = amount / fromRate;
     return amountInUSD * toRate;

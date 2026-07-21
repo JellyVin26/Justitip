@@ -86,8 +86,11 @@ export const getListings = async (req: Request, res: Response) => {
       let convertedCurrency = listing.localCurrency;
 
       if (targetCurrency !== listing.localCurrency && targetCurrency) {
-        convertedPrice = ExchangeService.convert(listing.price, listing.localCurrency, targetCurrency);
-        convertedCurrency = targetCurrency;
+        const result = ExchangeService.convert(listing.price, listing.localCurrency, targetCurrency);
+        if (result !== null) {
+          convertedPrice = result;
+          convertedCurrency = targetCurrency;
+        }
       }
 
       return {

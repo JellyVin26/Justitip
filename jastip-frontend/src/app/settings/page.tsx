@@ -304,6 +304,9 @@ export default function SettingsPage() {
                     <option value="GBP">GBP - British Pound</option>
                     <option value="SGD">SGD - Singapore Dollar</option>
                     <option value="JPY">JPY - Japanese Yen</option>
+                    <option value="KRW">KRW - South Korean Won</option>
+                    <option value="AUD">AUD - Australian Dollar</option>
+                    <option value="THB">THB - Thai Baht</option>
                   </select>
                 </div>
               </div>
