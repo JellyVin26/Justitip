@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Phone, Info, Paperclip, ImageIcon, Send, Check, ArrowRight, Star } from 'lucide-react';
 import api from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
@@ -11,6 +11,7 @@ import { io, Socket } from 'socket.io-client';
 
 export default function OrderDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const { user } = useAuth();
   const [order, setOrder] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
