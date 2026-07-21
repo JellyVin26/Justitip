@@ -5,7 +5,7 @@ export const registerSchema = z.object({
   email: z.string().email('Must be a valid email'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   name: z.string().min(1, 'Name is required').max(100),
-  role: z.enum(['BUYER', 'SELLER'], { errorMap: () => ({ message: "Role must be BUYER or SELLER" }) }),
+  role: z.enum({ BUYER: 'BUYER', SELLER: 'SELLER' }, { message: "Role must be BUYER or SELLER" }),
   phoneNumber: z.string().optional()
 });
 
@@ -30,7 +30,7 @@ export const createListingSchema = z.object({
   sellerId: z.string().uuid('sellerId must be a valid UUID'),
   productName: z.string().min(1, 'Product name is required').max(200),
   description: z.string().optional(),
-  price: z.number({ invalid_type_error: 'Price must be a number' }).positive('Price must be positive'),
+  price: z.number({ message: 'Price must be a number' }).positive('Price must be positive'),
   localCurrency: z.string().min(2, 'Local currency is required'),
   imageUrl: z.string().url('imageUrl must be a valid URL').optional().or(z.literal('')),
   maxQuantity: z.number().int().positive().optional(),
@@ -52,15 +52,15 @@ export const createOrderSchema = z.object({
 
 export const updateOrderStatusSchema = z.object({
   status: z.enum(
-    ['REQUEST_SUBMITTED', 'TRIP_CONFIRMED', 'PAID', 'ITEM_PURCHASED', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'COMPLETED'],
-    { errorMap: () => ({ message: 'Invalid order status' }) }
+    { REQUEST_SUBMITTED: 'REQUEST_SUBMITTED', TRIP_CONFIRMED: 'TRIP_CONFIRMED', PAID: 'PAID', ITEM_PURCHASED: 'ITEM_PURCHASED', IN_TRANSIT: 'IN_TRANSIT', DELIVERED: 'DELIVERED', CANCELLED: 'CANCELLED', COMPLETED: 'COMPLETED' },
+    { message: 'Invalid order status' }
   )
 });
 
 export const updateOrderPricingSchema = z.object({
-  originalPrice: z.number({ invalid_type_error: 'originalPrice must be a number' }).positive(),
-  exchangeRate: z.number({ invalid_type_error: 'exchangeRate must be a number' }).positive(),
-  markupFee: z.number({ invalid_type_error: 'markupFee must be a number' }).nonnegative(),
+  originalPrice: z.number({ message: 'originalPrice must be a number' }).positive(),
+  exchangeRate: z.number({ message: 'exchangeRate must be a number' }).positive(),
+  markupFee: z.number({ message: 'markupFee must be a number' }).nonnegative(),
   shippingFee: z.number().nonnegative().optional(),
   paymentQrUrl: z.string().optional()
 });
