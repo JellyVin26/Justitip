@@ -168,26 +168,63 @@ export default function OrderDetailsPage() {
 
         {/* Payment Summary */}
         <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-gray-100">
-          <h3 className="text-[13px] font-bold text-gray-900 mb-5 tracking-wide">Payment Summary</h3>
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-[13px] font-bold text-gray-900 tracking-wide">Payment Summary</h3>
+            {order.totalPriceIdr ? (
+              <span className="text-[11px] font-bold bg-green-100 text-green-800 px-2.5 py-1 rounded-full">Confirmed Quote</span>
+            ) : (
+              <span className="text-[11px] font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">Estimated Quote</span>
+            )}
+          </div>
           <div className="space-y-3.5 text-sm mb-5">
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-medium">Local Item Price</span>
-              <span className="font-bold text-gray-900">{formatCurrency(order.originalPrice || order.estimatedPrice || 0, order.localCurrency || 'USD')}</span>
+              <span className="text-gray-500 font-medium">Local Item Price ({order.quantity || 1}x)</span>
+              <span className="font-bold text-gray-900">{formatCurrency((order.originalPrice || order.estimatedPrice || 0) * (order.quantity || 1), order.localCurrency || 'USD')}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-medium">Shopper Markup (15%)</span>
-              <span className="font-bold text-gray-900">{formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 0.15, order.localCurrency || 'USD')}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-medium">Global Shipping</span>
-              <span className="font-bold text-gray-900">{formatCurrency(45, order.localCurrency || 'USD')}</span>
-            </div>
+            {order.totalPriceIdr ? (
+              <>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Shopper Fee</span>
+                  <span className="font-bold text-gray-900">{formatCurrency(order.markupFee || 0, 'IDR')}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Shipping Fee</span>
+                  <span className="font-bold text-gray-900">{formatCurrency(order.shippingFee || 0, 'IDR')}</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Estimated Shopper Fee (15%)</span>
+                  <span className="font-bold text-gray-900">{formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 0.15 * (order.quantity || 1), order.localCurrency || 'USD')}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Estimated Shipping</span>
+                  <span className="font-bold text-gray-900">{formatCurrency(45, order.localCurrency || 'USD')}</span>
+                </div>
+              </>
+            )}
           </div>
           <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
             <span className="font-bold text-gray-900 text-[15px]">Total Amount</span>
-            <span className="font-bold text-gray-900 text-2xl tracking-tight">
-              {formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 1.15 + 45, order.localCurrency || 'USD')}
-            </span>
+            <div className="text-right">
+              {order.totalPriceIdr ? (
+                <>
+                  <div className="font-bold text-gray-900 text-2xl tracking-tight">
+                    {formatCurrency(order.totalPriceIdr, 'IDR')}
+                  </div>
+                  {order.totalPricePreferredCurrency && order.buyerPreferredCurrency !== 'IDR' && (
+                    <div className="text-xs font-semibold text-gray-500 mt-0.5">
+                      approx. {formatCurrency(order.totalPricePreferredCurrency, order.buyerPreferredCurrency)}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="font-bold text-gray-900 text-2xl tracking-tight">
+                  {formatCurrency((order.originalPrice || order.estimatedPrice || 0) * 1.15 * (order.quantity || 1) + 45, order.localCurrency || 'USD')}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

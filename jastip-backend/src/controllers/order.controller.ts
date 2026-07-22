@@ -78,6 +78,61 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 };
 
+const FALLBACK_IDR_RATES: Record<string, number> = {
+  IDR: 1,
+  USD: 1 / 16000,
+  EUR: 1 / 17500,
+  GBP: 1 / 20000,
+  JPY: 1 / 105,
+  SGD: 1 / 12000,
+  AUD: 1 / 10500,
+  KRW: 1 / 12.5,
+};
+
+async function getConvertedAmountInPreferredCurrency(amountIdr: number, targetCurrency: string, orderExchangeRate?: number | null, localCurrency?: string | null): Promise<number> {
+  if (!amountIdr) return 0;
+  if (targetCurrency === 'IDR') return amountIdr;
+  
+  if (orderExchangeRate && localCurrency && targetCurrency === localCurrency && orderExchangeRate > 0) {
+    return amountIdr / orderExchangeRate;
+  }
+
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/IDR', { signal: AbortSignal.timeout(2000) });
+    if (res.ok) {
+      const data = await res.json();
+      const rate = data.rates?.[targetCurrency];
+      if (rate) return amountIdr * rate;
+    }
+  } catch (e) {
+    // Fallback
+  }
+
+  const fallbackRate = FALLBACK_IDR_RATES[targetCurrency] || (1 / 16000);
+  return amountIdr * fallbackRate;
+}
+
+export async function enrichOrderWithCurrencyConversion(order: any) {
+  if (!order) return order;
+  const buyerCurrency = order.buyer?.preferredCurrency || 'USD';
+  
+  let totalPricePreferredCurrency = null;
+  if (order.totalPriceIdr) {
+    totalPricePreferredCurrency = await getConvertedAmountInPreferredCurrency(
+      order.totalPriceIdr,
+      buyerCurrency,
+      order.exchangeRate,
+      order.localCurrency
+    );
+  }
+
+  return {
+    ...order,
+    buyerPreferredCurrency: buyerCurrency,
+    totalPricePreferredCurrency
+  };
+}
+
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const { buyerId, sellerId } = req.query;
@@ -91,7 +146,9 @@ export const getOrders = async (req: Request, res: Response) => {
       where: whereClause, 
       include: { trip: true, buyer: true } 
     });
-    res.status(200).json(orders);
+
+    const enrichedOrders = await Promise.all(orders.map(o => enrichOrderWithCurrencyConversion(o)));
+    res.status(200).json(enrichedOrders);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -120,7 +177,8 @@ export const getOrderById = async (req: Request, res: Response) => {
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
-    res.status(200).json(order);
+    const enriched = await enrichOrderWithCurrencyConversion(order);
+    res.status(200).json(enriched);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -176,7 +234,8 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
         }
       }
     });
-    res.status(200).json(order);
+    const enriched = await enrichOrderWithCurrencyConversion(order);
+    res.status(200).json(enriched);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -213,7 +272,8 @@ export const updateOrderPricing = async (req: Request, res: Response) => {
         }
       }
     });
-    res.status(200).json(order);
+    const enriched = await enrichOrderWithCurrencyConversion(order);
+    res.status(200).json(enriched);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
