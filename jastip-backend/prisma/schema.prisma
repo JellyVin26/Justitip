@@ -67,6 +67,7 @@ model Listing {
   category        String   @default("Other")
   imageUrl        String?
   maxQuantity     Int      @default(0) // 0 means unlimited or unknown
+  orders          Order[]
   createdAt       DateTime @default(now())
 }
 
@@ -76,6 +77,8 @@ model Order {
   trip            Trip        @relation(fields: [tripId], references: [id])
   buyerId         String
   buyer           User        @relation(fields: [buyerId], references: [id])
+  listingId       String?
+  listing         Listing?    @relation(fields: [listingId], references: [id])
   
   // Product Details
   productName     String

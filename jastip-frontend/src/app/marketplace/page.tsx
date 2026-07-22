@@ -96,6 +96,7 @@ export default function MarketplacePage() {
       const res = await api.post('/orders', {
         tripId: listing.tripId,
         buyerId: user.id,
+        listingId: listing.id,
         productName: listing.productName,
         estimatedPrice: listing.price,
         localCurrency: listing.localCurrency,
