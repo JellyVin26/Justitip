@@ -165,7 +165,7 @@ export default function MarketplacePage() {
                 }
               }}
               placeholder="Search by product name, brand, or country..."
-              className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm"
+              className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm bg-gray-50/50 focus:bg-white transition-all font-medium"
             />
           </div>
           
@@ -173,19 +173,19 @@ export default function MarketplacePage() {
           <div className="flex items-center gap-2 bg-gray-100 p-1.5 rounded-xl border border-gray-200">
             <button 
               onClick={() => setFollowingOnly(false)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${!followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all active-press ${!followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
             >
               All Items
             </button>
             <button 
               onClick={() => setFollowingOnly(true)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all active-press ${followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
             >
               Following
             </button>
           </div>
 
-          <button className="bg-white border border-gray-200 text-gray-700 px-6 py-4 rounded-xl flex items-center gap-2 font-medium hover:bg-gray-50 smooth-hover shadow-sm">
+          <button className="glass-panel text-gray-700 px-6 py-4 rounded-xl flex items-center gap-2 font-medium active-press hover-lift">
             <Filter className="w-5 h-5" />
           </button>
         </div>
@@ -197,8 +197,8 @@ export default function MarketplacePage() {
           <button 
             key={tag} 
             onClick={() => setSelectedCategory(tag)}
-            className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedCategory === tag ? 'bg-brand-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-colors active-press ${
+              selectedCategory === tag ? 'bg-brand-navy text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {tag}
@@ -229,7 +229,7 @@ export default function MarketplacePage() {
       {loading ? (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col h-[400px]">
+            <div key={i} className="glass-panel rounded-3xl overflow-hidden flex flex-col h-[400px]">
               <div className="h-56 bg-gray-200 animate-pulse"></div>
               <div className="p-5 flex-1 flex flex-col gap-4">
                 <div className="h-6 bg-gray-200 animate-pulse rounded w-3/4"></div>
@@ -246,7 +246,7 @@ export default function MarketplacePage() {
           ))}
         </section>
       ) : listings.length === 0 ? (
-        <div className="text-center py-20 bg-white border border-gray-200 rounded-2xl">
+        <div className="text-center py-20 glass-panel rounded-3xl">
           <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-bold text-gray-700">No items found</h3>
           <p className="text-gray-500">Check back later or adjust your filters.</p>
@@ -254,14 +254,13 @@ export default function MarketplacePage() {
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {listings.map((listing) => (
-            <div key={listing.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+            <div key={listing.id} className="glass-panel rounded-3xl overflow-hidden hover-lift flex flex-col">
               
               {/* Image Header */}
               <div className="h-56 relative overflow-hidden bg-gray-100">
                 <img src={listing.imageUrl || 'https://images.unsplash.com/photo-1582283086938-163e9f45d5a7?w=300&q=80'} alt={listing.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 
-                {/* Origin Badge */}
-                <div className="absolute bottom-3 left-3 z-20 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                <div className="absolute bottom-3 left-3 z-20 glass-panel border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                   <MapPin className="w-3 h-3 text-brand-accent" /> From {listing.trip?.destinationCountry || 'Unknown'}
                 </div>
               </div>
@@ -327,7 +326,7 @@ export default function MarketplacePage() {
 
                 {/* Action Button */}
                 <div className="mt-4">
-                  <button onClick={() => handleOrder(listing)} className="w-full bg-brand-navy text-white font-bold text-sm py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm smooth-hover">
+                  <button onClick={() => handleOrder(listing)} className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white font-bold text-sm py-3.5 rounded-xl active-press hover-lift shadow-premium">
                     Order Now
                   </button>
                 </div>
@@ -337,15 +336,14 @@ export default function MarketplacePage() {
         </section>
       )}
       
-      {/* Custom Request Banner */}
-      <div className="mt-12 bg-blue-50 border border-blue-100 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="mt-12 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-inner-glow">
         <div>
           <h3 className="text-xl font-bold text-brand-navy mb-2">Can't find what you're looking for?</h3>
           <p className="text-blue-800/80 max-w-lg">
             You can still submit a custom request directly to a seller going to your desired country. Head over to the Trips page to browse active routes.
           </p>
         </div>
-        <button onClick={() => router.push('/trips')} className="bg-white text-blue-600 font-bold px-6 py-3 rounded-xl border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-transparent smooth-hover whitespace-nowrap shadow-sm">
+        <button onClick={() => router.push('/trips')} className="bg-white text-blue-600 font-bold px-6 py-3 rounded-xl border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-transparent smooth-hover whitespace-nowrap shadow-premium active-press hover-lift">
           Browse Trips
         </button>
       </div>

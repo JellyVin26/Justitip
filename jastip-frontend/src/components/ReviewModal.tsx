@@ -40,8 +40,8 @@ export default function ReviewModal({ isOpen, onClose, onSuccess, orderId, selle
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in-up">
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+      <div className="glass-panel rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in-up border-none">
+        <div className="p-6 border-b border-gray-200/50 flex justify-between items-center bg-white/50">
           <h3 className="font-bold text-brand-navy text-lg">Rate your experience</h3>
           <button onClick={onClose} className="p-2 bg-white rounded-full hover:bg-gray-100 text-gray-500 shadow-sm transition-colors">
             <X className="w-5 h-5" />
@@ -81,7 +81,7 @@ export default function ReviewModal({ isOpen, onClose, onSuccess, orderId, selle
               onChange={(e) => setComment(e.target.value)}
               placeholder="What went well? What could be improved?"
               rows={4}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all resize-none text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-white/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all resize-none text-sm shadow-sm"
             />
           </div>
 
@@ -94,7 +94,7 @@ export default function ReviewModal({ isOpen, onClose, onSuccess, orderId, selle
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-brand-navy text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white font-bold py-3.5 rounded-xl transition-all active-press hover-lift shadow-premium disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? 'Submitting...' : 'Submit Review'}
           </button>

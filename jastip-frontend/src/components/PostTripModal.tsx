@@ -60,10 +60,10 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="glass-panel rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border-none">
         
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+        <div className="flex justify-between items-center p-6 border-b border-gray-200/50 bg-white/50">
           <h2 className="text-xl font-bold text-brand-navy">Post a New Trip</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors">
             <X className="w-5 h-5" />
@@ -86,7 +86,7 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
                 value={destinationCountry}
                 onChange={e => setDestinationCountry(e.target.value)}
                 placeholder="e.g., Japan, France, USA"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm shadow-sm"
               />
             </div>
             
@@ -97,7 +97,7 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
                   type="date" 
                   value={startDate}
                   onChange={e => setStartDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
+                  className="w-full px-4 py-3 bg-white/50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -106,7 +106,7 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
                   type="date" 
                   value={endDate}
                   onChange={e => setEndDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
+                  className="w-full px-4 py-3 bg-white/50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm shadow-sm"
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
                 value={markupRules}
                 onChange={e => setMarkupRules(e.target.value)}
                 placeholder="e.g., 10% on item price + $10 base fee"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm shadow-sm"
               />
             </div>
 
@@ -130,18 +130,18 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 placeholder="e.g., I'm focusing on buying cosmetics and small electronics. Please no bulky items or fragile glass!"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm h-24 resize-none"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:bg-white transition-all text-sm h-24 resize-none shadow-sm"
               ></textarea>
             </div>
           </form>
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+        <div className="p-6 border-t border-gray-200/50 bg-white/50 flex justify-end gap-3">
           <button 
             type="button"
             onClick={onClose}
-            className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
+            className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:bg-white rounded-lg transition-colors active-press shadow-sm"
           >
             Cancel
           </button>
@@ -149,7 +149,7 @@ export default function PostTripModal({ isOpen, onClose, onSuccess }: PostTripMo
             type="submit"
             form="post-trip-form"
             disabled={isSubmitting}
-            className="px-6 py-2.5 text-sm font-bold bg-brand-navy text-white hover:bg-gray-800 rounded-lg transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2.5 text-sm font-bold bg-gradient-to-r from-brand-navy to-gray-800 text-white rounded-lg transition-colors active-press shadow-premium disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isSubmitting ? 'Posting...' : 'Post Trip'}
           </button>

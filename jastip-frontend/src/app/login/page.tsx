@@ -108,7 +108,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                   required
                 />
               </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all font-medium"
+                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                   required
                 />
                 <button
@@ -162,7 +162,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-brand-navy text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest active-press hover-lift shadow-premium disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? 'SIGNING IN...' : 'SIGN IN'}
               {!loading && <ArrowRight className="w-4 h-4" />}
@@ -183,11 +183,11 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 active-press hover-lift">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
                 Google
               </button>
-              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 active-press hover-lift">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.05 20.28c-.98.95-2.05 1.8-3.08 1.8-1.09 0-1.46-.66-2.65-.66-1.18 0-1.6.63-2.62.63-1.08 0-2.26-.95-3.35-2.52C2.9 16.03 2.15 11.55 3.9 8.52c.86-1.5 2.4-2.45 4.08-2.45 1.13 0 2.18.77 2.87.77.68 0 1.88-.9 3.23-.9 1.43 0 2.65.65 3.34 1.63-2.92 1.76-2.43 5.96.48 7.15-.68 1.7-1.85 3.8-2.93 4.88l1.08.68zm-3.66-12.7c.65-.8 1.1-1.92.98-3.03-1.03.04-2.22.68-2.9 1.5-.6.73-1.12 1.88-.97 2.97 1.07.08 2.22-.62 2.89-1.44z"/>
                 </svg>

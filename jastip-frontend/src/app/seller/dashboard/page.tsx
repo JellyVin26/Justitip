@@ -83,14 +83,14 @@ export default function SellerDashboardPage() {
             <h1 className="text-3xl font-bold text-brand-navy mb-2">Welcome back, {user?.name?.split(' ')[0] || 'Seller'}</h1>
             <p className="text-gray-500">Here's what's happening with your deliveries today.</p>
           </div>
-          <div className="bg-white border border-gray-200 px-4 py-2 rounded-md flex items-center gap-2 text-sm text-gray-600 shadow-sm font-mono">
+          <div className="glass-panel px-4 py-2 rounded-xl flex items-center gap-2 text-sm text-gray-600 shadow-sm font-mono">
             <Calendar className="w-4 h-4" /> {new Date().toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'})}
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
           {/* Earnings Overview Card */}
-          <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+          <div className="lg:col-span-2 glass-panel rounded-3xl p-8 shadow-premium">
             <div className="flex justify-between items-start mb-10">
               <div>
                 <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2">Total Earnings</p>
@@ -104,13 +104,13 @@ export default function SellerDashboardPage() {
                   <select
                     value={displayCurrency}
                     onChange={(e) => setDisplayCurrency(e.target.value)}
-                    className="appearance-none bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:border-brand-accent transition-colors"
+                    className="appearance-none bg-white/50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-xl focus:outline-none focus:border-brand-accent focus:bg-white transition-colors"
                   >
                     {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
-                <div className="w-12 h-12 bg-brand-navy text-white rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-brand-navy to-gray-800 text-white rounded-xl flex items-center justify-center shadow-premium">
                   <Wallet className="w-6 h-6" />
                 </div>
               </div>
@@ -134,7 +134,7 @@ export default function SellerDashboardPage() {
 
           <div className="flex flex-col gap-6">
             {/* Pending Orders */}
-            <div className="bg-brand-navy border border-brand-navy rounded-xl p-8 shadow-sm flex items-center justify-between text-white">
+            <div className="bg-gradient-to-br from-brand-navy to-gray-900 border border-brand-navy rounded-3xl p-8 shadow-inner-glow flex items-center justify-between text-white">
               <div>
                 <p className="text-xs font-bold tracking-widest text-indigo-200 uppercase mb-2">Pending Orders</p>
                 <h2 className="text-6xl font-bold">{pendingOrders.length}</h2>
@@ -158,7 +158,7 @@ export default function SellerDashboardPage() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-navy"></div>
               </div>
             ) : dashboardOrders.filter(o => o.status !== 'DELIVERED' && o.status !== 'CANCELLED').length === 0 ? (
-              <div className="bg-white border border-gray-200 p-8 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
+              <div className="glass-panel p-8 rounded-3xl flex flex-col items-center justify-center text-center shadow-sm">
                 <Package className="w-12 h-12 text-gray-300 mb-3" />
                 <p className="font-bold text-gray-700">No active orders</p>
                 <p className="text-sm text-gray-500">When buyers purchase your listings, they will appear here.</p>
@@ -166,7 +166,7 @@ export default function SellerDashboardPage() {
             ) : (
               <div className="space-y-4">
                 {dashboardOrders.filter(o => o.status !== 'DELIVERED' && o.status !== 'CANCELLED').slice(0, 3).map(order => (
-                  <Link href={`/seller/orders/${order.id}`} key={order.id} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex items-center gap-4 hover:border-brand-accent transition-colors">
+                  <Link href={`/seller/orders/${order.id}`} key={order.id} className="glass-panel rounded-2xl p-4 shadow-sm flex items-center gap-4 hover-lift">
                     {order.productImageUrl ? (
                       <img src={order.productImageUrl} alt={order.productName} className="w-16 h-16 object-cover rounded-lg border border-gray-100" />
                     ) : (
@@ -189,7 +189,7 @@ export default function SellerDashboardPage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-brand-navy">Upcoming Trips</h3>
-              <button onClick={() => setIsPostTripModalOpen(true)} className="text-sm text-gray-600 hover:text-brand-navy flex items-center gap-1"><Plus className="w-3 h-3"/> New Trip</button>
+              <button onClick={() => setIsPostTripModalOpen(true)} className="text-sm font-bold text-gray-600 hover:text-brand-navy flex items-center gap-1 active-press hover-lift"><Plus className="w-4 h-4"/> New Trip</button>
             </div>
 
             <div className="space-y-4">
@@ -198,15 +198,15 @@ export default function SellerDashboardPage() {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-navy"></div>
                 </div>
               ) : upcomingTrips.length === 0 ? (
-                <div className="bg-white border border-gray-200 p-8 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
+                <div className="glass-panel p-8 rounded-3xl flex flex-col items-center justify-center text-center shadow-sm">
                   <Calendar className="w-12 h-12 text-gray-300 mb-3" />
                   <p className="font-bold text-gray-700">No upcoming trips</p>
                   <p className="text-sm text-gray-500 mb-4">Post your first trip to start earning.</p>
-                  <button onClick={() => setIsPostTripModalOpen(true)} className="bg-brand-navy text-white px-4 py-2 rounded font-medium text-sm hover:bg-gray-800">Post Trip</button>
+                  <button onClick={() => setIsPostTripModalOpen(true)} className="bg-gradient-to-r from-brand-navy to-gray-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm active-press hover-lift shadow-premium">Post Trip</button>
                 </div>
               ) : (
                 upcomingTrips.map(trip => (
-                  <div key={trip.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
+                  <div key={trip.id} className="glass-panel rounded-2xl overflow-hidden shadow-sm flex flex-col hover-lift">
                     <div className="h-24 relative bg-brand-navy">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                       <div className="absolute bottom-3 left-4 z-20">
@@ -221,7 +221,7 @@ export default function SellerDashboardPage() {
                           <p className="font-bold text-brand-navy text-sm">{trip.status}</p>
                         </div>
                       </div>
-                      <Link href={`/seller/trips/${trip.id}`} className="bg-brand-navy text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-800 transition-colors">
+                      <Link href={`/seller/trips/${trip.id}`} className="bg-gradient-to-r from-brand-navy to-gray-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold active-press hover-lift shadow-premium">
                         Manage
                       </Link>
                     </div>

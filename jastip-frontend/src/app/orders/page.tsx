@@ -30,15 +30,15 @@ export default function OrdersPage() {
     <div className="w-full max-w-6xl mx-auto px-8 py-10">
       <h1 className="text-3xl font-bold text-brand-navy mb-8">My Orders</h1>
       {orders.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm flex flex-col items-center text-center">
+        <div className="glass-panel rounded-3xl p-8 shadow-premium flex flex-col items-center text-center">
           <h2 className="text-xl font-bold text-gray-700 mb-2">No Active Orders</h2>
           <p className="text-gray-500 max-w-md">You haven't requested any items yet. Explore active trips to request an item!</p>
-          <Link href="/explore" className="mt-6 bg-brand-navy text-white px-6 py-2 rounded-lg font-bold">Explore Trips</Link>
+          <Link href="/explore" className="mt-6 bg-gradient-to-r from-brand-navy to-gray-800 text-white px-8 py-3 rounded-xl font-bold tracking-wider active-press hover-lift shadow-premium">Explore Trips</Link>
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="glass-panel rounded-3xl shadow-premium overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-50 border-b border-gray-200 text-xs uppercase text-gray-500 font-bold">
+            <thead className="bg-gray-50/50 border-b border-gray-200/50 text-xs uppercase text-gray-500 font-bold tracking-wider">
               <tr>
                 <th className="px-6 py-4">Item</th>
                 <th className="px-6 py-4">Trip Destination</th>
@@ -47,9 +47,9 @@ export default function OrdersPage() {
                 <th className="px-6 py-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 text-sm">
+            <tbody className="divide-y divide-gray-100 text-sm">
               {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={order.id} className="hover:bg-white/60 smooth-hover transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <img src={order.productImageUrl || "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=100&q=80"} alt={order.productName} className="w-10 h-10 rounded object-cover" />
@@ -71,7 +71,7 @@ export default function OrdersPage() {
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <Link href={`/orders/${order.id}`} className="text-brand-accent font-bold hover:underline">
+                    <Link href={`/orders/${order.id}`} className="text-brand-accent font-bold hover:underline active-press hover-lift inline-block">
                       View Details &rarr;
                     </Link>
                   </td>

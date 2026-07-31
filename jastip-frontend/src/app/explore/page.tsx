@@ -46,11 +46,11 @@ export default function ExplorePage() {
               if (e.key === 'Enter') fetchTrips(searchQuery);
             }}
             placeholder="Where do you need things from? (e.g. Japan, France, USA)"
-            className="w-full pl-12 pr-32 py-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm"
+            className="w-full pl-12 pr-32 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm bg-gray-50/50 focus:bg-white transition-all font-medium"
           />
           <button 
             onClick={() => fetchTrips(searchQuery)}
-            className="absolute inset-y-2 right-2 bg-brand-navy text-white px-6 rounded text-sm font-medium hover:bg-gray-800 smooth-hover"
+            className="absolute inset-y-2 right-2 bg-gradient-to-r from-brand-navy to-gray-800 text-white px-6 rounded-lg text-sm font-bold tracking-wider active-press hover-lift shadow-sm"
           >
             Search
           </button>
@@ -77,12 +77,12 @@ export default function ExplorePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (
-              <Link href={`/trips/${trip.id}`} key={trip.id} className="relative h-[280px] rounded-2xl overflow-hidden shadow-sm border border-gray-200 group cursor-pointer hover:shadow-md transition-all block">
+              <Link href={`/trips/${trip.id}`} key={trip.id} className="relative h-[280px] rounded-3xl overflow-hidden shadow-sm border border-gray-200 group cursor-pointer hover-lift block">
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                  <img src={trip.image || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80'} alt={trip.destinationCountry} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
                  
                  <div 
-                   className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-md px-2 py-1 rounded-full cursor-pointer hover:bg-white"
+                   className="absolute top-3 left-3 z-20 flex items-center gap-2 glass-panel px-2 py-1.5 rounded-full cursor-pointer hover:bg-white smooth-hover"
                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/seller/${trip.sellerId}`; }}
                  >
                    <div className="w-5 h-5 rounded-full bg-brand-navy flex items-center justify-center text-[10px] font-bold text-white">
@@ -104,7 +104,7 @@ export default function ExplorePage() {
       </section>
       
       {/* CTA Section */}
-      <section className="bg-brand-navy rounded-2xl p-12 text-center relative overflow-hidden mt-20">
+      <section className="bg-gradient-to-br from-brand-navy to-gray-900 rounded-3xl p-12 text-center relative overflow-hidden mt-20 shadow-inner-glow">
         <div className="relative z-10">
           <h2 className="text-3xl font-bold text-white mb-4">Can't find your destination?</h2>
           <p className="text-gray-300 mb-8 max-w-xl mx-auto text-sm">Create a custom request and let our global community of sellers reach out to you.</p>
@@ -114,7 +114,7 @@ export default function ExplorePage() {
                 alert("Please select a specific trip to request an item.");
                 router.push('/trips');
               }}
-              className="bg-white text-brand-navy px-6 py-3 rounded text-sm font-bold tracking-wide hover:bg-gray-100 smooth-hover"
+              className="bg-white text-brand-navy px-8 py-3.5 rounded-xl text-sm font-bold tracking-widest active-press hover-lift shadow-premium"
             >
               POST CUSTOM REQUEST
             </button>

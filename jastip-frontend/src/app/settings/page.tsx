@@ -137,14 +137,14 @@ export default function SettingsPage() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="glass-panel rounded-3xl border border-gray-100 shadow-premium overflow-hidden">
           {/* Top Banner Accent */}
           <div className="h-32 bg-gradient-to-r from-brand-navy to-gray-800" />
           
           <div className="px-8 pb-10">
             {/* Avatar section */}
             <div className="relative -mt-16 mb-8 flex flex-col sm:flex-row items-center sm:items-end gap-6">
-              <div className="relative group w-32 h-32 rounded-full border-4 border-white shadow-md overflow-hidden bg-gray-100 flex items-center justify-center">
+              <div className="relative group w-32 h-32 rounded-full border-4 border-white shadow-premium-hover overflow-hidden bg-gray-100 flex items-center justify-center transition-all">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -200,7 +200,7 @@ export default function SettingsPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                         required
                         disabled={saving}
                       />
@@ -219,7 +219,7 @@ export default function SettingsPage() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="+62 812-3456-7890"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                         disabled={saving}
                       />
                     </div>
@@ -243,7 +243,7 @@ export default function SettingsPage() {
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                         placeholder="Indonesia"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                         disabled={saving}
                       />
                     </div>
@@ -261,7 +261,7 @@ export default function SettingsPage() {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Jakarta"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                         disabled={saving}
                       />
                     </div>
@@ -281,7 +281,7 @@ export default function SettingsPage() {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Tell other travelers or buyers about yourself..."
-                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium resize-none"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium resize-none bg-gray-50/50 focus:bg-white shadow-sm"
                     disabled={saving}
                   />
                 </div>
@@ -295,7 +295,7 @@ export default function SettingsPage() {
                   <select
                     value={preferredCurrency}
                     onChange={(e) => setPreferredCurrency(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy/20 focus:border-brand-navy transition-all font-medium bg-white"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                     disabled={saving}
                   >
                     <option value="USD">USD - US Dollar</option>
@@ -316,7 +316,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={saving || uploading}
-                  className="bg-brand-navy text-white px-8 py-3.5 rounded-xl text-sm font-bold tracking-wider hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-brand-navy to-gray-800 text-white px-8 py-3.5 rounded-xl text-sm font-bold tracking-wider active-press hover-lift shadow-premium disabled:opacity-75 disabled:cursor-not-allowed"
                 >
                   {saving ? 'SAVING CHANGES...' : 'SAVE CHANGES'}
                 </button>

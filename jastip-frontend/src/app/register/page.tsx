@@ -91,8 +91,8 @@ export default function RegisterPage() {
                 onClick={() => setRole('BUYER')}
                 className={`py-3 rounded-xl border text-sm font-bold transition-all ${
                   role === 'BUYER' 
-                    ? 'border-brand-navy bg-brand-navy text-white shadow-md' 
-                    : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'border-brand-navy bg-gradient-to-br from-brand-navy to-gray-800 text-white shadow-premium' 
+                    : 'border-gray-200 text-gray-500 hover:bg-gray-50 active-press hover-lift'
                 }`}
               >
                 I want to Buy
@@ -102,8 +102,8 @@ export default function RegisterPage() {
                 onClick={() => setRole('SELLER')}
                 className={`py-3 rounded-xl border text-sm font-bold transition-all ${
                   role === 'SELLER' 
-                    ? 'border-brand-navy bg-brand-navy text-white shadow-md' 
-                    : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'border-brand-navy bg-gradient-to-br from-brand-navy to-gray-800 text-white shadow-premium' 
+                    : 'border-gray-200 text-gray-500 hover:bg-gray-50 active-press hover-lift'
                 }`}
               >
                 I want to Sell
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                   required
                 />
               </div>
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                   required
                 />
               </div>
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-transparent transition-all font-medium"
+                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
                   required
                 />
                 <button
@@ -179,7 +179,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-brand-navy text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+              className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest active-press hover-lift shadow-premium disabled:opacity-70 disabled:cursor-not-allowed mt-4"
             >
               {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
               {!loading && <ArrowRight className="w-4 h-4" />}
