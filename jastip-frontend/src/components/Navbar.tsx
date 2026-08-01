@@ -13,6 +13,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Auth pages have their own branded split-panel (logo + CTA cross-links) -
+  // the global nav is redundant there and shows a duplicate logo.
+  if (pathname === "/login" || pathname === "/register") return null;
+
   // Close mobile menu on route change
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
