@@ -113,45 +113,45 @@ export default function SettingsPage() {
 
   if (fetching) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-brand-navy border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 font-medium text-sm">Loading settings...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+          <p className="text-sm font-medium text-zinc-500">Loading settings...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <Navbar />
       
-      <div className="max-w-4xl mx-auto pt-28 pb-16 px-4">
+      <div className="mx-auto max-w-4xl px-4 pb-16 pt-28">
         {/* Header navigation */}
         <div className="mb-8">
           <Link 
             href={user?.role === 'SELLER' ? '/seller/dashboard' : '/explore'} 
-            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-brand-navy transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-500 hover:text-zinc-200 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Dashboard
           </Link>
         </div>
 
-        <div className="glass-panel rounded-3xl border border-gray-100 shadow-premium overflow-hidden">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
           {/* Top Banner Accent */}
-          <div className="h-32 bg-gradient-to-r from-brand-navy to-gray-800" />
+          <div className="h-32 bg-gradient-to-r from-emerald-500/20 to-zinc-800" />
           
           <div className="px-8 pb-10">
             {/* Avatar section */}
-            <div className="relative -mt-16 mb-8 flex flex-col sm:flex-row items-center sm:items-end gap-6">
-              <div className="relative group w-32 h-32 rounded-full border-4 border-white shadow-premium-hover overflow-hidden bg-gray-100 flex items-center justify-center transition-all">
+            <div className="relative -mt-16 mb-8 flex flex-col items-center gap-6 sm:flex-row sm:items-end">
+              <div className="relative group w-32 h-32 overflow-hidden rounded-full border-4 border-zinc-900 bg-zinc-800 flex items-center justify-center transition-all">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-4xl font-extrabold text-brand-navy">{name.charAt(0) || 'U'}</span>
+                  <span className="text-4xl font-extrabold text-emerald-300">{name.charAt(0) || 'U'}</span>
                 )}
                 
-                <label className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                   <Camera className="w-6 h-6 text-white" />
                   <input 
                     type="file" 
@@ -163,21 +163,21 @@ export default function SettingsPage() {
                 </label>
               </div>
 
-              <div className="text-center sm:text-left pb-2">
-                <h2 className="text-2xl font-bold text-brand-navy">{name || 'Your Name'}</h2>
-                <p className="text-gray-500 text-sm font-medium">{user?.role} Account • {user?.email}</p>
+              <div className="pb-2 text-center sm:text-left">
+                <h2 className="text-2xl font-bold text-zinc-100">{name || 'Your Name'}</h2>
+                <p className="text-sm font-medium text-zinc-500">{user?.role} Account • {user?.email}</p>
               </div>
             </div>
 
             {/* Notifications */}
             {success && (
-              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl text-sm font-semibold flex items-center gap-2">
+              <div className="mb-6 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-300">
                 <Check className="w-5 h-5" /> {success}
               </div>
             )}
 
             {error && (
-              <div className="mb-6 p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl text-sm font-semibold flex items-center gap-2">
+              <div className="mb-6 flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-semibold text-red-300">
                 <AlertCircle className="w-5 h-5" /> {error}
               </div>
             )}
@@ -185,22 +185,22 @@ export default function SettingsPage() {
             {/* Form */}
             <form onSubmit={handleSave} className="space-y-8">
               <div>
-                <h3 className="text-lg font-bold text-brand-navy mb-4 border-b border-gray-100 pb-2">Personal Information</h3>
+                <h3 className="mb-4 border-b border-white/5 pb-2 text-lg font-bold text-zinc-100">Personal Information</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {/* Name */}
                   <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Full Name</label>
+                    <label className="label-base">Full Name</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <User className="h-5 w-5 text-gray-400" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <User className="h-5 w-5 text-zinc-600" />
                       </div>
                       <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
+                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         required
                         disabled={saving}
                       />
@@ -209,17 +209,17 @@ export default function SettingsPage() {
 
                   {/* Phone */}
                   <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Phone Number</label>
+                    <label className="label-base">Phone Number</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Phone className="h-5 w-5 text-gray-400" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <Phone className="h-5 w-5 text-zinc-600" />
                       </div>
                       <input
                         type="text"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="+62 812-3456-7890"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
+                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -228,22 +228,22 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-brand-navy mb-4 border-b border-gray-100 pb-2">Location Settings</h3>
+                <h3 className="mb-4 border-b border-white/5 pb-2 text-lg font-bold text-zinc-100">Location Settings</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {/* Country */}
                   <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Based in Nation (Country)</label>
+                    <label className="label-base">Based in Nation (Country)</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Globe className="h-5 w-5 text-gray-400" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <Globe className="h-5 w-5 text-zinc-600" />
                       </div>
                       <input
                         type="text"
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                         placeholder="Indonesia"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
+                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -251,17 +251,17 @@ export default function SettingsPage() {
 
                   {/* City */}
                   <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Based in City</label>
+                    <label className="label-base">Based in City</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <MapPin className="h-5 w-5 text-gray-400" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <MapPin className="h-5 w-5 text-zinc-600" />
                       </div>
                       <input
                         type="text"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Jakarta"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
+                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -271,17 +271,17 @@ export default function SettingsPage() {
 
               {/* Bio */}
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Biography / Description</label>
+                <label className="label-base">Biography / Description</label>
                 <div className="relative">
                   <div className="absolute top-3 left-4 pointer-events-none">
-                    <FileText className="h-5 w-5 text-gray-400" />
+                    <FileText className="h-5 w-5 text-zinc-600" />
                   </div>
                   <textarea
                     rows={4}
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Tell other travelers or buyers about yourself..."
-                    className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium resize-none bg-gray-50/50 focus:bg-white shadow-sm"
+                    className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500 resize-none"
                     disabled={saving}
                   />
                 </div>
@@ -289,13 +289,13 @@ export default function SettingsPage() {
 
               {/* Preferences */}
               <div>
-                <h3 className="text-lg font-bold text-brand-navy mb-4 border-b border-gray-100 pb-2">Preferences</h3>
+                <h3 className="mb-4 border-b border-white/5 pb-2 text-lg font-bold text-zinc-100">Preferences</h3>
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-wider font-bold text-gray-500">Preferred Currency</label>
+                  <label className="label-base">Preferred Currency</label>
                   <select
                     value={preferredCurrency}
                     onChange={(e) => setPreferredCurrency(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
+                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
                     disabled={saving}
                   >
                     <option value="USD">USD - US Dollar</option>
@@ -312,11 +312,11 @@ export default function SettingsPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end pt-4 gap-4 border-t border-gray-100">
+              <div className="flex justify-end gap-4 border-t border-white/5 pt-4">
                 <button
                   type="submit"
                   disabled={saving || uploading}
-                  className="bg-gradient-to-r from-brand-navy to-gray-800 text-white px-8 py-3.5 rounded-xl text-sm font-bold tracking-wider active-press hover-lift shadow-premium disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="btn-primary disabled:opacity-75"
                 >
                   {saving ? 'SAVING CHANGES...' : 'SAVE CHANGES'}
                 </button>

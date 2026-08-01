@@ -1,25 +1,28 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import api from '@/lib/api';
-import { Calendar, Package, ShieldCheck, Star } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import api from "@/lib/api";
+import { Calendar, Package, ShieldCheck, Star, MapPin, ArrowLeft, X } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+
+const CURRENCIES = ["USD", "JPY", "EUR", "GBP", "KRW", "SGD", "AUD"];
+const CATEGORIES = ["Trending", "Electronics", "Beauty", "Fashion", "Snacks & Food", "Toys & Collectibles", "Other"];
 
 export default function TripDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const [trip, setTrip] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { user } = useAuth();
   const [creatingOrder, setCreatingOrder] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    productName: '',
-    estimatedPrice: '',
-    localCurrency: 'USD',
+    productName: "",
+    estimatedPrice: "",
+    localCurrency: "USD",
     quantity: 1,
-    category: 'Trending'
+    category: "Trending",
   });
 
   useEffect(() => {
@@ -28,7 +31,7 @@ export default function TripDetailsPage() {
         const response = await api.get(`/trips/${params.id}`);
         setTrip(response.data);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to fetch trip details');
+        setError(err.response?.data?.error || "Failed to fetch trip details");
       } finally {
         setLoading(false);
       }
@@ -38,20 +41,20 @@ export default function TripDetailsPage() {
 
   const parseMarkupRules = (rules: any) => {
     try {
-      if (typeof rules === 'string') {
+      if (typeof rules === "string") {
         const parsed = JSON.parse(rules);
         return parsed.description || rules;
       }
-      return rules?.description || 'Standard markup rules apply.';
+      return rules?.description || "Standard markup rules apply.";
     } catch {
-      return rules || 'Standard markup rules apply.';
+      return rules || "Standard markup rules apply.";
     }
   };
 
   const openModal = () => {
     if (!user) {
       alert("Please login as a buyer to request an item.");
-      return router.push('/login');
+      return router.push("/login");
     }
     setShowModal(true);
   };
@@ -61,221 +64,211 @@ export default function TripDetailsPage() {
     if (!user) return;
     try {
       setCreatingOrder(true);
-      const res = await api.post('/orders', {
+      const res = await api.post("/orders", {
         tripId: params.id,
         buyerId: user.id,
         productName: formData.productName,
         estimatedPrice: parseFloat(formData.estimatedPrice) || null,
         localCurrency: formData.localCurrency,
         quantity: Number(formData.quantity),
-        category: formData.category
+        category: formData.category,
       });
       router.push(`/orders/${res.data.id}`);
     } catch (err) {
-      console.error('Failed to create order', err);
-      alert('Failed to submit request.');
+      console.error("Failed to create order", err);
+      alert("Failed to submit request.");
       setCreatingOrder(false);
     }
   };
 
   if (loading) return (
-    <div className="flex justify-center items-center min-h-[60vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-navy"></div>
+    <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+      <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500"></div>
     </div>
   );
-  
-  if (error) return <div className="text-center py-20 text-red-500 font-medium">{error}</div>;
-  if (!trip) return <div className="text-center py-20 font-bold text-gray-600">Trip not found</div>;
+  if (error) return <div className="min-h-screen bg-zinc-950 pt-20 text-center text-red-400">{error}</div>;
+  if (!trip) return <div className="min-h-screen bg-zinc-950 pt-20 text-center font-bold text-zinc-400">Trip not found</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-8 py-10">
-      <button 
-        onClick={() => router.back()} 
-        className="text-sm font-bold tracking-wide text-gray-500 hover:text-brand-navy mb-8 transition-colors"
-      >
-        &larr; BACK
-      </button>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+        <button
+          onClick={() => router.back()}
+          className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-zinc-500 transition-colors hover:text-zinc-200"
+        >
+          <ArrowLeft size={16} /> Back
+        </button>
 
-      <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-        <div className="h-72 relative bg-gray-100">
-          <img 
-            src={trip.image || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80'} 
-            alt={trip.destinationCountry} 
-            className="w-full h-full object-cover" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-8 left-8 z-10 text-white">
-            <h1 className="text-4xl font-bold mb-3 tracking-tight">{trip.destinationCountry}</h1>
-            <div className="flex items-center gap-2 text-sm font-bold tracking-wide text-white/90 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg w-fit">
-              <Calendar className="w-4 h-4" />
-              {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })} 
-              <span className="mx-1">-</span> 
-              {new Date(trip.endDate).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+          {/* Banner */}
+          <div className="relative h-72 bg-zinc-800">
+            <img
+              src={trip.image || "https://picsum.photos/seed/jastip-trip-detail/1200/600"}
+              alt={trip.destinationCountry}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+            <div className="absolute bottom-8 left-8 z-10">
+              <h1 className="flex items-center gap-2 text-4xl font-extrabold tracking-tight text-white">
+                <MapPin size={26} className="text-emerald-400" /> {trip.destinationCountry}
+              </h1>
+              <div className="mt-3 flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm font-bold text-white/90 backdrop-blur-md w-fit">
+                <Calendar size={14} />
+                {new Date(trip.startDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
+                <span className="mx-1">-</span>
+                {new Date(trip.endDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="p-8 grid md:grid-cols-3 gap-10">
-          <div className="md:col-span-2 space-y-10">
-            <section>
-              <h2 className="text-xl font-bold text-brand-navy mb-4">About This Trip</h2>
-              <p className="text-gray-600 leading-relaxed text-sm">
-                {trip.notes || 'No specific notes provided for this trip.'}
-              </p>
-            </section>
-            
-            <section>
-              <h2 className="text-xl font-bold text-brand-navy mb-4 flex items-center gap-2">
-                <Package className="w-5 h-5 text-brand-accent" />
-                Markup & Fees
-              </h2>
-              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                <p className="text-brand-navy font-bold text-sm">
-                  {parseMarkupRules(trip.markupRules)}
+          <div className="grid gap-10 p-6 sm:p-8 md:grid-cols-3">
+            <div className="space-y-10 md:col-span-2">
+              <section>
+                <h2 className="mb-4 text-xl font-bold text-zinc-100">About this trip</h2>
+                <p className="text-sm leading-relaxed text-zinc-400">
+                  {trip.notes || "No specific notes provided for this trip."}
                 </p>
-              </div>
-            </section>
-          </div>
+              </section>
 
-          <div className="space-y-6 relative">
-            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm sticky top-24">
-              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                <div 
-                  className="w-12 h-12 shrink-0 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-lg relative shadow-inner cursor-pointer"
-                  onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
-                >
-                  {trip.seller?.name?.charAt(0) || 'S'}
-                  <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
-                    <ShieldCheck className="w-4 h-4 text-blue-500" />
-                  </div>
+              <section>
+                <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-zinc-100">
+                  <Package size={18} className="text-emerald-400" /> Markup & fees
+                </h2>
+                <div className="rounded-2xl border border-white/5 bg-zinc-950/60 p-5">
+                  <p className="text-sm font-bold text-emerald-300">{parseMarkupRules(trip.markupRules)}</p>
                 </div>
-                <div>
-                  <h3 
-                    className="font-bold text-brand-navy tracking-tight cursor-pointer hover:underline"
+              </section>
+            </div>
+
+            {/* Sticky action card */}
+            <div className="relative">
+              <div className="sticky top-24 rounded-2xl border border-white/10 bg-zinc-900 p-6">
+                <div className="mb-6 flex items-center gap-4 border-b border-white/5 pb-6">
+                  <div
+                    className="relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full bg-emerald-500/15 text-lg font-bold text-emerald-300"
                     onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
                   >
-                    {trip.seller?.name || 'Verified Seller'}
-                  </h3>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Star className="w-3.5 h-3.5 text-yellow-400 fill-current" />
-                    <span className="text-xs font-bold text-gray-700">
-                      {trip.seller?.averageRating > 0 ? trip.seller.averageRating.toFixed(1) : 'New'}
-                    </span>
-                    {trip.seller?.reviewCount > 0 && (
-                      <span className="text-xs text-gray-400">({trip.seller.reviewCount})</span>
-                    )}
+                    {trip.seller?.name?.charAt(0) || "S"}
+                    <div className="absolute -bottom-1 -right-1 rounded-full bg-zinc-900 p-0.5">
+                      <ShieldCheck size={14} className="text-emerald-400" />
+                    </div>
                   </div>
-                  {trip.seller?.completedTripsCount > 0 && (
-                    <p className="text-[11px] text-gray-400 font-medium mt-1">
-                      {trip.seller.completedTripsCount} Completed Trips
-                    </p>
-                  )}
+                  <div>
+                    <h3
+                      className="cursor-pointer font-bold tracking-tight text-zinc-100 hover:underline"
+                      onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
+                    >
+                      {trip.seller?.name || "Verified jastiper"}
+                    </h3>
+                    <div className="mt-1 flex items-center gap-1">
+                      <Star size={13} className="fill-amber-400 text-amber-400" />
+                      <span className="text-xs font-bold text-zinc-300">
+                        {trip.seller?.averageRating > 0 ? trip.seller.averageRating.toFixed(1) : "New"}
+                      </span>
+                      {trip.seller?.reviewCount > 0 && (
+                        <span className="text-xs text-zinc-500">({trip.seller.reviewCount})</span>
+                      )}
+                    </div>
+                  </div>
                 </div>
+
+                <button onClick={openModal} className="btn-primary w-full">
+                  Request an item
+                </button>
+                <p className="mt-4 px-4 text-center text-[11px] font-medium leading-relaxed text-zinc-500">
+                  Payment is secured by Jastip until you receive your item.
+                </p>
               </div>
-              <button 
-                onClick={openModal}
-                className="w-full bg-brand-navy text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition-colors shadow-sm tracking-wide text-sm"
-              >
-                REQUEST ITEM
-              </button>
-              <p className="text-[11px] font-medium text-center text-gray-400 mt-4 leading-relaxed px-4">
-                Payment is secured by Justitip until you receive your item.
-              </p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Request modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-xl">
-            <h2 className="text-2xl font-bold text-brand-navy mb-6">Request an Item</h2>
-            <form onSubmit={submitRequest} className="space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-zinc-900 p-8">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-2xl font-extrabold tracking-tight text-zinc-100">Request an item</h2>
+              <button onClick={() => setShowModal(false)} className="rounded-full p-2 text-zinc-500 transition-colors hover:bg-white/5 hover:text-zinc-200">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={submitRequest} className="space-y-5">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Item Name</label>
-                <input 
-                  type="text" 
+                <label className="label-base">Item name</label>
+                <input
+                  type="text"
                   required
                   value={formData.productName}
-                  onChange={(e) => setFormData({...formData, productName: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                  onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
+                  className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                   placeholder="e.g. Rare Beauty Liquid Blush"
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Estimated Price</label>
-                  <input 
-                    type="number" 
+                  <label className="label-base">Est. price</label>
+                  <input
+                    type="number"
                     value={formData.estimatedPrice}
-                    onChange={(e) => setFormData({...formData, estimatedPrice: e.target.value})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                    onChange={(e) => setFormData({ ...formData, estimatedPrice: e.target.value })}
+                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                     placeholder="e.g. 50"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Local Currency</label>
-                  <select 
+                  <label className="label-base">Currency</label>
+                  <select
                     value={formData.localCurrency}
-                    onChange={(e) => setFormData({...formData, localCurrency: e.target.value})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                    onChange={(e) => setFormData({ ...formData, localCurrency: e.target.value })}
+                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
                   >
-                    <option value="USD">USD ($)</option>
-                    <option value="JPY">JPY (¥)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="KRW">KRW (₩)</option>
-                    <option value="SGD">SGD (S$)</option>
-                    <option value="AUD">AUD (A$)</option>
+                    {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Quantity</label>
-                  <input 
-                    type="number" 
+                  <label className="label-base">Quantity</label>
+                  <input
+                    type="number"
                     min="1"
                     required
                     value={formData.quantity}
-                    onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value)})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                    onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Category</label>
-                  <select 
+                  <label className="label-base">Category</label>
+                  <select
                     value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
                   >
-                    <option value="Trending">Trending</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Beauty">Beauty</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Snacks & Food">Snacks & Food</option>
-                    <option value="Toys & Collectibles">Toys & Collectibles</option>
-                    <option value="Other">Other</option>
+                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
 
-              <div className="pt-4 flex gap-3">
-                <button 
-                  type="button" 
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition-colors"
+                  className="flex-1 rounded-full px-4 py-3 font-bold text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
                 >
-                  CANCEL
+                  Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={creatingOrder}
-                  className="flex-1 px-4 py-3 bg-brand-navy text-white font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50"
+                  className="btn-primary flex-1 disabled:opacity-50"
                 >
-                  {creatingOrder ? 'SUBMITTING...' : 'SUBMIT REQUEST'}
+                  {creatingOrder ? "Submitting..." : "Submit request"}
                 </button>
               </div>
             </form>

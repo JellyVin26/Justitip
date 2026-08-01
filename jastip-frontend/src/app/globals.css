@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-navy: #0A1128; /* Deeper, richer navy */
-  --color-brand-light: #F8FAFC; /* Slate 50 for a cooler light mode */
-  --color-brand-accent: #2563EB; /* Blue 600 */
-  --color-brand-success: #059669; /* Emerald 600 */
+  --color-brand-navy: #0A1128;
+  --color-brand-light: #F8FAFC;
+  --color-brand-accent: #10B981; /* emerald 500 - primary accent */
+  --color-brand-accent-strong: #059669; /* emerald 600 - hover */
+  --color-brand-accent-soft: #D1FAE5; /* emerald 100 - tints */
+  --color-brand-amber: #F59E0B; /* amber 500 - travel warmth (secondary, status only) */
   --color-brand-surface: #ffffff;
 }
 
 :root {
-  --background: #F8FAFC;
-  --foreground: #0A1128;
+  --background: #09090B;
+  --foreground: #F4F4F5;
 }
 
 body {
@@ -21,7 +23,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Taste Guidelines: Premium utility classes */
+/* ===== Taste Guidelines: Premium utility classes ===== */
+
 .smooth-hover {
   @apply transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)];
 }
@@ -32,7 +35,7 @@ body {
 }
 
 .glass-nav {
-  @apply bg-white/80 backdrop-blur-lg border-b border-gray-200/50;
+  @apply bg-zinc-950/80 backdrop-blur-lg border-b border-white/5;
 }
 
 /* Premium Shadows */
@@ -69,4 +72,69 @@ body {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ===== New design system ===== */
+
+/* Brand gradient CTA */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+}
+
+.btn-dark {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:bg-zinc-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-zinc-700 px-6 py-3 text-sm font-bold text-zinc-200 transition-all duration-200 hover:border-zinc-500 hover:bg-zinc-900 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+}
+
+/* Inputs */
+.input-base {
+  @apply w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20;
+}
+
+.label-base {
+  @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-zinc-500;
+}
+
+/* Dark card */
+.card-dark {
+  @apply rounded-2xl border border-white/10 bg-zinc-900;
+}
+
+/* Entrance animation */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise-in,
+  .animate-fade-in {
+    animation: none;
+  }
 }

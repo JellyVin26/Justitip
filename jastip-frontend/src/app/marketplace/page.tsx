@@ -1,99 +1,78 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Package, ShieldCheck, Star } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
-import { formatCurrency } from '@/lib/currency';
+import React, { useState, useEffect } from "react";
+import { Search, MapPin, Package, ShieldCheck, Star, ArrowRight, UserPlus, UserCheck } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import api from "@/lib/api";
+import { formatCurrency } from "@/lib/currency";
+
+const CATEGORIES = ["All Items", "Trending", "Electronics", "Beauty", "Fashion", "Snacks & Food", "Toys & Collectibles", "Other"];
 
 export default function MarketplacePage() {
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [followingOnly, setFollowingOnly] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Items');
-  const [sortOption, setSortOption] = useState('Newest First');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Items");
+  const [sortOption, setSortOption] = useState("Newest First");
   const [followedSellers, setFollowedSellers] = useState<Set<string>>(new Set());
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    fetchListings();
-    
-    if (isAuthenticated && user) {
-      api.get('/users/me/following')
-        .then(res => {
-          setFollowedSellers(new Set(res.data));
-        })
-        .catch(err => console.error('Failed to fetch following', err));
-    }
-  }, [followingOnly, selectedCategory, isAuthenticated, user]);
-
-  const fetchListings = async () => {
+  const fetchListings = async (search = searchQuery, cat = selectedCategory, following = followingOnly) => {
     try {
       setLoading(true);
-      let endpoint = '/listings?';
-      
-      if (followingOnly && isAuthenticated && user) {
+      let endpoint = "/listings?";
+
+      if (following && isAuthenticated && user) {
         endpoint += `followingOnly=true&followerId=${user.id}&`;
       }
-      
-      if (selectedCategory && selectedCategory !== 'All Items') {
-        endpoint += `category=${encodeURIComponent(selectedCategory)}&`;
+      if (cat && cat !== "All Items") {
+        endpoint += `category=${encodeURIComponent(cat)}&`;
       }
-
-      if (searchQuery) {
-        endpoint += `search=${encodeURIComponent(searchQuery)}&`;
+      if (search) {
+        endpoint += `search=${encodeURIComponent(search)}&`;
       }
-      
       if (user?.preferredCurrency) {
         endpoint += `currency=${encodeURIComponent(user.preferredCurrency)}&`;
       }
-      
-      // Remove trailing ? or &
-      endpoint = endpoint.replace(/[?&]$/, '');
+      endpoint = endpoint.replace(/[?&]$/, "");
 
       const response = await api.get(endpoint);
-      
       let fetchedListings = response.data;
-      if (sortOption === 'Lowest Price') {
+      if (sortOption === "Lowest Price") {
         fetchedListings = fetchedListings.sort((a: any, b: any) => a.price - b.price);
-      } else if (sortOption === 'Highest Price') {
+      } else if (sortOption === "Highest Price") {
         fetchedListings = fetchedListings.sort((a: any, b: any) => b.price - a.price);
       } else {
-        // Newest First (default from backend usually, but let's enforce)
         fetchedListings = fetchedListings.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       }
-      
       setListings(fetchedListings);
     } catch (error) {
-      console.error('Failed to fetch listings', error);
+      console.error("Failed to fetch listings", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    let sorted = [...listings];
-    if (sortOption === 'Lowest Price') {
-      sorted = sorted.sort((a: any, b: any) => a.price - b.price);
-    } else if (sortOption === 'Highest Price') {
-      sorted = sorted.sort((a: any, b: any) => b.price - a.price);
-    } else {
-      sorted = sorted.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    fetchListings();
+    if (isAuthenticated && user) {
+      api.get("/users/me/following")
+        .then((res) => setFollowedSellers(new Set(res.data)))
+        .catch((err) => console.error("Failed to fetch following", err));
     }
-    setListings(sorted);
-  }, [sortOption]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [followingOnly, selectedCategory, isAuthenticated, user]);
 
   const handleOrder = async (listing: any) => {
     if (!isAuthenticated || !user) {
       alert("Please log in to place an order.");
-      router.push('/login');
+      router.push("/login");
       return;
     }
-    
     try {
-      const res = await api.post('/orders', {
+      const res = await api.post("/orders", {
         tripId: listing.tripId,
         buyerId: user.id,
         listingId: listing.id,
@@ -101,254 +80,260 @@ export default function MarketplacePage() {
         estimatedPrice: listing.price,
         localCurrency: listing.localCurrency,
         quantity: 1,
-        category: listing.category
+        category: listing.category,
       });
       router.push(`/orders/${res.data.id}`);
     } catch (error: any) {
-      console.error('Failed to order item', error);
+      console.error("Failed to order item", error);
       alert(`Failed to place order: ${error.response?.data?.error || error.message}`);
     }
   };
 
-  const handleFollow = async (sellerId: string) => {
+  const handleToggleFollow = async (sellerId: string) => {
     if (!isAuthenticated || !user) {
       alert("Please log in to follow sellers.");
-      router.push('/login');
+      router.push("/login");
       return;
     }
-    
-    // Optimistic UI update
-    setFollowedSellers(prev => {
-      const newSet = new Set(prev);
-      newSet.add(sellerId);
-      return newSet;
+    const isFollowing = followedSellers.has(sellerId);
+
+    // Optimistic update
+    setFollowedSellers((prev) => {
+      const next = new Set(prev);
+      if (isFollowing) next.delete(sellerId);
+      else next.add(sellerId);
+      return next;
     });
 
     try {
-      await api.post(`/users/${sellerId}/follow`);
+      if (isFollowing) {
+        await api.delete(`/users/${sellerId}/follow`);
+      } else {
+        await api.post(`/users/${sellerId}/follow`);
+      }
     } catch (error) {
-      console.error('Failed to follow seller', error);
-      // Revert on failure
-      setFollowedSellers(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(sellerId);
-        return newSet;
+      console.error("Failed to update follow", error);
+      setFollowedSellers((prev) => {
+        const next = new Set(prev);
+        if (isFollowing) next.add(sellerId);
+        else next.delete(sellerId);
+        return next;
       });
-      alert('Failed to follow seller.');
+      alert("Failed to update follow status.");
     }
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-8 py-10">
-      {/* Header Section */}
-      <section className="mb-12">
-        <h1 className="text-4xl font-bold text-brand-navy mb-4">
-          Available <span className="italic text-gray-500 font-serif">Items.</span>
-        </h1>
-        <p className="text-gray-600 max-w-xl mb-8">
-          Browse exclusive items pre-listed by verified global couriers for their upcoming trips. Purchase directly from them and get it delivered fast.
-        </p>
-        
-        {/* Search & Filter */}
-        <div className="flex flex-col md:flex-row gap-4 max-w-4xl">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6">
+        {/* Header */}
+        <section className="mb-8">
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Available <span className="text-emerald-400">items.</span>
+          </h1>
+          <p className="mt-2 max-w-xl text-zinc-400">
+            Pre-listed items from verified jastipers. Order directly and get it delivered on their next trip.
+          </p>
+
+          {/* Search + Following toggle */}
+          <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center">
+            <div className="relative flex-1">
+              <Search size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") fetchListings(searchQuery, selectedCategory, followingOnly);
+                }}
+                placeholder="Search by product name, brand, or country..."
+                className="input-base !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500 !pl-11"
+              />
             </div>
-            <input 
-              type="text" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  fetchListings();
-                }
-              }}
-              placeholder="Search by product name, brand, or country..."
-              className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-sm bg-gray-50/50 focus:bg-white transition-all font-medium"
-            />
-          </div>
-          
-          {/* Following Toggle */}
-          <div className="flex items-center gap-2 bg-gray-100 p-1.5 rounded-xl border border-gray-200">
-            <button 
-              onClick={() => setFollowingOnly(false)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all active-press ${!followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-              All Items
-            </button>
-            <button 
-              onClick={() => setFollowingOnly(true)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all active-press ${followingOnly ? 'bg-white text-brand-navy shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-              Following
-            </button>
+            <div className="flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 p-1.5">
+              <button
+                onClick={() => setFollowingOnly(false)}
+                className={`rounded-full px-5 py-2 text-sm font-bold transition-all ${!followingOnly ? "bg-emerald-500 text-zinc-950" : "text-zinc-400 hover:text-zinc-200"}`}
+              >
+                All Items
+              </button>
+              <button
+                onClick={() => setFollowingOnly(true)}
+                className={`rounded-full px-5 py-2 text-sm font-bold transition-all ${followingOnly ? "bg-emerald-500 text-zinc-950" : "text-zinc-400 hover:text-zinc-200"}`}
+              >
+                Following
+              </button>
+            </div>
           </div>
 
-          <button className="glass-panel text-gray-700 px-6 py-4 rounded-xl flex items-center gap-2 font-medium active-press hover-lift">
-            <Filter className="w-5 h-5" />
-          </button>
-        </div>
-      </section>
-
-      {/* Categories / Tags */}
-      <div className="flex gap-3 overflow-x-auto pb-6 mb-8 hide-scrollbar">
-        {['All Items', 'Trending', 'Electronics', 'Beauty', 'Fashion', 'Snacks & Food', 'Toys & Collectibles', 'Other'].map((tag) => (
-          <button 
-            key={tag} 
-            onClick={() => setSelectedCategory(tag)}
-            className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-colors active-press ${
-              selectedCategory === tag ? 'bg-brand-navy text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
-
-      {/* Results Header */}
-      <div className="flex justify-between items-end mb-6">
-        <div>
-          <p className="text-sm font-medium text-gray-500">Showing {listings.length} available items</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Sort by:</span>
-          <select 
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className="text-sm font-bold text-brand-navy bg-transparent outline-none cursor-pointer"
-          >
-            <option>Newest First</option>
-            <option>Lowest Price</option>
-            <option>Highest Price</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Results Grid */}
-      {loading ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="glass-panel rounded-3xl overflow-hidden flex flex-col h-[400px]">
-              <div className="h-56 bg-gray-200 animate-pulse"></div>
-              <div className="p-5 flex-1 flex flex-col gap-4">
-                <div className="h-6 bg-gray-200 animate-pulse rounded w-3/4"></div>
-                <div className="h-8 bg-gray-200 animate-pulse rounded w-1/3"></div>
-                <div className="mt-auto flex justify-between items-center pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 animate-pulse rounded w-20"></div>
-                  </div>
-                  <div className="h-4 bg-gray-200 animate-pulse rounded w-12"></div>
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Categories */}
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
+            {CATEGORIES.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setSelectedCategory(tag)}
+                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                  selectedCategory === tag
+                    ? "bg-emerald-500 text-zinc-950"
+                    : "border border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
         </section>
-      ) : listings.length === 0 ? (
-        <div className="text-center py-20 glass-panel rounded-3xl">
-          <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-bold text-gray-700">No items found</h3>
-          <p className="text-gray-500">Check back later or adjust your filters.</p>
+
+        {/* Results header */}
+        <div className="mb-6 flex items-center justify-between">
+          <p className="text-sm font-medium text-zinc-500">Showing {listings.length} available items</p>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-zinc-500">Sort by:</span>
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm font-bold text-zinc-100 outline-none"
+            >
+              <option>Newest First</option>
+              <option>Lowest Price</option>
+              <option>Highest Price</option>
+            </select>
+          </div>
         </div>
-      ) : (
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {listings.map((listing) => (
-            <div key={listing.id} className="glass-panel rounded-3xl overflow-hidden hover-lift flex flex-col">
-              
-              {/* Image Header */}
-              <div className="h-56 relative overflow-hidden bg-gray-100">
-                <img src={listing.imageUrl || 'https://images.unsplash.com/photo-1582283086938-163e9f45d5a7?w=300&q=80'} alt={listing.productName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                
-                <div className="absolute bottom-3 left-3 z-20 glass-panel border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                  <MapPin className="w-3 h-3 text-brand-accent" /> From {listing.trip?.destinationCountry || 'Unknown'}
+
+        {/* Grid */}
+        {loading ? (
+          <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="overflow-hidden rounded-2xl border border-white/10 bg-zinc-900">
+                <div className="h-48 animate-pulse bg-zinc-800" />
+                <div className="space-y-3 p-5">
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-zinc-800" />
+                  <div className="h-7 w-1/3 animate-pulse rounded bg-zinc-800" />
+                  <div className="h-10 w-full animate-pulse rounded-xl bg-zinc-800" />
                 </div>
               </div>
+            ))}
+          </section>
+        ) : listings.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 py-20 text-center">
+            <Package className="mx-auto mb-4 h-12 w-12 text-zinc-700" />
+            <h3 className="text-lg font-bold text-zinc-200">No items found</h3>
+            <p className="mt-1 text-zinc-500">Check back later or adjust your filters.</p>
+          </div>
+        ) : (
+          <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {listings.map((listing) => (
+              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 transition-colors hover:border-white/20">
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden bg-zinc-800">
+                  <img
+                    src={listing.imageUrl || "https://picsum.photos/seed/jastip-item/600/400"}
+                    alt={listing.productName}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-zinc-950/80 px-3 py-1.5 text-xs font-bold text-zinc-100 backdrop-blur-sm">
+                    <MapPin size={12} className="text-emerald-400" /> {listing.trip?.destinationCountry || "Unknown"}
+                  </div>
+                </div>
 
-              {/* Content Body */}
-              <div className="p-5 flex-1 flex flex-col">
-                <div className="mb-4">
-                  <h3 className="font-bold text-brand-navy text-lg leading-tight mb-2 line-clamp-2">
-                    {listing.productName}
-                  </h3>
-                  <p className="font-black text-brand-accent text-2xl">
+                {/* Body */}
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="line-clamp-2 font-bold leading-tight text-zinc-100">{listing.productName}</h3>
+                  <p className="mt-2 text-2xl font-extrabold tracking-tight text-emerald-400">
                     {formatCurrency(listing.price, listing.localCurrency)}
                   </p>
-                </div>
-                
-                {/* Seller Info */}
-                <div className="flex items-center justify-between py-4 border-t border-gray-100 mt-auto">
-                  <div className="flex items-center gap-2">
-                    <div 
-                      className="relative cursor-pointer"
-                      onClick={(e) => { e.stopPropagation(); router.push(`/seller/${listing.sellerId}`); }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white font-bold text-xs">
-                        {listing.seller?.name?.charAt(0) || 'S'}
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
-                        <ShieldCheck className="w-3 h-3 text-blue-500" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <p 
-                          className="text-xs font-bold text-brand-navy cursor-pointer hover:underline"
-                          onClick={(e) => { e.stopPropagation(); router.push(`/seller/${listing.sellerId}`); }}
-                        >
-                          {listing.seller?.name || 'Unknown'}
-                        </p>
-                        {followedSellers.has(listing.sellerId) ? (
-                          <span className="text-[10px] font-bold text-gray-400">Following</span>
-                        ) : (
-                          <button onClick={() => handleFollow(listing.sellerId)} className="text-[10px] font-bold text-blue-600 hover:text-blue-800">Follow</button>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-[11px] font-bold text-gray-700">
-                          {listing.seller?.averageRating > 0 ? listing.seller.averageRating.toFixed(1) : 'New'}
-                        </span>
-                        {listing.seller?.reviewCount > 0 && (
-                          <span className="text-[11px] text-gray-400">({listing.seller.reviewCount})</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="text-right">
-                    <p className="text-xs text-gray-400 font-medium flex items-center gap-1 justify-end">
-                      <Package className="w-3.5 h-3.5" /> Stock
-                    </p>
-                    <p className="font-bold text-brand-navy text-sm leading-none mt-1">{listing.maxQuantity} left</p>
-                  </div>
-                </div>
 
-                {/* Action Button */}
-                <div className="mt-4">
-                  <button onClick={() => handleOrder(listing)} className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white font-bold text-sm py-3.5 rounded-xl active-press hover-lift shadow-premium">
-                    Order Now
+                  {/* Seller */}
+                  <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/seller/${listing.sellerId}`);
+                        }}
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 text-xs font-bold text-emerald-300">
+                          {listing.seller?.name?.charAt(0) || "S"}
+                        </div>
+                        <div className="absolute -bottom-0.5 -right-0.5 rounded-full bg-zinc-900 p-0.5">
+                          <ShieldCheck size={12} className="text-emerald-400" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <p
+                            className="cursor-pointer text-xs font-bold text-zinc-200 hover:underline"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(`/seller/${listing.sellerId}`);
+                            }}
+                          >
+                            {listing.seller?.name || "Unknown"}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star size={11} className="fill-amber-400 text-amber-400" />
+                          <span className="text-[11px] font-bold text-zinc-300">
+                            {listing.seller?.averageRating > 0 ? listing.seller.averageRating.toFixed(1) : "New"}
+                          </span>
+                          {listing.seller?.reviewCount > 0 && (
+                            <span className="text-[11px] text-zinc-500">({listing.seller.reviewCount})</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Follow / unfollow */}
+                    <div className="text-right">
+                      {followedSellers.has(listing.sellerId) ? (
+                        <button
+                          onClick={() => handleToggleFollow(listing.sellerId)}
+                          className="flex items-center gap-1 text-[11px] font-bold text-emerald-400 hover:text-emerald-300"
+                        >
+                          <UserCheck size={12} /> Following
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleToggleFollow(listing.sellerId)}
+                          className="flex items-center gap-1 text-[11px] font-bold text-zinc-400 hover:text-zinc-200"
+                        >
+                          <UserPlus size={12} /> Follow
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action */}
+                  <button
+                    onClick={() => handleOrder(listing)}
+                    className="btn-primary mt-4 w-full"
+                  >
+                    Order now <ArrowRight size={16} />
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
-        </section>
-      )}
-      
-      <div className="mt-12 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-inner-glow">
-        <div>
-          <h3 className="text-xl font-bold text-brand-navy mb-2">Can't find what you're looking for?</h3>
-          <p className="text-blue-800/80 max-w-lg">
-            You can still submit a custom request directly to a seller going to your desired country. Head over to the Trips page to browse active routes.
-          </p>
-        </div>
-        <button onClick={() => router.push('/trips')} className="bg-white text-blue-600 font-bold px-6 py-3 rounded-xl border border-blue-200 hover:bg-blue-600 hover:text-white hover:border-transparent smooth-hover whitespace-nowrap shadow-premium active-press hover-lift">
-          Browse Trips
-        </button>
-      </div>
+            ))}
+          </section>
+        )}
 
-      {/* Load More Removed - Pagination not supported yet */}
+        {/* Custom request CTA */}
+        <div className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-zinc-900 to-zinc-900 p-8 md:flex-row">
+          <div>
+            <h3 className="text-xl font-bold text-zinc-100">Can't find what you're looking for?</h3>
+            <p className="mt-1 max-w-lg text-sm text-zinc-400">
+              Submit a custom request to a seller going to your destination. Browse active trips and ask for anything.
+            </p>
+          </div>
+          <button
+            onClick={() => router.push("/trips")}
+            className="btn-primary whitespace-nowrap"
+          >
+            Browse trips <ArrowRight size={16} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { MapPin, Globe, Calendar, User, Package, Star } from 'lucide-react';
-import api from '@/lib/api';
-import { useAuth } from '@/context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { MapPin, Globe, Calendar, ShieldCheck, Star, UserPlus, UserCheck, ArrowLeft } from "lucide-react";
+import api from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SellerProfilePage() {
   const params = useParams();
@@ -21,134 +21,154 @@ export default function SellerProfilePage() {
       try {
         const [profileRes, followingRes] = await Promise.all([
           api.get(`/users/${sellerId}`),
-          isAuthenticated ? api.get('/users/me/following').catch(() => ({ data: [] })) : Promise.resolve({ data: [] })
+          isAuthenticated ? api.get("/users/me/following").catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
         ]);
-        
+
         setSeller(profileRes.data);
         if (isAuthenticated) {
           setIsFollowing(followingRes.data.includes(sellerId));
         }
       } catch (err) {
-        console.error('Failed to load seller profile', err);
+        console.error("Failed to load seller profile", err);
       } finally {
         setLoading(false);
       }
     };
-    
+
     if (sellerId) fetchSellerData();
   }, [sellerId, isAuthenticated]);
 
   const handleFollowToggle = async () => {
     if (!isAuthenticated) {
       alert("Please log in to follow sellers.");
-      router.push('/login');
+      router.push("/login");
       return;
     }
-    
+
     try {
       setFollowingAction(true);
       if (isFollowing) {
         await api.delete(`/users/${sellerId}/follow`);
         setSeller((prev: any) => ({
           ...prev,
-          _count: { ...prev._count, followers: prev._count.followers - 1 }
+          _count: { ...prev._count, followers: Math.max(0, prev._count.followers - 1) },
         }));
       } else {
         await api.post(`/users/${sellerId}/follow`);
         setSeller((prev: any) => ({
           ...prev,
-          _count: { ...prev._count, followers: prev._count.followers + 1 }
+          _count: { ...prev._count, followers: prev._count.followers + 1 },
         }));
       }
       setIsFollowing(!isFollowing);
     } catch (error) {
-      console.error('Failed to toggle follow', error);
-      alert('Failed to update follow status.');
+      console.error("Failed to toggle follow", error);
+      alert("Failed to update follow status.");
     } finally {
       setFollowingAction(false);
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-navy border-t-transparent rounded-full animate-spin" /></div>;
-  if (!seller) return <div className="text-center py-20 text-gray-500 font-medium">Seller not found</div>;
+  if (loading)
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500" />
+      </div>
+    );
+  if (!seller)
+    return <div className="min-h-screen bg-zinc-950 py-20 text-center font-medium text-zinc-400">Seller not found</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          
-          {/* Header Banner */}
-          <div className="h-40 bg-[#0A192F] relative w-full">
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+        <button
+          onClick={() => router.back()}
+          className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-zinc-500 transition-colors hover:text-zinc-200"
+        >
+          <ArrowLeft size={16} /> Back
+        </button>
+
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+          {/* Banner */}
+          <div className="relative h-40 w-full bg-gradient-to-br from-emerald-500/20 via-zinc-900 to-zinc-950">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.15),transparent_60%)]" />
           </div>
-          
-          {/* Profile Content */}
-          <div className="px-8 pb-10">
-            {/* Avatar & Action Button */}
-            <div className="flex justify-between items-end -mt-16 mb-6">
-              <div className="w-32 h-32 bg-white rounded-full p-2 relative shadow-lg">
-                <div className="w-full h-full bg-blue-100 rounded-full flex items-center justify-center text-blue-800 text-4xl font-black overflow-hidden border border-gray-100">
+
+          <div className="px-6 pb-10 sm:px-8">
+            {/* Avatar + action */}
+            <div className="mb-6 flex items-end justify-between -mt-16">
+              <div className="relative h-32 w-32 rounded-full bg-zinc-900 p-2 shadow-lg">
+                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/10 bg-emerald-500/15 text-4xl font-black text-emerald-300">
                   {seller.avatarUrl ? (
-                    <img src={seller.avatarUrl} alt={seller.name} className="w-full h-full object-cover" />
+                    <img src={seller.avatarUrl} alt={seller.name} className="h-full w-full object-cover" />
                   ) : (
-                    seller.name?.charAt(0).toUpperCase() || 'S'
+                    seller.name?.charAt(0).toUpperCase() || "S"
                   )}
                 </div>
               </div>
-              
+
               {user?.id !== sellerId && (
                 <button
                   onClick={handleFollowToggle}
                   disabled={followingAction}
-                  className={`px-8 py-3 rounded-xl font-bold tracking-wide transition-all shadow-sm ${
-                    isFollowing 
-                      ? 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200' 
-                      : 'bg-brand-navy text-white hover:bg-brand-navy/90 border border-brand-navy'
-                  }`}
+                  className={
+                    isFollowing
+                      ? "btn-ghost !border-zinc-700 !bg-zinc-900 !text-zinc-300 hover:!bg-zinc-800"
+                      : "btn-primary"
+                  }
                 >
-                  {followingAction ? 'Wait...' : isFollowing ? 'Following' : 'Follow Seller'}
+                  {followingAction ? "Wait..." : isFollowing ? (
+                    <><UserCheck size={16} /> Following</>
+                  ) : (
+                    <><UserPlus size={16} /> Follow seller</>
+                  )}
                 </button>
               )}
             </div>
 
-            {/* Seller Info */}
+            {/* Info */}
             <div className="mb-10">
-              <h1 className="text-3xl font-black text-gray-900 mb-2">{seller.name}</h1>
-              <div className="flex flex-wrap gap-4 text-sm text-gray-500 font-medium">
+              <h1 className="mb-2 text-3xl font-black text-zinc-100">{seller.name}</h1>
+              <div className="flex flex-wrap gap-4 text-sm font-medium text-zinc-400">
                 {seller.country && (
-                  <span className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-gray-400" /> {seller.city ? `${seller.city}, ` : ''}{seller.country}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Globe size={15} className="text-zinc-600" /> {seller.city ? `${seller.city}, ` : ""}{seller.country}
+                  </span>
                 )}
-                <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-gray-400" /> Joined {new Date(seller.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
-                {seller.role === 'SELLER' && (
-                  <span className="flex items-center gap-1.5 text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full"><Star className="w-3.5 h-3.5" /> Verified Courier</span>
+                <span className="flex items-center gap-1.5">
+                  <Calendar size={15} className="text-zinc-600" /> Joined {new Date(seller.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+                </span>
+                {seller.role === "SELLER" && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-amber-300">
+                    <Star size={13} className="fill-current" /> Verified courier
+                  </span>
                 )}
               </div>
             </div>
 
-            {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-6 mb-10 border-y border-gray-100 py-8">
+            {/* Stats */}
+            <div className="mb-10 grid grid-cols-3 gap-6 border-y border-white/5 py-8">
               <div className="text-center">
-                <div className="text-2xl font-black text-brand-navy mb-1">{seller._count?.followers || 0}</div>
-                <div className="text-xs uppercase tracking-widest font-bold text-gray-400">Followers</div>
+                <div className="mb-1 text-2xl font-black text-zinc-100">{seller._count?.followers || 0}</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-zinc-500">Followers</div>
               </div>
-              <div className="text-center border-x border-gray-100">
-                <div className="text-2xl font-black text-brand-navy mb-1">{seller._count?.following || 0}</div>
-                <div className="text-xs uppercase tracking-widest font-bold text-gray-400">Following</div>
+              <div className="border-x border-white/5 text-center">
+                <div className="mb-1 text-2xl font-black text-zinc-100">{seller._count?.following || 0}</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-zinc-500">Following</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-black text-brand-navy mb-1">{seller._count?.trips || 0}</div>
-                <div className="text-xs uppercase tracking-widest font-bold text-gray-400">Trips Hosted</div>
+                <div className="mb-1 text-2xl font-black text-zinc-100">{seller._count?.trips || 0}</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-zinc-500">Trips hosted</div>
               </div>
             </div>
 
-            {/* Bio Section */}
+            {/* Bio */}
             <div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4">About Me</h3>
-              <p className="text-gray-600 leading-relaxed bg-gray-50 p-6 rounded-2xl border border-gray-100">
+              <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-zinc-100">About me</h3>
+              <p className="rounded-2xl border border-white/5 bg-zinc-950/60 p-6 leading-relaxed text-zinc-400">
                 {seller.bio || "This user hasn't written a biography yet."}
               </p>
             </div>
-            
           </div>
         </div>
       </div>

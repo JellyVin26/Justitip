@@ -1,228 +1,167 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Truck, Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, LockKeyhole } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import api from '@/lib/api';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/api";
+import { Plane, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login, isAuthenticated, user } = useAuth();
+  const { login } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'SELLER') {
-        router.push('/seller/dashboard');
-      } else {
-        router.push('/explore');
-      }
-    }
-  }, [isAuthenticated, user, router]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
+
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await api.post('/auth/login', { email, password });
-      const { user, token } = response.data;
-      login(token, user);
-      
-      // Redirect based on role
-      if (user.role === 'SELLER') {
-        router.push('/seller/dashboard');
-      } else {
-        router.push('/explore');
-      }
+      const res = await api.post("/auth/login", { email, password });
+      login(res.data.token, res.data.user);
+      const role = res.data.user?.role;
+      router.push(role === "SELLER" ? "/seller/dashboard" : "/explore");
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to login');
+      setError(err?.response?.data?.error || "Invalid email or password. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex w-full bg-white fixed inset-0 z-[100]">
-      {/* Left Side - Image (Hidden on mobile) */}
-      <div className="hidden lg:flex w-1/2 relative">
-        <div className="absolute inset-0 bg-black/10 z-10" />
-        <img 
-          src="https://images.unsplash.com/photo-1549463273-0402b115bc5c?q=80&w=2000" 
-          alt="Traveler with luggage in Galleria" 
-          className="w-full h-full object-cover"
-        />
-        
-        {/* Top Logo */}
-        <div className="absolute top-8 left-8 z-20 flex items-center gap-2">
-          <div className="w-10 h-10 bg-brand-navy rounded-lg flex items-center justify-center">
-            <Truck className="text-white w-5 h-5" />
-          </div>
-          <span className="text-brand-navy font-bold text-2xl tracking-tight bg-white/80 px-2 rounded-md">Justitip</span>
-        </div>
+    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
+      {/* Left: brand panel (hidden on mobile) */}
+      <div className="relative hidden w-1/2 overflow-hidden lg:block">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-zinc-950 to-zinc-950" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[100px]" />
+        <div className="relative flex h-full flex-col justify-between p-12">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+              <Plane size={20} />
+            </div>
+            <span className="text-lg font-extrabold tracking-tight">
+              Jastip<span className="text-emerald-500">.</span>
+            </span>
+          </Link>
 
-        {/* Bottom Text Overlay */}
-        <div className="absolute bottom-16 left-12 right-12 z-20 text-brand-navy max-w-xl">
-          <h1 className="text-5xl font-bold leading-tight mb-6 tracking-tight">
-            The world, delivered by neighbors.
-          </h1>
-          <p className="text-lg font-medium opacity-90 leading-relaxed">
-            Access the premium global marketplace where trust and efficiency meet. Secure your next delivery with Justitip.
+          <div>
+            <h2 className="max-w-sm text-3xl font-extrabold leading-tight tracking-tight">
+              Welcome back to the world of jastip.
+            </h2>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
+              Sign in to track your orders, chat with jastipers, and keep your trips moving.
+            </p>
+          </div>
+
+          <p className="text-xs text-zinc-500">
+            Travelers shop. Jastipers deliver.
           </p>
         </div>
       </div>
 
-      {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center relative px-8 sm:px-16 md:px-24">
+      {/* Right: form */}
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-8">
         <div className="w-full max-w-md">
-          
-          {/* Header */}
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold text-brand-navy mb-3">Welcome back</h2>
-            <p className="text-gray-500 text-sm">Please enter your credentials to access your account.</p>
-          </div>
+          {/* Mobile logo */}
+          <Link href="/" className="mb-8 flex items-center gap-2.5 lg:hidden">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+              <Plane size={20} />
+            </div>
+            <span className="text-lg font-extrabold tracking-tight">
+              Jastip<span className="text-emerald-500">.</span>
+            </span>
+          </Link>
+
+          <h1 className="text-3xl font-extrabold tracking-tight">Sign in</h1>
+          <p className="mt-2 text-sm text-zinc-400">
+            New to Jastip?{" "}
+            <Link href="/register" className="font-bold text-emerald-400 hover:text-emerald-300">
+              Create an account
+            </Link>
+          </p>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm font-medium">
+            <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-300">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-wider font-semibold text-gray-600">Email Address</label>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            <div>
+              <label htmlFor="email" className="label-base">
+                Email
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
+                <Mail size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
                 <input
+                  id="email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
-                  required
+                  placeholder="you@example.com"
+                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-[11px] uppercase tracking-wider font-semibold text-gray-600">Password</label>
-                <Link href="#" className="text-[11px] font-bold text-brand-navy hover:underline">Forgot password?</Link>
-              </div>
+            <div>
+              <label htmlFor="password" className="label-base">
+                Password
+              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
+                <Lock size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
-                  required
+                  className="input-base !pl-11 !pr-12 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-zinc-300"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
-            {/* Remember Me */}
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-brand-navy focus:ring-brand-navy cursor-pointer"
-              />
-              <label htmlFor="remember" className="ml-3 block text-sm text-gray-600 cursor-pointer">
-                Remember me for 30 days
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 text-sm text-zinc-400">
+                <input type="checkbox" className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-emerald-500" />
+                Remember me
               </label>
+              <button type="button" className="text-sm font-bold text-emerald-400 transition-colors hover:text-emerald-300">
+                Forgot password?
+              </button>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest active-press hover-lift shadow-premium disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {loading ? 'SIGNING IN...' : 'SIGN IN'}
-              {!loading && <ArrowRight className="w-4 h-4" />}
+            <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5 text-base">
+              {loading ? "Signing in..." : "Sign in"} {!loading && <ArrowRight size={18} />}
             </button>
           </form>
 
-          {/* Social Logins */}
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-[10px] uppercase tracking-widest font-bold text-gray-400">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 active-press hover-lift">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-                Google
-              </button>
-              <button className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 active-press hover-lift">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05 1.8-3.08 1.8-1.09 0-1.46-.66-2.65-.66-1.18 0-1.6.63-2.62.63-1.08 0-2.26-.95-3.35-2.52C2.9 16.03 2.15 11.55 3.9 8.52c.86-1.5 2.4-2.45 4.08-2.45 1.13 0 2.18.77 2.87.77.68 0 1.88-.9 3.23-.9 1.43 0 2.65.65 3.34 1.63-2.92 1.76-2.43 5.96.48 7.15-.68 1.7-1.85 3.8-2.93 4.88l1.08.68zm-3.66-12.7c.65-.8 1.1-1.92.98-3.03-1.03.04-2.22.68-2.9 1.5-.6.73-1.12 1.88-.97 2.97 1.07.08 2.22-.62 2.89-1.44z"/>
-                </svg>
-                Apple
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link href="/register" className="font-bold text-brand-navy hover:underline">
-                Create account
-              </Link>
-            </p>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="mt-12 flex items-center justify-center gap-8 text-[10px] text-gray-400 font-bold tracking-widest uppercase">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" /> 256-BIT SSL
-            </div>
-            <div className="flex items-center gap-2">
-              <LockKeyhole className="w-4 h-4" /> SECURE LOGIN
-            </div>
-          </div>
-        </div>
-
-        {/* Absolute Footer */}
-        <div className="absolute bottom-6 left-8 right-8 flex justify-between items-center text-[10px] text-gray-400 uppercase tracking-wider font-semibold hidden sm:flex">
-          <p>© {new Date().getFullYear()} Justitip Inc.</p>
-          <div className="flex gap-4">
-            <Link href="#" className="hover:text-gray-600">Privacy</Link>
-            <Link href="#" className="hover:text-gray-600">Terms</Link>
-          </div>
+          <p className="mt-8 text-center text-xs leading-relaxed text-zinc-500">
+            Demo accounts: <span className="font-semibold text-zinc-400">buyer@jastip.app</span> /{" "}
+            <span className="font-semibold text-zinc-400">seller@jastip.app</span> (password:{" "}
+            <span className="font-semibold text-zinc-400">jastip123</span>)
+          </p>
         </div>
       </div>
     </div>

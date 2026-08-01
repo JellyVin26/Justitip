@@ -23,6 +23,7 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (updatedUserFields: Partial<User>) => void;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,15 +34,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
-    const storedToken = sessionStorage.getItem('token');
-    const storedUser = sessionStorage.getItem('user');
+    const storedToken = sessionStorage.getItem("token");
+    const storedUser = sessionStorage.getItem("user");
 
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
   }, []);
+
+  // loading = not yet mounted OR still hydrating sessionStorage
+  const loading = !isMounted;
 
   const login = (newToken: string, newUser: User) => {
     setToken(newToken);
@@ -69,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   if (!isMounted) return null; // Avoid hydration mismatch
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, updateUser, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   );

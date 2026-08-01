@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { Package, List, Plus } from 'lucide-react';
-import Link from 'next/link';
-import AddListingModal from '@/components/AddListingModal';
-import { useAuth } from '@/context/AuthContext';
-import api from '@/lib/api';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { Package, List, Plus, ArrowLeft, MapPin } from "lucide-react";
+import Link from "next/link";
+import AddListingModal from "@/components/AddListingModal";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/api";
 
 export default function ManageTripPage() {
   const { id } = useParams();
@@ -26,93 +26,96 @@ export default function ManageTripPage() {
       const res = await api.get(`/listings?tripId=${id}`);
       setListings(res.data);
     } catch (error) {
-      console.error('Failed to fetch listings', error);
+      console.error("Failed to fetch listings", error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-8 py-10">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <Link href="/seller/dashboard" className="text-sm text-gray-500 hover:text-brand-navy mb-2 block">&larr; Back to Dashboard</Link>
-          <h1 className="text-3xl font-bold text-brand-navy">Manage Trip Details</h1>
-        </div>
-        <button className="bg-gradient-to-r from-brand-navy to-gray-800 text-white px-5 py-2.5 rounded-lg font-bold text-sm active-press hover-lift tracking-wide shadow-premium">
-          Edit Trip Info
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <div className="glass-panel rounded-3xl p-8 shadow-premium flex flex-col items-center text-center">
-          <List className="w-12 h-12 text-gray-300 mb-3" />
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Trip Listings</h2>
-          <p className="text-gray-500 mb-6 text-sm">You have {listings.length} item{listings.length === 1 ? '' : 's'} listed for this trip.</p>
-          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-gradient-to-r from-brand-accent to-yellow-500 text-brand-navy px-5 py-2.5 rounded-xl font-bold text-sm active-press hover-lift shadow-premium">
-            <Plus className="w-4 h-4" /> Add Listing
-          </button>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <Link href="/seller/dashboard" className="mb-2 flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-200">
+              <ArrowLeft size={14} /> Back to dashboard
+            </Link>
+            <h1 className="text-3xl font-extrabold tracking-tight">Manage trip details</h1>
+          </div>
         </div>
 
-        <div className="glass-panel rounded-3xl p-8 shadow-premium flex flex-col items-center text-center">
-          <Package className="w-12 h-12 text-gray-300 mb-3" />
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Trip Orders</h2>
-          <p className="text-gray-500 mb-6 text-sm">Review order requests from buyers for this specific trip.</p>
-          <Link href="/seller/orders" className="text-brand-navy font-bold text-sm hover:underline active-press hover-lift inline-block">
-            View Requests
-          </Link>
-        </div>
-      </div>
+        <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center">
+            <List size={44} className="mb-3 text-zinc-700" />
+            <h2 className="mb-2 text-xl font-bold text-zinc-100">Trip listings</h2>
+            <p className="mb-6 text-sm text-zinc-500">
+              You have {listings.length} item{listings.length === 1 ? "" : "s"} listed for this trip.
+            </p>
+            <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+              <Plus size={16} /> Add listing
+            </button>
+          </div>
 
-      <h2 className="text-2xl font-bold text-brand-navy mb-6">Listings for this Trip</h2>
-      
-      {loading ? (
-        <div className="flex justify-center p-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-navy"></div>
+          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center">
+            <Package size={44} className="mb-3 text-zinc-700" />
+            <h2 className="mb-2 text-xl font-bold text-zinc-100">Trip orders</h2>
+            <p className="mb-6 text-sm text-zinc-500">Review order requests from buyers for this specific trip.</p>
+            <Link href="/seller/orders" className="inline-flex items-center gap-1 text-sm font-bold text-emerald-400 hover:text-emerald-300">
+              View requests
+            </Link>
+          </div>
         </div>
-      ) : listings.length === 0 ? (
-        <div className="glass-panel rounded-3xl p-8 text-center text-gray-500 shadow-sm">
-          No listings found for this trip. Click "Add Listing" to start adding items!
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {listings.map(listing => (
-            <div key={listing.id} className="glass-panel rounded-3xl overflow-hidden shadow-premium hover-lift flex flex-col group border-none">
-              <div className="h-48 bg-gray-100 relative overflow-hidden">
-                {listing.imageUrl ? (
-                  <img src={listing.imageUrl} alt={listing.productName} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
-                )}
-                <div className="absolute top-3 left-3 glass-panel border-white/50 px-2 py-1 rounded text-xs font-bold text-brand-navy shadow-sm">
-                  {listing.localCurrency} {listing.price.toLocaleString()}
+
+        <h2 className="mb-6 text-2xl font-extrabold tracking-tight">Listings for this trip</h2>
+
+        {loading ? (
+          <div className="flex justify-center p-10">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500"></div>
+          </div>
+        ) : listings.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center text-zinc-500">
+            No listings found for this trip. Click "Add listing" to start adding items!
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {listings.map((listing) => (
+              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 transition-colors hover:border-white/20">
+                <div className="relative h-48 overflow-hidden bg-zinc-800">
+                  {listing.imageUrl ? (
+                    <img src={listing.imageUrl} alt={listing.productName} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-zinc-600">No image</div>
+                  )}
+                  <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-zinc-950/80 px-2 py-1 text-xs font-bold text-emerald-300 backdrop-blur-sm">
+                    {listing.localCurrency} {listing.price.toLocaleString()}
+                  </div>
                 </div>
-              </div>
-              <div className="p-5 flex-1 flex flex-col">
-                <h3 className="font-bold text-gray-800 mb-1 line-clamp-2">{listing.productName}</h3>
-                {listing.description && <p className="text-xs text-gray-500 mb-3 line-clamp-2">{listing.description}</p>}
-                
-                <div className="mt-auto pt-4 border-t border-gray-100">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-gray-500">Trip: <span className="font-bold text-gray-700">{listing.trip?.destinationCountry || 'Unknown'}</span></span>
-                    {listing.maxQuantity > 0 && <span className="text-brand-accent font-medium">Max: {listing.maxQuantity}</span>}
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="line-clamp-2 font-bold text-zinc-100">{listing.productName}</h3>
+                  {listing.description && <p className="mb-3 line-clamp-2 text-xs text-zinc-500">{listing.description}</p>}
+
+                  <div className="mt-auto flex items-center justify-between border-t border-white/5 pt-4 text-xs">
+                    <span className="flex items-center gap-1 text-zinc-500">
+                      <MapPin size={11} /> <span className="font-bold text-zinc-300">{listing.trip?.destinationCountry || "Unknown"}</span>
+                    </span>
+                    {listing.maxQuantity > 0 && <span className="font-medium text-emerald-400">Max: {listing.maxQuantity}</span>}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
-      <AddListingModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        preSelectedTripId={id as string}
-        onSuccess={() => {
-          setIsModalOpen(false);
-          fetchListings();
-        }}
-      />
+        <AddListingModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          preSelectedTripId={id as string}
+          onSuccess={() => {
+            setIsModalOpen(false);
+            fetchListings();
+          }}
+        />
+      </div>
     </div>
   );
 }

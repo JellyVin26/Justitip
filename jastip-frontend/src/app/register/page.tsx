@@ -1,208 +1,221 @@
 "use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Truck, Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, LockKeyhole, User } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import api from '@/lib/api';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/api";
+import { Plane, Mail, Lock, User, Phone, ArrowRight, ShoppingBag } from "lucide-react";
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'BUYER' | 'SELLER'>('BUYER');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [role, setRole] = useState<"BUYER" | "SELLER">("BUYER");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!name || !email || !password) {
+      setError("Please fill in your name, email, and password.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await api.post('/auth/register', { name, email, password, role });
-      const { user, token } = response.data;
-      login(token, user);
-      
-      if (user.role === 'SELLER') {
-        router.push('/seller/dashboard');
-      } else {
-        router.push('/explore');
-      }
+      const res = await api.post("/auth/register", { name, email, password, role, phoneNumber });
+      login(res.data.token, res.data.user);
+      const userRole = res.data.user?.role || role;
+      router.push(userRole === "SELLER" ? "/seller/dashboard" : "/explore");
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to register');
+      setError(err?.response?.data?.error || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex w-full bg-white fixed inset-0 z-[100]">
-      {/* Left Side - Image */}
-      <div className="hidden lg:flex w-1/2 relative">
-        <div className="absolute inset-0 bg-black/20 z-10" />
-        <img 
-          src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000" 
-          alt="Airplane wing over clouds" 
-          className="w-full h-full object-cover"
-        />
-        
-        <div className="absolute top-8 left-8 z-20 flex items-center gap-2">
-          <div className="w-10 h-10 bg-brand-navy rounded-lg flex items-center justify-center">
-            <Truck className="text-white w-5 h-5" />
-          </div>
-          <span className="text-brand-navy font-bold text-2xl tracking-tight bg-white/80 px-2 rounded-md">Justitip</span>
-        </div>
+    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
+      {/* Left: brand panel */}
+      <div className="relative hidden w-1/2 overflow-hidden lg:block">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-zinc-950 to-zinc-950" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[100px]" />
+        <div className="relative flex h-full flex-col justify-between p-12">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+              <Plane size={20} />
+            </div>
+            <span className="text-lg font-extrabold tracking-tight">
+              Jastip<span className="text-emerald-500">.</span>
+            </span>
+          </Link>
 
-        <div className="absolute inset-y-0 left-12 right-12 z-20 text-white max-w-xl flex flex-col justify-center">
-          <h1 className="text-5xl font-bold leading-tight mb-6 tracking-tight">
-            Join the global community.
-          </h1>
-          <p className="text-lg font-medium opacity-90 leading-relaxed">
-            Whether you want to shop the world or earn while traveling, Justitip connects you with verified neighbors globally.
-          </p>
+          <div>
+            <h2 className="max-w-sm text-3xl font-extrabold leading-tight tracking-tight">
+              Join the network that brings things home.
+            </h2>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
+              Shop from abroad, or earn on your next trip. One account, both sides of the jastip.
+            </p>
+          </div>
+
+          <p className="text-xs text-zinc-500">Travelers shop. Jastipers deliver.</p>
         </div>
       </div>
 
-      {/* Right Side - Register Form */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center relative px-8 sm:px-16 md:px-24">
+      {/* Right: form */}
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-8">
         <div className="w-full max-w-md">
-          
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold text-brand-navy mb-3">Create an account</h2>
-            <p className="text-gray-500 text-sm">Join Justitip to start shopping or earning today.</p>
-          </div>
+          <Link href="/" className="mb-8 flex items-center gap-2.5 lg:hidden">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+              <Plane size={20} />
+            </div>
+            <span className="text-lg font-extrabold tracking-tight">
+              Jastip<span className="text-emerald-500">.</span>
+            </span>
+          </Link>
+
+          <h1 className="text-3xl font-extrabold tracking-tight">Create your account</h1>
+          <p className="mt-2 text-sm text-zinc-400">
+            Already have an account?{" "}
+            <Link href="/login" className="font-bold text-emerald-400 hover:text-emerald-300">
+              Sign in
+            </Link>
+          </p>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm font-medium">
+            <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-300">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleRegister} className="space-y-5">
-            {/* Role Selection */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <button 
-                type="button"
-                onClick={() => setRole('BUYER')}
-                className={`py-3 rounded-xl border text-sm font-bold transition-all ${
-                  role === 'BUYER' 
-                    ? 'border-brand-navy bg-gradient-to-br from-brand-navy to-gray-800 text-white shadow-premium' 
-                    : 'border-gray-200 text-gray-500 hover:bg-gray-50 active-press hover-lift'
-                }`}
-              >
-                I want to Buy
-              </button>
-              <button 
-                type="button"
-                onClick={() => setRole('SELLER')}
-                className={`py-3 rounded-xl border text-sm font-bold transition-all ${
-                  role === 'SELLER' 
-                    ? 'border-brand-navy bg-gradient-to-br from-brand-navy to-gray-800 text-white shadow-premium' 
-                    : 'border-gray-200 text-gray-500 hover:bg-gray-50 active-press hover-lift'
-                }`}
-              >
-                I want to Sell
-              </button>
-            </div>
-
-            {/* Name Field */}
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-wider font-semibold text-gray-600">Full Name</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-wider font-semibold text-gray-600">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all placeholder:text-gray-400 font-medium bg-gray-50/50 focus:bg-white shadow-sm"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-wider font-semibold text-gray-600">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-all font-medium bg-gray-50/50 focus:bg-white shadow-sm"
-                  required
-                />
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            {/* Role toggle */}
+            <div>
+              <label className="label-base">I am a</label>
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center"
+                  onClick={() => setRole("BUYER")}
+                  className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
+                    role === "BUYER"
+                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-300"
+                      : "border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600"
+                  }`}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
+                  <ShoppingBag size={17} /> Buyer
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setRole("SELLER")}
+                  className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
+                    role === "SELLER"
+                      ? "border-amber-500 bg-amber-500/10 text-amber-300"
+                      : "border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600"
+                  }`}
+                >
+                  <Plane size={17} /> Seller
+                </button>
+              </div>
+              <p className="mt-2 text-xs text-zinc-500">
+                {role === "BUYER"
+                  ? "You'll request items from travelers and track orders."
+                  : "You'll post trips, accept requests, and earn markup."}
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor="name" className="label-base">
+                Full name
+              </label>
+              <div className="relative">
+                <User size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your name"
+                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                />
               </div>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-brand-navy to-gray-800 text-white flex items-center justify-center gap-3 py-3.5 rounded-lg text-sm font-bold tracking-widest active-press hover-lift shadow-premium disabled:opacity-70 disabled:cursor-not-allowed mt-4"
-            >
-              {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
-              {!loading && <ArrowRight className="w-4 h-4" />}
+            <div>
+              <label htmlFor="reg-email" className="label-base">
+                Email
+              </label>
+              <div className="relative">
+                <Mail size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  id="reg-email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="reg-password" className="label-base">
+                Password
+              </label>
+              <div className="relative">
+                <Lock size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  id="reg-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="label-base">
+                Phone number <span className="normal-case text-zinc-500">(optional)</span>
+              </label>
+              <div className="relative">
+                <Phone size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="+62 812-3456-7890"
+                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                />
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5 text-base">
+              {loading ? "Creating account..." : "Create account"} {!loading && <ArrowRight size={18} />}
             </button>
           </form>
 
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="font-bold text-brand-navy hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-12 flex items-center justify-center gap-8 text-[10px] text-gray-400 font-bold tracking-widest uppercase">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" /> 256-BIT SSL
-            </div>
-            <div className="flex items-center gap-2">
-              <LockKeyhole className="w-4 h-4" /> SECURE LOGIN
-            </div>
-          </div>
+          <p className="mt-8 text-center text-xs leading-relaxed text-zinc-500">
+            By creating an account you agree to the Jastip terms and privacy policy.
+          </p>
         </div>
       </div>
     </div>

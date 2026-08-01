@@ -1,8 +1,29 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import api from '@/lib/api';
-import { useAuth } from '@/context/AuthContext';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import api from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import { Package, ArrowRight, MapPin } from "lucide-react";
+
+const STATUS_STYLES: Record<string, string> = {
+  REQUEST_SUBMITTED: "bg-zinc-700/40 text-zinc-300",
+  TRIP_CONFIRMED: "bg-blue-500/15 text-blue-300",
+  PAID: "bg-emerald-500/15 text-emerald-300",
+  ITEM_PURCHASED: "bg-emerald-500/15 text-emerald-300",
+  IN_TRANSIT: "bg-amber-500/15 text-amber-300",
+  DELIVERED: "bg-emerald-500/15 text-emerald-300",
+  COMPLETED: "bg-emerald-500/15 text-emerald-300",
+  CANCELLED: "bg-red-500/15 text-red-300",
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const style = STATUS_STYLES[status] || "bg-zinc-700/40 text-zinc-300";
+  return (
+    <span className={`inline-block rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${style}`}>
+      {status.replace("_", " ")}
+    </span>
+  );
+}
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -16,7 +37,7 @@ export default function OrdersPage() {
         const response = await api.get(`/orders?buyerId=${user.id}`);
         setOrders(response.data);
       } catch (err) {
-        console.error('Failed to fetch orders', err);
+        console.error("Failed to fetch orders", err);
       } finally {
         setLoading(false);
       }
@@ -24,63 +45,105 @@ export default function OrdersPage() {
     fetchOrders();
   }, [user]);
 
-  if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-navy"></div></div>;
+  if (loading)
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center bg-zinc-950">
+        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-emerald-500"></div>
+      </div>
+    );
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-8 py-10">
-      <h1 className="text-3xl font-bold text-brand-navy mb-8">My Orders</h1>
-      {orders.length === 0 ? (
-        <div className="glass-panel rounded-3xl p-8 shadow-premium flex flex-col items-center text-center">
-          <h2 className="text-xl font-bold text-gray-700 mb-2">No Active Orders</h2>
-          <p className="text-gray-500 max-w-md">You haven't requested any items yet. Explore active trips to request an item!</p>
-          <Link href="/explore" className="mt-6 bg-gradient-to-r from-brand-navy to-gray-800 text-white px-8 py-3 rounded-xl font-bold tracking-wider active-press hover-lift shadow-premium">Explore Trips</Link>
-        </div>
-      ) : (
-        <div className="glass-panel rounded-3xl shadow-premium overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-gray-50/50 border-b border-gray-200/50 text-xs uppercase text-gray-500 font-bold tracking-wider">
-              <tr>
-                <th className="px-6 py-4">Item</th>
-                <th className="px-6 py-4">Trip Destination</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-white/60 smooth-hover transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <img src={order.productImageUrl || "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=100&q=80"} alt={order.productName} className="w-10 h-10 rounded object-cover" />
-                      <div>
-                        <p className="font-bold text-brand-navy">{order.productName}</p>
-                        <p className="text-xs text-gray-500">Qty: {order.quantity}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-700">
-                     {order.trip?.destinationCountry || 'Unknown'}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
-                      {order.status.replace('_', ' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-gray-500">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <Link href={`/orders/${order.id}`} className="text-brand-accent font-bold hover:underline active-press hover-lift inline-block">
-                      View Details &rarr;
-                    </Link>
-                  </td>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+        <h1 className="mb-8 text-3xl font-extrabold tracking-tight">My orders</h1>
+
+        {orders.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-12 text-center">
+            <Package className="mx-auto mb-4 h-14 w-14 text-zinc-700" />
+            <h2 className="text-xl font-bold text-zinc-200">No orders yet</h2>
+            <p className="mx-auto mt-2 max-w-md text-zinc-500">
+              You haven't requested any items yet. Explore active trips to request an item!
+            </p>
+            <Link href="/explore" className="btn-primary mt-6">
+              Explore trips <ArrowRight size={16} />
+            </Link>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-zinc-900">
+            {/* Desktop table */}
+            <table className="hidden w-full text-left md:table">
+              <thead className="border-b border-white/5 text-xs uppercase tracking-wider text-zinc-500">
+                <tr>
+                  <th className="px-6 py-4 font-bold">Item</th>
+                  <th className="px-6 py-4 font-bold">Destination</th>
+                  <th className="px-6 py-4 font-bold">Status</th>
+                  <th className="px-6 py-4 font-bold">Date</th>
+                  <th className="px-6 py-4 text-right font-bold">Action</th>
                 </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5 text-sm">
+                {orders.map((order) => (
+                  <tr key={order.id} className="transition-colors hover:bg-white/5">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={order.productImageUrl || "https://picsum.photos/seed/jastip-order/100/100"}
+                          alt={order.productName}
+                          className="h-10 w-10 rounded-lg object-cover"
+                        />
+                        <div>
+                          <p className="font-bold text-zinc-100">{order.productName}</p>
+                          <p className="text-xs text-zinc-500">Qty: {order.quantity}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 font-medium text-zinc-300">
+                      {order.trip?.destinationCountry || "Unknown"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <StatusBadge status={order.status} />
+                    </td>
+                    <td className="px-6 py-4 text-zinc-500">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        href={`/orders/${order.id}`}
+                        className="inline-flex items-center gap-1 font-bold text-emerald-400 hover:underline"
+                      >
+                        View details <ArrowRight size={14} />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Mobile cards */}
+            <div className="divide-y divide-white/5 md:hidden">
+              {orders.map((order) => (
+                <Link key={order.id} href={`/orders/${order.id}`} className="flex items-center gap-4 p-4 transition-colors hover:bg-white/5">
+                  <img
+                    src={order.productImageUrl || "https://picsum.photos/seed/jastip-order/100/100"}
+                    alt={order.productName}
+                    className="h-14 w-14 rounded-xl object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-bold text-zinc-100">{order.productName}</p>
+                    <p className="mt-0.5 flex items-center gap-1 text-xs text-zinc-500">
+                      <MapPin size={11} /> {order.trip?.destinationCountry || "Unknown"} · Qty {order.quantity}
+                    </p>
+                    <div className="mt-2">
+                      <StatusBadge status={order.status} />
+                    </div>
+                  </div>
+                  <ArrowRight size={16} className="shrink-0 text-zinc-600" />
+                </Link>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
