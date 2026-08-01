@@ -42,7 +42,7 @@ export default function SellerListingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-extrabold tracking-tight">My listings</h1>
@@ -53,10 +53,10 @@ export default function SellerListingsPage() {
 
         {loading ? (
           <div className="flex justify-center p-10">
-            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-emerald-500"></div>
+            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-gold-400"></div>
           </div>
         ) : listings.length === 0 ? (
-          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-zinc-900 p-12 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-navy-900 p-12 text-center">
             <Package size={56} className="mb-4 text-zinc-700" />
             <h2 className="text-xl font-bold text-zinc-200">You haven't listed any items</h2>
             <p className="mt-1 max-w-md text-zinc-500">
@@ -69,14 +69,14 @@ export default function SellerListingsPage() {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {listings.map((listing) => (
-              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 transition-colors hover:border-white/20">
-                <div className="relative h-48 overflow-hidden bg-zinc-800">
+              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-900 transition-colors hover:border-white/20">
+                <div className="relative h-48 overflow-hidden bg-navy-800">
                   {listing.imageUrl ? (
                     <img src={listing.imageUrl} alt={listing.productName} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-zinc-600">No image</div>
                   )}
-                  <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-zinc-950/80 px-2 py-1 text-xs font-bold text-emerald-300 backdrop-blur-sm">
+                  <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-navy-950/80 px-2 py-1 text-xs font-bold text-gold-300 backdrop-blur-sm">
                     {listing.localCurrency} {listing.price.toLocaleString()}
                   </div>
                 </div>
@@ -91,7 +91,7 @@ export default function SellerListingsPage() {
                       </span>
                       <div className="flex items-center gap-2">
                         {listing.maxQuantity > 0 && (
-                          <span className="font-medium text-emerald-400">Max: {listing.maxQuantity}</span>
+                          <span className="font-medium text-gold-400">Max: {listing.maxQuantity}</span>
                         )}
                         <button
                           onClick={() => handleDeleteListing(listing.id)}

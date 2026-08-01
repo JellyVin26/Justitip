@@ -56,11 +56,11 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400 text-navy-950">
             <Plane size={20} />
           </div>
           <span className="text-lg font-extrabold tracking-tight text-zinc-100">
-            Jastip<span className="text-emerald-500">.</span>
+            Justitip<span className="text-gold-400">.</span>
           </span>
         </Link>
 
@@ -75,8 +75,8 @@ export default function Navbar() {
                   href={link.href}
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                     active
-                      ? "bg-zinc-100 text-zinc-900"
-                      : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                      ? "bg-navy-800 text-gold-300"
+                      : "text-zinc-400 hover:bg-navy-800 hover:text-zinc-100"
                   }`}
                 >
                   {link.label}
@@ -109,14 +109,14 @@ export default function Navbar() {
               )}
               <Link
                 href="/settings"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-800 text-sm font-bold text-zinc-100 transition-colors hover:bg-zinc-700"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-800 text-sm font-bold text-zinc-100 transition-colors hover:bg-navy-700"
                 title="Settings"
               >
                 {user?.name?.charAt(0) || <User size={16} />}
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-navy-800 hover:text-zinc-200"
                 title="Log out"
               >
                 <LogOut size={18} />
@@ -128,7 +128,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex h-10 w-10 items-center justify-center rounded-xl text-zinc-700 transition-colors hover:bg-zinc-100 md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-zinc-400 transition-colors hover:bg-navy-800 hover:text-zinc-100 md:hidden"
           aria-label="Toggle menu"
         >
           {menuOpen ? <X size={22} /> : <List size={22} />}
@@ -137,19 +137,19 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div ref={menuRef} className="border-t border-white/5 bg-zinc-950 md:hidden">
+        <div ref={menuRef} className="border-t border-white/5 bg-navy-950 md:hidden">
           <div className="mx-auto max-w-7xl space-y-1 px-4 py-4">
             {!isAuthenticated ? (
               <>
                 <Link
                   href="/login"
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-zinc-200 hover:bg-zinc-900"
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-zinc-200 hover:bg-navy-900"
                 >
                   <User size={18} /> Sign in
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-emerald-400 hover:bg-zinc-900"
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-gold-400 hover:bg-navy-900"
                 >
                   <Package size={18} /> Get started
                 </Link>
@@ -162,8 +162,8 @@ export default function Navbar() {
                     href={link.href}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold ${
                       pathname === link.href
-                        ? "bg-zinc-900 text-zinc-100"
-                        : "text-zinc-400 hover:bg-zinc-900"
+                        ? "bg-navy-900 text-zinc-100"
+                        : "text-zinc-400 hover:bg-navy-900"
                     }`}
                   >
                     {link.label === "Dashboard" || link.label === "Seller Hub" ? (
@@ -177,13 +177,13 @@ export default function Navbar() {
                 <div className="mt-2 border-t border-white/5 pt-2">
                   <Link
                     href="/settings"
-                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-zinc-400 hover:bg-zinc-900"
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-zinc-400 hover:bg-navy-900"
                   >
                     <User size={18} /> Settings
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-400 hover:bg-zinc-900"
+                    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-400 hover:bg-navy-900"
                   >
                     <LogOut size={18} /> Log out
                   </button>

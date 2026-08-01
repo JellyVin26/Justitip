@@ -47,18 +47,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="flex min-h-screen bg-navy-950 text-zinc-100">
       {/* Left: brand panel */}
       <div className="relative hidden w-1/2 overflow-hidden lg:block">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-zinc-950 to-zinc-950" />
-        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gold-400/20 via-zinc-950 to-zinc-950" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-gold-400/10 blur-[100px]" />
         <div className="relative flex h-full flex-col justify-between p-12">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400 text-navy-950">
               <Plane size={20} />
             </div>
             <span className="text-lg font-extrabold tracking-tight">
-              Jastip<span className="text-emerald-500">.</span>
+              Justitip<span className="text-gold-400">.</span>
             </span>
           </Link>
 
@@ -67,11 +67,11 @@ export default function RegisterPage() {
               Join the network that brings things home.
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
-              Shop from abroad, or earn on your next trip. One account, both sides of the jastip.
+              Shop from abroad, or earn on your next trip. One account, both sides of the justitip.
             </p>
           </div>
 
-          <p className="text-xs text-zinc-500">Travelers shop. Jastipers deliver.</p>
+          <p className="text-xs text-zinc-500">Travelers shop. Justitipers deliver.</p>
         </div>
       </div>
 
@@ -79,18 +79,18 @@ export default function RegisterPage() {
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-8">
         <div className="w-full max-w-md">
           <Link href="/" className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400 text-navy-950">
               <Plane size={20} />
             </div>
             <span className="text-lg font-extrabold tracking-tight">
-              Jastip<span className="text-emerald-500">.</span>
+              Justitip<span className="text-gold-400">.</span>
             </span>
           </Link>
 
           <h1 className="text-3xl font-extrabold tracking-tight">Create your account</h1>
           <p className="mt-2 text-sm text-zinc-400">
             Already have an account?{" "}
-            <Link href="/login" className="font-bold text-emerald-400 hover:text-emerald-300">
+            <Link href="/login" className="font-bold text-gold-400 hover:text-gold-300">
               Sign in
             </Link>
           </p>
@@ -111,8 +111,8 @@ export default function RegisterPage() {
                   onClick={() => setRole("BUYER")}
                   className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
                     role === "BUYER"
-                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-300"
-                      : "border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600"
+                      ? "border-gold-400 bg-gold-400/10 text-gold-300"
+                      : "border-zinc-700 bg-navy-900 text-zinc-400 hover:border-zinc-600"
                   }`}
                 >
                   <ShoppingBag size={17} /> Buyer
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                   className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
                     role === "SELLER"
                       ? "border-amber-500 bg-amber-500/10 text-amber-300"
-                      : "border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600"
+                      : "border-zinc-700 bg-navy-900 text-zinc-400 hover:border-zinc-600"
                   }`}
                 >
                   <Plane size={17} /> Seller
@@ -149,7 +149,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 8 characters"
-                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function RegisterPage() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="+62 812-3456-7890"
-                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
@@ -214,7 +214,7 @@ export default function RegisterPage() {
           </form>
 
           <p className="mt-8 text-center text-xs leading-relaxed text-zinc-500">
-            By creating an account you agree to the Jastip terms and privacy policy.
+            By creating an account you agree to the Justitip terms and privacy policy.
           </p>
         </div>
       </div>

@@ -8,11 +8,22 @@
   --color-brand-accent-soft: #D1FAE5; /* emerald 100 - tints */
   --color-brand-amber: #F59E0B; /* amber 500 - travel warmth (secondary, status only) */
   --color-brand-surface: #ffffff;
+
+  /* Justitip identity: deep navy + gold */
+  --color-navy-950: #0A0F1E;
+  --color-navy-900: #101830;
+  --color-navy-800: #182240;
+  --color-navy-700: #233057;
+  --color-navy-600: #31406B;
+  --color-gold-300: #FFD97A;
+  --color-gold-400: #F5B942;
+  --color-gold-500: #E8A33D;
+  --color-gold-600: #C98227;
 }
 
 :root {
-  --background: #09090B;
-  --foreground: #F4F4F5;
+  --background: #0A0F1E;
+  --foreground: #E8ECF8;
 }
 
 body {
@@ -35,7 +46,7 @@ body {
 }
 
 .glass-nav {
-  @apply bg-zinc-950/80 backdrop-blur-lg border-b border-white/5;
+  @apply bg-navy-950/80 backdrop-blur-lg border-b border-white/5;
 }
 
 /* Premium Shadows */
@@ -76,31 +87,31 @@ body {
 
 /* ===== New design system ===== */
 
-/* Brand gradient CTA */
+/* Brand CTA: gold on navy */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold-400 px-6 py-3 text-sm font-bold text-navy-950 transition-all duration-200 hover:bg-gold-300 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
 .btn-dark {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:bg-zinc-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-navy-800 px-6 py-3 text-sm font-bold text-white transition-all duration-200 hover:bg-navy-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-zinc-700 px-6 py-3 text-sm font-bold text-zinc-200 transition-all duration-200 hover:border-zinc-500 hover:bg-zinc-900 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-bold text-zinc-200 transition-all duration-200 hover:border-gold-400/50 hover:bg-navy-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
 /* Inputs */
 .input-base {
-  @apply w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20;
+  @apply w-full rounded-xl border border-navy-700 bg-navy-900 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 transition-all focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/20;
 }
 
 .label-base {
-  @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-zinc-500;
+  @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-zinc-400;
 }
 
 /* Dark card */
 .card-dark {
-  @apply rounded-2xl border border-white/10 bg-zinc-900;
+  @apply rounded-2xl border border-white/10 bg-navy-900;
 }
 
 /* Entrance animation */

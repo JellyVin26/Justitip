@@ -58,32 +58,32 @@ export default function LandingPage() {
         ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         {/* Glow */}
-        <div className="pointer-events-none absolute -top-40 right-[-10%] h-[480px] w-[480px] rounded-full bg-emerald-500/15 blur-[120px]" />
+        <div className="pointer-events-none absolute -top-40 right-[-10%] h-[480px] w-[480px] rounded-full bg-gold-400/15 blur-[120px]" />
         <div className="pointer-events-none absolute bottom-0 left-[-5%] h-[360px] w-[360px] rounded-full bg-amber-500/10 blur-[100px]" />
 
         <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-20 pt-16 sm:px-6 md:grid-cols-2 md:pb-28 md:pt-24">
           {/* Left: copy */}
           <div className="animate-rise-in">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-bold tracking-wide text-emerald-300">
-              <Sparkles size={14} /> Travelers shop. Jastipers deliver.
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold-400/30 bg-gold-400/10 px-4 py-1.5 text-xs font-bold tracking-wide text-gold-300">
+              <Sparkles size={14} /> Travelers shop. Justitipers deliver.
             </div>
 
             <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tighter sm:text-5xl lg:text-6xl">
               Your go-to for hard-to-find finds,{" "}
-              <span className="text-emerald-400">from anywhere.</span>
+              <span className="text-gold-400">from anywhere.</span>
             </h1>
 
             <p className="mt-5 max-w-md text-base leading-relaxed text-zinc-400">
-              Jastip connects you with verified travelers who pick up items abroad and deliver them to your doorstep. No international shipping, no hassle.
+              Justitip connects you with verified travelers who pick up items abroad and deliver them to your doorstep. No international shipping, no hassle.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/register" className="btn-primary !px-8 !py-4 text-base">
-                Start jastiping <ArrowRight size={18} />
+                Start justitiping <ArrowRight size={18} />
               </Link>
               <a
                 href="#how"
@@ -96,15 +96,15 @@ export default function LandingPage() {
 
           {/* Right: live preview (real trip cards) */}
           <div className="relative animate-rise-in [animation-delay:150ms]">
-            <div className="pointer-events-none absolute -inset-8 -z-10 rounded-[2rem] bg-gradient-to-br from-emerald-500/20 via-transparent to-amber-500/10 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-8 -z-10 rounded-[2rem] bg-gradient-to-br from-gold-400/20 via-transparent to-amber-500/10 blur-2xl" />
 
-            <div className="rounded-3xl border border-white/10 bg-zinc-900/80 p-4 backdrop-blur-xl sm:p-5">
+            <div className="rounded-3xl border border-white/10 bg-navy-900/80 p-4 backdrop-blur-xl sm:p-5">
               <div className="mb-4 flex items-center justify-between px-1">
                 <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">
                   Live trips
                 </p>
-                <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> 3 active
+                <span className="flex items-center gap-1.5 rounded-full bg-gold-400/15 px-2.5 py-1 text-[10px] font-bold text-gold-300">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold-300" /> 3 active
                 </span>
               </div>
 
@@ -112,9 +112,9 @@ export default function LandingPage() {
                 {previewTrips.map((trip, i) => (
                   <div
                     key={trip.id}
-                    className="flex items-center gap-4 rounded-2xl border border-white/5 bg-zinc-950/60 p-4 transition-colors hover:border-white/10"
+                    className="flex items-center gap-4 rounded-2xl border border-white/5 bg-navy-950/60 p-4 transition-colors hover:border-white/10"
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold-400/10 text-gold-400">
                       <MapPin size={22} />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -133,10 +133,10 @@ export default function LandingPage() {
                         {new Date(trip.endDate).toLocaleDateString()}
                       </p>
                       <p className="mt-0.5 truncate text-xs font-medium text-zinc-400">
-                        by {trip.seller?.name || "Verified jastiper"}
+                        by {trip.seller?.name || "Verified justitiper"}
                       </p>
                     </div>
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-zinc-950">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-400 text-navy-950">
                       <ArrowRight size={15} />
                     </div>
                   </div>
@@ -148,10 +148,10 @@ export default function LandingPage() {
       </section>
 
       {/* ===== HOW IT WORKS ===== */}
-      <section id="how" className="border-t border-white/5 bg-zinc-900/40">
+      <section id="how" className="border-t border-white/5 bg-navy-900/40">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-24">
           <h2 className="max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
-            How jastiping works
+            How justitiping works
           </h2>
           <p className="mt-3 max-w-lg text-zinc-400">
             A simple handoff between people who want things and people who are going places.
@@ -167,7 +167,7 @@ export default function LandingPage() {
               {
                 icon: <Handshake size={22} />,
                 title: "Request an item",
-                body: "Send a request with a link or photo. The jastiper confirms price and markup.",
+                body: "Send a request with a link or photo. The justitiper confirms price and markup.",
               },
               {
                 icon: <Receipt size={22} />,
@@ -177,9 +177,9 @@ export default function LandingPage() {
             ].map((step, i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-white/10 bg-zinc-900 p-6 transition-colors hover:border-emerald-500/30"
+                className="rounded-2xl border border-white/10 bg-navy-900 p-6 transition-colors hover:border-gold-400/30"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gold-400/10 text-gold-400">
                   {step.icon}
                 </div>
                 <h3 className="mb-2 font-bold text-zinc-100">{step.title}</h3>
@@ -194,8 +194,8 @@ export default function LandingPage() {
       <section id="buyers" className="border-t border-white/5">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-2 md:py-28">
           <div className="order-2 md:order-1">
-            <div className="rounded-3xl border border-white/10 bg-zinc-900 p-8">
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
+            <div className="rounded-3xl border border-white/10 bg-navy-900 p-8">
+              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-400/10 text-gold-400">
                 <Package size={24} />
               </div>
               <h3 className="text-xl font-bold text-zinc-100">Buy from anywhere</h3>
@@ -203,10 +203,10 @@ export default function LandingPage() {
                 {[
                   "Snack runs, skincare, merch, limited drops. If it exists abroad, request it.",
                   "Get a confirmed quote before you pay. No surprise fees.",
-                  "Chat with your jastiper from request to delivery.",
+                  "Chat with your justitiper from request to delivery.",
                 ].map((point) => (
                   <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-zinc-400">
-                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
+                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-400/15 text-gold-400">
                       <ArrowRight size={11} />
                     </span>
                     {point}
@@ -215,7 +215,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/explore"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-emerald-400 transition-colors hover:text-emerald-300"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-gold-400 transition-colors hover:text-gold-300"
               >
                 Explore trips <ArrowRight size={15} />
               </Link>
@@ -223,7 +223,7 @@ export default function LandingPage() {
           </div>
 
           <div className="order-1 md:order-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-bold tracking-wide text-emerald-300">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold-400/30 bg-gold-400/10 px-4 py-1.5 text-xs font-bold tracking-wide text-gold-300">
               <ShoppingBag size={14} /> For buyers
             </span>
             <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -237,7 +237,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== FOR SELLERS ===== */}
-      <section id="sellers" className="border-t border-white/5 bg-zinc-900/40">
+      <section id="sellers" className="border-t border-white/5 bg-navy-900/40">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-2 md:py-28">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold tracking-wide text-amber-300">
@@ -267,25 +267,25 @@ export default function LandingPage() {
               href="/register"
               className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-amber-400 transition-colors hover:text-amber-300"
             >
-              Become a jastiper <ArrowRight size={15} />
+              Become a justitiper <ArrowRight size={15} />
             </Link>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-zinc-900 p-8">
+          <div className="rounded-3xl border border-white/10 bg-navy-900 p-8">
             <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
               <Plane size={24} />
             </div>
             <h3 className="text-xl font-bold text-zinc-100">Earn while you fly</h3>
             <div className="mt-5 space-y-4">
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-4 py-3">
+              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-navy-950/60 px-4 py-3">
                 <span className="text-sm text-zinc-400">Your markup</span>
-                <span className="text-sm font-bold text-emerald-400">You set it</span>
+                <span className="text-sm font-bold text-gold-400">You set it</span>
               </div>
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-4 py-3">
+              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-navy-950/60 px-4 py-3">
                 <span className="text-sm text-zinc-400">Payout</span>
                 <span className="text-sm font-bold text-zinc-100">In-app, per order</span>
               </div>
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/60 px-4 py-3">
+              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-navy-950/60 px-4 py-3">
                 <span className="text-sm text-zinc-400">Reviews</span>
                 <span className="flex items-center gap-1 text-sm font-bold text-amber-400">
                   <Star size={13} className="fill-current" /> 4.9 average
@@ -293,8 +293,8 @@ export default function LandingPage() {
               </div>
             </div>
             <p className="mt-6 flex items-start gap-2 text-xs leading-relaxed text-zinc-500">
-              <ShieldCheck size={15} className="mt-0.5 shrink-0 text-emerald-400" />
-              Every jastiper is verified with a real profile. Payments are held in-app until delivery, so both sides stay protected.
+              <ShieldCheck size={15} className="mt-0.5 shrink-0 text-gold-400" />
+              Every justitiper is verified with a real profile. Payments are held in-app until delivery, so both sides stay protected.
             </p>
           </div>
         </div>
@@ -303,10 +303,10 @@ export default function LandingPage() {
       {/* ===== CTA BAND ===== */}
       <section className="border-t border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-24">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-emerald-500/15 via-zinc-900 to-zinc-900 p-10 text-center md:p-16">
-            <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-500/20 blur-[100px]" />
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-gold-400/15 via-zinc-900 to-zinc-900 p-10 text-center md:p-16">
+            <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-gold-400/20 blur-[100px]" />
             <h2 className="relative mx-auto max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Ready to jastip?
+              Ready to justitip?
             </h2>
             <p className="relative mx-auto mt-3 max-w-md text-zinc-400">
               {isAuthenticated ? "Browse live trips and make your first request." : "Create a free account in under a minute."}
@@ -329,15 +329,15 @@ export default function LandingPage() {
       <footer className="border-t border-white/5">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-zinc-950">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold-400 text-navy-950">
               <Plane size={15} />
             </div>
             <span className="text-sm font-extrabold tracking-tight">
-              Jastip<span className="text-emerald-500">.</span>
+              Justitip<span className="text-gold-400">.</span>
             </span>
           </div>
           <p className="text-xs text-zinc-500">
-            Travelers shop. Jastipers deliver.
+            Travelers shop. Justitipers deliver.
           </p>
         </div>
       </footer>

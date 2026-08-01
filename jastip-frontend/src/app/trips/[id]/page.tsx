@@ -82,15 +82,15 @@ export default function TripDetailsPage() {
   };
 
   if (loading) return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-950">
-      <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500"></div>
+    <div className="flex min-h-screen items-center justify-center bg-navy-950">
+      <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold-400"></div>
     </div>
   );
-  if (error) return <div className="min-h-screen bg-zinc-950 pt-20 text-center text-red-400">{error}</div>;
-  if (!trip) return <div className="min-h-screen bg-zinc-950 pt-20 text-center font-bold text-zinc-400">Trip not found</div>;
+  if (error) return <div className="min-h-screen bg-navy-950 pt-20 text-center text-red-400">{error}</div>;
+  if (!trip) return <div className="min-h-screen bg-navy-950 pt-20 text-center font-bold text-zinc-400">Trip not found</div>;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
         <button
           onClick={() => router.back()}
@@ -99,18 +99,18 @@ export default function TripDetailsPage() {
           <ArrowLeft size={16} /> Back
         </button>
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-navy-900">
           {/* Banner */}
-          <div className="relative h-72 bg-zinc-800">
+          <div className="relative h-72 bg-navy-800">
             <img
-              src={trip.image || "https://picsum.photos/seed/jastip-trip-detail/1200/600"}
+              src={trip.image || "https://picsum.photos/seed/justitip-trip-detail/1200/600"}
               alt={trip.destinationCountry}
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
             <div className="absolute bottom-8 left-8 z-10">
               <h1 className="flex items-center gap-2 text-4xl font-extrabold tracking-tight text-white">
-                <MapPin size={26} className="text-emerald-400" /> {trip.destinationCountry}
+                <MapPin size={26} className="text-gold-400" /> {trip.destinationCountry}
               </h1>
               <div className="mt-3 flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm font-bold text-white/90 backdrop-blur-md w-fit">
                 <Calendar size={14} />
@@ -132,25 +132,25 @@ export default function TripDetailsPage() {
 
               <section>
                 <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-zinc-100">
-                  <Package size={18} className="text-emerald-400" /> Markup & fees
+                  <Package size={18} className="text-gold-400" /> Markup & fees
                 </h2>
-                <div className="rounded-2xl border border-white/5 bg-zinc-950/60 p-5">
-                  <p className="text-sm font-bold text-emerald-300">{parseMarkupRules(trip.markupRules)}</p>
+                <div className="rounded-2xl border border-white/5 bg-navy-950/60 p-5">
+                  <p className="text-sm font-bold text-gold-300">{parseMarkupRules(trip.markupRules)}</p>
                 </div>
               </section>
             </div>
 
             {/* Sticky action card */}
             <div className="relative">
-              <div className="sticky top-24 rounded-2xl border border-white/10 bg-zinc-900 p-6">
+              <div className="sticky top-24 rounded-2xl border border-white/10 bg-navy-900 p-6">
                 <div className="mb-6 flex items-center gap-4 border-b border-white/5 pb-6">
                   <div
-                    className="relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full bg-emerald-500/15 text-lg font-bold text-emerald-300"
+                    className="relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full bg-gold-400/15 text-lg font-bold text-gold-300"
                     onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
                   >
                     {trip.seller?.name?.charAt(0) || "S"}
-                    <div className="absolute -bottom-1 -right-1 rounded-full bg-zinc-900 p-0.5">
-                      <ShieldCheck size={14} className="text-emerald-400" />
+                    <div className="absolute -bottom-1 -right-1 rounded-full bg-navy-900 p-0.5">
+                      <ShieldCheck size={14} className="text-gold-400" />
                     </div>
                   </div>
                   <div>
@@ -158,7 +158,7 @@ export default function TripDetailsPage() {
                       className="cursor-pointer font-bold tracking-tight text-zinc-100 hover:underline"
                       onClick={(e) => { e.stopPropagation(); router.push(`/seller/${trip.sellerId}`); }}
                     >
-                      {trip.seller?.name || "Verified jastiper"}
+                      {trip.seller?.name || "Verified justitiper"}
                     </h3>
                     <div className="mt-1 flex items-center gap-1">
                       <Star size={13} className="fill-amber-400 text-amber-400" />
@@ -176,7 +176,7 @@ export default function TripDetailsPage() {
                   Request an item
                 </button>
                 <p className="mt-4 px-4 text-center text-[11px] font-medium leading-relaxed text-zinc-500">
-                  Payment is secured by Jastip until you receive your item.
+                  Payment is secured by Justitip until you receive your item.
                 </p>
               </div>
             </div>
@@ -187,7 +187,7 @@ export default function TripDetailsPage() {
       {/* Request modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-zinc-900 p-8">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-navy-900 p-8">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-2xl font-extrabold tracking-tight text-zinc-100">Request an item</h2>
               <button onClick={() => setShowModal(false)} className="rounded-full p-2 text-zinc-500 transition-colors hover:bg-white/5 hover:text-zinc-200">
@@ -203,7 +203,7 @@ export default function TripDetailsPage() {
                   required
                   value={formData.productName}
                   onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-                  className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                   placeholder="e.g. Rare Beauty Liquid Blush"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function TripDetailsPage() {
                     type="number"
                     value={formData.estimatedPrice}
                     onChange={(e) => setFormData({ ...formData, estimatedPrice: e.target.value })}
-                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                    className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                     placeholder="e.g. 50"
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function TripDetailsPage() {
                   <select
                     value={formData.localCurrency}
                     onChange={(e) => setFormData({ ...formData, localCurrency: e.target.value })}
-                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
+                    className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100"
                   >
                     {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -240,7 +240,7 @@ export default function TripDetailsPage() {
                     required
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
-                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
+                    className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100"
                   />
                 </div>
                 <div>
@@ -248,7 +248,7 @@ export default function TripDetailsPage() {
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
+                    className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100"
                   >
                     {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>

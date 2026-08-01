@@ -104,9 +104,9 @@ export default function OrderDetailsPage() {
     }
   };
 
-  if (loading) return <div className="flex h-[calc(100vh-64px)] items-center justify-center bg-zinc-950"><div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500"></div></div>;
-  if (!order) return <div className="bg-zinc-950 py-20 text-center font-medium text-zinc-400">Order not found</div>;
-  if (user && order.buyerId !== user.id) return <div className="bg-zinc-950 py-20 text-center text-lg font-bold uppercase tracking-wide text-red-400">Unauthorized. You are not the buyer of this order.</div>;
+  if (loading) return <div className="flex h-[calc(100vh-64px)] items-center justify-center bg-navy-950"><div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold-400"></div></div>;
+  if (!order) return <div className="bg-navy-950 py-20 text-center font-medium text-zinc-400">Order not found</div>;
+  if (user && order.buyerId !== user.id) return <div className="bg-navy-950 py-20 text-center text-lg font-bold uppercase tracking-wide text-red-400">Unauthorized. You are not the buyer of this order.</div>;
 
   const STATUS_STAGES = [
     { key: "REQUEST_SUBMITTED", label: "Request submitted" },
@@ -139,7 +139,7 @@ export default function OrderDetailsPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden bg-zinc-950 text-zinc-100 md:flex-row">
+    <div className="flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden bg-navy-950 text-zinc-100 md:flex-row">
       {/* Left sidebar */}
       <div className="flex shrink-0 flex-col overflow-y-auto border-b border-white/5 p-6 md:w-[380px] md:border-b-0 md:border-r md:p-8 lg:w-[420px]">
         <button
@@ -151,11 +151,11 @@ export default function OrderDetailsPage() {
 
         {/* Item info */}
         <div className="mb-8 flex gap-4">
-          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-800">
+          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-navy-800">
             {order.productImageUrl ? (
               <img src={order.productImageUrl} alt="Item" className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
+              <div className="flex h-full w-full items-center justify-center bg-navy-800 text-zinc-600">
                 <ImageIcon size={30} className="opacity-50" />
               </div>
             )}
@@ -177,11 +177,11 @@ export default function OrderDetailsPage() {
         )}
 
         {/* Payment summary */}
-        <div className="mb-8 rounded-2xl border border-white/5 bg-zinc-900 p-6">
+        <div className="mb-8 rounded-2xl border border-white/5 bg-navy-900 p-6">
           <div className="mb-5 flex items-center justify-between">
             <h3 className="text-[13px] font-bold tracking-wide text-zinc-100">Payment summary</h3>
             {order.totalPriceIdr ? (
-              <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-bold text-emerald-300">Confirmed quote</span>
+              <span className="rounded-full bg-gold-400/15 px-2.5 py-1 text-[11px] font-bold text-gold-300">Confirmed quote</span>
             ) : (
               <span className="rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-bold text-amber-300">Estimated quote</span>
             )}
@@ -261,20 +261,20 @@ export default function OrderDetailsPage() {
                 return (
                   <div key={stage.key} className="relative pb-8 pl-8 last:pb-0">
                     {idx !== STATUS_STAGES.length - 1 && (
-                      <div className={`absolute bottom-0 left-[11.5px] top-7 w-[2px] ${idx < activeStageIndex - 1 ? "bg-emerald-500/60" : "bg-zinc-800"}`} />
+                      <div className={`absolute bottom-0 left-[11.5px] top-7 w-[2px] ${idx < activeStageIndex - 1 ? "bg-gold-400/60" : "bg-navy-800"}`} />
                     )}
 
                     <div className="absolute left-0 top-0.5">
                       {isCompleted ? (
-                        <div className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-zinc-950 ring-4 ring-zinc-950">
+                        <div className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-gold-400 text-navy-950 ring-4 ring-zinc-950">
                           <Check size={13} strokeWidth={3} />
                         </div>
                       ) : isActive ? (
-                        <div className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-emerald-500 bg-zinc-950 ring-4 ring-zinc-950">
-                          <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <div className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-gold-400 bg-navy-950 ring-4 ring-navy-950">
+                          <div className="h-2 w-2 rounded-full bg-gold-400" />
                         </div>
                       ) : (
-                        <div className="relative z-10 h-6 w-6 rounded-full border-2 border-zinc-800 bg-zinc-950 ring-4 ring-zinc-950" />
+                        <div className="relative z-10 h-6 w-6 rounded-full border-2 border-zinc-800 bg-navy-950 ring-4 ring-zinc-950" />
                       )}
                     </div>
 
@@ -295,7 +295,7 @@ export default function OrderDetailsPage() {
                           <button
                             onClick={handleMarkAsPaid}
                             disabled={updatingPayment}
-                            className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-6 py-3 text-[15px] font-bold text-zinc-950 transition-colors hover:bg-emerald-400 disabled:opacity-70"
+                            className="inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3 text-[15px] font-bold text-navy-950 transition-colors hover:bg-gold-300 disabled:opacity-70"
                           >
                             {updatingPayment ? "Processing..." : "Pay now"} {!updatingPayment && <ArrowRight size={16} />}
                           </button>
@@ -337,12 +337,12 @@ export default function OrderDetailsPage() {
       </div>
 
       {/* Right chat area */}
-      <div className="relative flex flex-1 flex-col bg-zinc-950">
+      <div className="relative flex flex-1 flex-col bg-navy-950">
         {/* Chat header */}
-        <div className="z-10 flex items-center justify-between border-b border-white/5 bg-zinc-900/80 px-6 py-4 backdrop-blur">
+        <div className="z-10 flex items-center justify-between border-b border-white/5 bg-navy-900/80 px-6 py-4 backdrop-blur">
           <div className="flex items-center gap-3.5">
             <div
-              className="relative flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-emerald-500/15 text-lg font-bold text-emerald-300"
+              className="relative flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gold-400/15 text-lg font-bold text-gold-300"
               onClick={(e) => { e.stopPropagation(); router.push(`/seller/${order.trip.sellerId}`); }}
             >
               {order.trip.seller?.avatarUrl ? (
@@ -350,7 +350,7 @@ export default function OrderDetailsPage() {
               ) : (
                 order.trip.seller?.name?.charAt(0) || "S"
               )}
-              <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-emerald-500"></div>
+              <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-gold-400"></div>
             </div>
             <div className="flex flex-col">
               <h3
@@ -360,7 +360,7 @@ export default function OrderDetailsPage() {
                 {order.trip.seller?.name || "Seller"}
               </h3>
               <p className="mt-0.5 flex items-center gap-1 text-[13px] font-medium text-zinc-500">
-                Verified jastiper <span className="text-zinc-700">•</span> <Star size={11} className="fill-amber-400 text-amber-400" /> 4.9
+                Verified justitiper <span className="text-zinc-700">•</span> <Star size={11} className="fill-amber-400 text-amber-400" /> 4.9
               </p>
             </div>
           </div>
@@ -373,7 +373,7 @@ export default function OrderDetailsPage() {
         {/* Messages */}
         <div className="flex-1 space-y-6 overflow-y-auto p-6">
           <div className="mb-2 flex justify-center">
-            <div className="rounded-full bg-zinc-900 px-4 py-1.5 text-[11px] font-bold tracking-wide text-zinc-400">
+            <div className="rounded-full bg-navy-900 px-4 py-1.5 text-[11px] font-bold tracking-wide text-zinc-400">
               Security check: all payments must be made within the app.
             </div>
           </div>
@@ -389,12 +389,12 @@ export default function OrderDetailsPage() {
               return (
                 <div key={idx} className={`flex max-w-[80%] gap-3 ${isMe ? "flex-row-reverse self-end" : "self-start"}`}>
                   {!isMe && (
-                    <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-emerald-500/15 text-xs font-bold text-emerald-300">
+                    <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gold-400/15 text-xs font-bold text-gold-300">
                       {senderAvatar ? <img src={senderAvatar} alt="avatar" className="h-full w-full object-cover" /> : senderInitial}
                     </div>
                   )}
                   <div className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                    <div className={`px-5 py-3.5 text-[15px] shadow-sm ${isMe ? "rounded-2xl rounded-tr-sm bg-emerald-500 text-zinc-950" : "rounded-2xl rounded-tl-sm bg-zinc-800 text-zinc-100"}`}>
+                    <div className={`px-5 py-3.5 text-[15px] shadow-sm ${isMe ? "rounded-2xl rounded-tr-sm bg-gold-400 text-navy-950" : "rounded-2xl rounded-tl-sm bg-navy-800 text-zinc-100"}`}>
                       {msg.content}
                     </div>
                     <p className="mt-2 px-1 text-[11px] font-medium text-zinc-600">
@@ -409,9 +409,9 @@ export default function OrderDetailsPage() {
         </div>
 
         {/* Chat input */}
-        <div className="border-t border-white/5 bg-zinc-900/60 p-4 pb-8 backdrop-blur md:pb-4">
+        <div className="border-t border-white/5 bg-navy-900/60 p-4 pb-8 backdrop-blur md:pb-4">
           <form
-            className="flex items-center gap-3 rounded-full border border-zinc-700 bg-zinc-900 py-1.5 pl-4 pr-1.5 transition-all focus-within:border-emerald-500/40 focus-within:ring-2 focus-within:ring-emerald-500/10"
+            className="flex items-center gap-3 rounded-full border border-zinc-700 bg-navy-900 py-1.5 pl-4 pr-1.5 transition-all focus-within:border-gold-400/40 focus-within:ring-2 focus-within:ring-gold-400/10"
             onSubmit={handleSendMessage}
           >
             <button type="button" className="shrink-0 text-zinc-500 transition-colors hover:text-zinc-300">
@@ -430,7 +430,7 @@ export default function OrderDetailsPage() {
             <button
               type="submit"
               disabled={!newMessage.trim()}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-zinc-950 transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-400 text-navy-950 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send size={16} strokeWidth={2.5} />
             </button>

@@ -198,12 +198,12 @@ export default function SellerOrderDetailsPage() {
     }
   };
 
-  if (loading) return <div className="flex h-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500"></div></div>;
+  if (loading) return <div className="flex h-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold-400"></div></div>;
   if (!order) return <div className="py-20 text-center text-zinc-400">Order not found</div>;
   if (user && order.trip?.sellerId !== user.id) return <div className="py-20 text-center text-lg font-bold uppercase tracking-wide text-red-400">Unauthorized. You are not the seller of this order.</div>;
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-zinc-950 text-zinc-100 md:flex-row">
+    <div className="flex h-full w-full flex-col overflow-hidden bg-navy-950 text-zinc-100 md:flex-row">
       {/* Left sidebar */}
       <div className="flex shrink-0 flex-col overflow-y-auto border-b border-white/5 p-6 md:w-[380px] md:border-b-0 md:border-r md:p-8 lg:w-[450px]">
         <Link href="/seller/orders" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-zinc-500 transition-colors hover:text-zinc-200">
@@ -212,11 +212,11 @@ export default function SellerOrderDetailsPage() {
 
         {/* Item info */}
         <div className="mb-8 flex gap-4">
-          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-zinc-800">
+          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-navy-800">
             {order.productImageUrl ? (
               <img src={order.productImageUrl} alt="Item" className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
+              <div className="flex h-full w-full items-center justify-center bg-navy-800 text-zinc-600">
                 <ImageIcon size={30} className="opacity-50" />
               </div>
             )}
@@ -226,12 +226,12 @@ export default function SellerOrderDetailsPage() {
               <div className="self-start rounded bg-amber-400 px-2 py-1 text-[11px] font-bold leading-none text-amber-950">
                 Order #{order.id.slice(0, 8).toUpperCase()}
               </div>
-              <div className="rounded bg-emerald-500/10 px-2 py-0.5 text-[11px] font-bold tracking-wide text-emerald-300">
+              <div className="rounded bg-gold-400/10 px-2 py-0.5 text-[11px] font-bold tracking-wide text-gold-300">
                 QTY: {order.quantity}
               </div>
             </div>
             <h2 className="mb-1.5 text-[15px] font-bold leading-tight text-zinc-100">{order.productName}</h2>
-            <p className="text-sm font-bold text-emerald-400">
+            <p className="text-sm font-bold text-gold-400">
               {order.originalPrice ? `${order.localCurrency || "USD"} ${order.originalPrice}` : "Price pending"}
             </p>
           </div>
@@ -241,7 +241,7 @@ export default function SellerOrderDetailsPage() {
           <div className="flex items-center justify-between">
             <span className="font-medium text-zinc-500">Buyer</span>
             <span className="flex items-center gap-2 font-bold text-zinc-100">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15 text-[9px] text-emerald-300">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gold-400/15 text-[9px] text-gold-300">
                 {order.buyer?.name?.charAt(0) || "B"}
               </div>
               {order.buyer?.name || "Buyer"}
@@ -263,7 +263,7 @@ export default function SellerOrderDetailsPage() {
             <p className="text-sm font-medium text-red-300/70">This order has been cancelled and requires no further action.</p>
           </div>
         ) : (
-          <div className="relative mb-8 rounded-2xl border border-white/5 bg-zinc-900 p-6 text-center">
+          <div className="relative mb-8 rounded-2xl border border-white/5 bg-navy-900 p-6 text-center">
             {order.status === "TRIP_CONFIRMED" && (
               <button
                 onClick={handleCancelOrder}
@@ -275,7 +275,7 @@ export default function SellerOrderDetailsPage() {
             )}
             <h3 className="mb-5 text-[14px] font-bold tracking-wide text-zinc-100">Order status</h3>
             <div className="mb-6 flex justify-center">
-              <span className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-emerald-300">
+              <span className="rounded-lg border border-gold-400/20 bg-gold-400/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gold-300">
                 {order.status.replace("_", " ")}
               </span>
             </div>
@@ -287,8 +287,8 @@ export default function SellerOrderDetailsPage() {
               if (!nextStatus) {
                 return (
                   <div className="mt-4 text-center">
-                    <Check size={32} className="mx-auto mb-2 text-emerald-400" />
-                    <p className="text-sm font-bold text-emerald-400">Order completed</p>
+                    <Check size={32} className="mx-auto mb-2 text-gold-400" />
+                    <p className="text-sm font-bold text-gold-400">Order completed</p>
                   </div>
                 );
               }
@@ -346,7 +346,7 @@ export default function SellerOrderDetailsPage() {
         )}
 
         {/* Pricing & fees */}
-        <div className="rounded-2xl border border-white/5 bg-zinc-900 p-6">
+        <div className="rounded-2xl border border-white/5 bg-navy-900 p-6">
           <div className="mb-6 flex items-center justify-between">
             <h3 className="text-[14px] font-bold tracking-wide text-zinc-100">Pricing & fees</h3>
             <div className="text-right">
@@ -367,24 +367,24 @@ export default function SellerOrderDetailsPage() {
                   type="number"
                   value={pricingForm.originalPrice}
                   onChange={(e) => setPricingForm({ ...pricingForm, originalPrice: parseFloat(e.target.value) })}
-                  className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
+                  className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100"
                 />
               </div>
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-500">Markup fee</label>
-                  <div className="flex rounded bg-zinc-800 p-0.5">
+                  <div className="flex rounded bg-navy-800 p-0.5">
                     <button
                       type="button"
                       onClick={() => setMarkupType("fixed")}
-                      className={`rounded px-2 py-0.5 text-[9px] font-bold ${markupType === "fixed" ? "bg-zinc-700 text-zinc-100" : "text-zinc-500"}`}
+                      className={`rounded px-2 py-0.5 text-[9px] font-bold ${markupType === "fixed" ? "bg-navy-700 text-zinc-100" : "text-zinc-500"}`}
                     >
                       IDR
                     </button>
                     <button
                       type="button"
                       onClick={() => setMarkupType("percentage")}
-                      className={`rounded px-2 py-0.5 text-[9px] font-bold ${markupType === "percentage" ? "bg-zinc-700 text-zinc-100" : "text-zinc-500"}`}
+                      className={`rounded px-2 py-0.5 text-[9px] font-bold ${markupType === "percentage" ? "bg-navy-700 text-zinc-100" : "text-zinc-500"}`}
                     >
                       %
                     </button>
@@ -396,7 +396,7 @@ export default function SellerOrderDetailsPage() {
                     type="number"
                     value={pricingForm.markupValue}
                     onChange={(e) => setPricingForm({ ...pricingForm, markupValue: parseFloat(e.target.value) })}
-                    className={`input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100 ${markupType === "fixed" ? "!pl-9" : ""}`}
+                    className={`input-base !bg-navy-950 !border-zinc-700 !text-zinc-100 ${markupType === "fixed" ? "!pl-9" : ""}`}
                   />
                   {markupType === "percentage" && <span className="absolute right-3 top-3 text-[13px] font-bold text-zinc-500">%</span>}
                 </div>
@@ -405,11 +405,11 @@ export default function SellerOrderDetailsPage() {
 
             <div className="mt-2 pt-4">
               <label className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-zinc-500">Upload payment QR code</label>
-              <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-zinc-950 p-3">
+              <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-navy-950 p-3">
                 {qrUrl ? (
-                  <img src={qrUrl} alt="QR Code" className="h-12 w-12 rounded bg-zinc-800 object-cover" />
+                  <img src={qrUrl} alt="QR Code" className="h-12 w-12 rounded bg-navy-800 object-cover" />
                 ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded bg-zinc-800">
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-navy-800">
                     <ImageIcon size={20} className="text-zinc-600" />
                   </div>
                 )}
@@ -419,7 +419,7 @@ export default function SellerOrderDetailsPage() {
                     accept="image/*"
                     onChange={handleQrUpload}
                     disabled={uploadingQr}
-                    className="w-full cursor-pointer text-xs text-zinc-500 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-800 file:px-3 file:py-1.5 file:text-[11px] file:font-bold file:text-zinc-300 hover:file:bg-zinc-700"
+                    className="w-full cursor-pointer text-xs text-zinc-500 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-800 file:px-3 file:py-1.5 file:text-[11px] file:font-bold file:text-zinc-300 hover:file:bg-navy-700"
                   />
                   {uploadingQr && <p className="mt-1 text-[10px] font-medium text-zinc-500">Uploading...</p>}
                 </div>
@@ -429,7 +429,7 @@ export default function SellerOrderDetailsPage() {
             <div className="mt-6 flex flex-col gap-4 border-t border-white/5 pt-5">
               <div className="flex items-center justify-between">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Total charge to buyer</p>
-                <p className="text-xl font-extrabold tracking-tight text-emerald-400">
+                <p className="text-xl font-extrabold tracking-tight text-gold-400">
                   Rp{" "}
                   {(() => {
                     const basePrice = pricingForm.originalPrice * pricingForm.exchangeRate;
@@ -450,17 +450,17 @@ export default function SellerOrderDetailsPage() {
       </div>
 
       {/* Right chat area */}
-      <div className="relative flex flex-1 flex-col bg-zinc-950">
+      <div className="relative flex flex-1 flex-col bg-navy-950">
         {/* Chat header */}
-        <div className="z-10 flex items-center justify-between border-b border-white/5 bg-zinc-900/80 px-6 py-4 backdrop-blur">
+        <div className="z-10 flex items-center justify-between border-b border-white/5 bg-navy-900/80 px-6 py-4 backdrop-blur">
           <div className="flex items-center gap-3.5">
-            <div className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-emerald-500/15 text-lg font-bold text-emerald-300">
+            <div className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gold-400/15 text-lg font-bold text-gold-300">
               {order.buyer?.avatarUrl ? (
                 <img src={order.buyer.avatarUrl} className="h-full w-full object-cover" alt="avatar" />
               ) : (
                 order.buyer?.name?.charAt(0) || "B"
               )}
-              <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-emerald-500"></div>
+              <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-gold-400"></div>
             </div>
             <div className="flex flex-col">
               <h3 className="text-[15px] font-bold leading-tight text-zinc-100">{order.buyer?.name || "Buyer"}</h3>
@@ -476,7 +476,7 @@ export default function SellerOrderDetailsPage() {
         {/* Messages */}
         <div className="flex-1 space-y-6 overflow-y-auto p-6">
           <div className="mb-2 flex justify-center">
-            <div className="rounded-full bg-zinc-900 px-4 py-1.5 text-[11px] font-bold tracking-wide text-zinc-400">
+            <div className="rounded-full bg-navy-900 px-4 py-1.5 text-[11px] font-bold tracking-wide text-zinc-400">
               Security check: all payments must be made within the app.
             </div>
           </div>
@@ -492,12 +492,12 @@ export default function SellerOrderDetailsPage() {
               return (
                 <div key={idx} className={`flex max-w-[80%] gap-3 ${isMe ? "flex-row-reverse self-end" : "self-start"}`}>
                   {!isMe && (
-                    <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-emerald-500/15 text-xs font-bold text-emerald-300">
+                    <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gold-400/15 text-xs font-bold text-gold-300">
                       {senderAvatar ? <img src={senderAvatar} alt="avatar" className="h-full w-full object-cover" /> : senderInitial}
                     </div>
                   )}
                   <div className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                    <div className={`px-5 py-3.5 text-[15px] shadow-sm ${isMe ? "rounded-2xl rounded-tr-sm bg-emerald-500 text-zinc-950" : "rounded-2xl rounded-tl-sm bg-zinc-800 text-zinc-100"}`}>
+                    <div className={`px-5 py-3.5 text-[15px] shadow-sm ${isMe ? "rounded-2xl rounded-tr-sm bg-gold-400 text-navy-950" : "rounded-2xl rounded-tl-sm bg-navy-800 text-zinc-100"}`}>
                       {msg.content}
                     </div>
                     <p className="mt-2 px-1 text-[11px] font-medium text-zinc-600">
@@ -512,9 +512,9 @@ export default function SellerOrderDetailsPage() {
         </div>
 
         {/* Chat input */}
-        <div className="border-t border-white/5 bg-zinc-900/60 p-4 pb-8 backdrop-blur md:pb-4">
+        <div className="border-t border-white/5 bg-navy-900/60 p-4 pb-8 backdrop-blur md:pb-4">
           <form
-            className="flex items-center gap-3 rounded-full border border-zinc-700 bg-zinc-900 py-1.5 pl-4 pr-1.5 transition-all focus-within:border-emerald-500/40 focus-within:ring-2 focus-within:ring-emerald-500/10"
+            className="flex items-center gap-3 rounded-full border border-zinc-700 bg-navy-900 py-1.5 pl-4 pr-1.5 transition-all focus-within:border-gold-400/40 focus-within:ring-2 focus-within:ring-gold-400/10"
             onSubmit={handleSendMessage}
           >
             <button type="button" className="shrink-0 text-zinc-500 transition-colors hover:text-zinc-300">
@@ -533,7 +533,7 @@ export default function SellerOrderDetailsPage() {
             <button
               type="submit"
               disabled={!newMessage.trim()}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-zinc-950 transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-400 text-navy-950 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send size={16} strokeWidth={2.5} />
             </button>

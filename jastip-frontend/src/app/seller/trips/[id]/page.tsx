@@ -33,7 +33,7 @@ export default function ManageTripPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -45,7 +45,7 @@ export default function ManageTripPage() {
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-navy-900 p-8 text-center">
             <List size={44} className="mb-3 text-zinc-700" />
             <h2 className="mb-2 text-xl font-bold text-zinc-100">Trip listings</h2>
             <p className="mb-6 text-sm text-zinc-500">
@@ -56,11 +56,11 @@ export default function ManageTripPage() {
             </button>
           </div>
 
-          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-navy-900 p-8 text-center">
             <Package size={44} className="mb-3 text-zinc-700" />
             <h2 className="mb-2 text-xl font-bold text-zinc-100">Trip orders</h2>
             <p className="mb-6 text-sm text-zinc-500">Review order requests from buyers for this specific trip.</p>
-            <Link href="/seller/orders" className="inline-flex items-center gap-1 text-sm font-bold text-emerald-400 hover:text-emerald-300">
+            <Link href="/seller/orders" className="inline-flex items-center gap-1 text-sm font-bold text-gold-400 hover:text-gold-300">
               View requests
             </Link>
           </div>
@@ -70,23 +70,23 @@ export default function ManageTripPage() {
 
         {loading ? (
           <div className="flex justify-center p-10">
-            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-gold-400"></div>
           </div>
         ) : listings.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center text-zinc-500">
+          <div className="rounded-2xl border border-white/10 bg-navy-900 p-8 text-center text-zinc-500">
             No listings found for this trip. Click "Add listing" to start adding items!
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {listings.map((listing) => (
-              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 transition-colors hover:border-white/20">
-                <div className="relative h-48 overflow-hidden bg-zinc-800">
+              <div key={listing.id} className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-900 transition-colors hover:border-white/20">
+                <div className="relative h-48 overflow-hidden bg-navy-800">
                   {listing.imageUrl ? (
                     <img src={listing.imageUrl} alt={listing.productName} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-zinc-600">No image</div>
                   )}
-                  <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-zinc-950/80 px-2 py-1 text-xs font-bold text-emerald-300 backdrop-blur-sm">
+                  <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-navy-950/80 px-2 py-1 text-xs font-bold text-gold-300 backdrop-blur-sm">
                     {listing.localCurrency} {listing.price.toLocaleString()}
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function ManageTripPage() {
                     <span className="flex items-center gap-1 text-zinc-500">
                       <MapPin size={11} /> <span className="font-bold text-zinc-300">{listing.trip?.destinationCountry || "Unknown"}</span>
                     </span>
-                    {listing.maxQuantity > 0 && <span className="font-medium text-emerald-400">Max: {listing.maxQuantity}</span>}
+                    {listing.maxQuantity > 0 && <span className="font-medium text-gold-400">Max: {listing.maxQuantity}</span>}
                   </div>
                 </div>
               </div>

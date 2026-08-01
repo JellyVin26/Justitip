@@ -112,9 +112,9 @@ export default function SettingsPage() {
 
   if (fetching) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+      <div className="flex min-h-screen items-center justify-center bg-navy-950">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-gold-400 border-t-transparent" />
           <p className="text-sm font-medium text-zinc-500">Loading settings...</p>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-28">
         {/* Header navigation */}
@@ -135,18 +135,18 @@ export default function SettingsPage() {
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-navy-900">
           {/* Top Banner Accent */}
-          <div className="h-32 bg-gradient-to-r from-emerald-500/20 to-zinc-800" />
+          <div className="h-32 bg-gradient-to-r from-gold-400/20 to-zinc-800" />
           
           <div className="px-8 pb-10">
             {/* Avatar section */}
             <div className="relative -mt-16 mb-8 flex flex-col items-center gap-6 sm:flex-row sm:items-end">
-              <div className="relative group w-32 h-32 overflow-hidden rounded-full border-4 border-zinc-900 bg-zinc-800 flex items-center justify-center transition-all">
+              <div className="relative group w-32 h-32 overflow-hidden rounded-full border-4 border-zinc-900 bg-navy-800 flex items-center justify-center transition-all">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-4xl font-extrabold text-emerald-300">{name.charAt(0) || 'U'}</span>
+                  <span className="text-4xl font-extrabold text-gold-300">{name.charAt(0) || 'U'}</span>
                 )}
                 
                 <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
@@ -169,7 +169,7 @@ export default function SettingsPage() {
 
             {/* Notifications */}
             {success && (
-              <div className="mb-6 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-300">
+              <div className="mb-6 flex items-center gap-2 rounded-xl border border-gold-400/20 bg-gold-400/10 p-4 text-sm font-semibold text-gold-300">
                 <Check className="w-5 h-5" /> {success}
               </div>
             )}
@@ -198,7 +198,7 @@ export default function SettingsPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
-                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                        className="input-base !pl-11 !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         required
                         disabled={saving}
                       />
@@ -217,7 +217,7 @@ export default function SettingsPage() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="+62 812-3456-7890"
-                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                        className="input-base !pl-11 !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                         placeholder="Indonesia"
-                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                        className="input-base !pl-11 !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -259,7 +259,7 @@ export default function SettingsPage() {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="Jakarta"
-                        className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                        className="input-base !pl-11 !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                         disabled={saving}
                       />
                     </div>
@@ -279,7 +279,7 @@ export default function SettingsPage() {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Tell other travelers or buyers about yourself..."
-                    className="input-base !pl-11 !bg-zinc-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500 resize-none"
+                    className="input-base !pl-11 !bg-navy-950 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500 resize-none"
                     disabled={saving}
                   />
                 </div>
@@ -293,7 +293,7 @@ export default function SettingsPage() {
                   <select
                     value={preferredCurrency}
                     onChange={(e) => setPreferredCurrency(e.target.value)}
-                    className="input-base !bg-zinc-950 !border-zinc-700 !text-zinc-100"
+                    className="input-base !bg-navy-950 !border-zinc-700 !text-zinc-100"
                     disabled={saving}
                   >
                     <option value="USD">USD - US Dollar</option>

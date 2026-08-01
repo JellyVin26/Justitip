@@ -71,15 +71,15 @@ export default function SellerProfilePage() {
 
   if (loading)
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500" />
+      <div className="flex min-h-screen items-center justify-center bg-navy-950">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gold-400" />
       </div>
     );
   if (!seller)
-    return <div className="min-h-screen bg-zinc-950 py-20 text-center font-medium text-zinc-400">Seller not found</div>;
+    return <div className="min-h-screen bg-navy-950 py-20 text-center font-medium text-zinc-400">Seller not found</div>;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-navy-950 text-zinc-100">
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
         <button
           onClick={() => router.back()}
@@ -88,17 +88,17 @@ export default function SellerProfilePage() {
           <ArrowLeft size={16} /> Back
         </button>
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-navy-900">
           {/* Banner */}
-          <div className="relative h-40 w-full bg-gradient-to-br from-emerald-500/20 via-zinc-900 to-zinc-950">
+          <div className="relative h-40 w-full bg-gradient-to-br from-gold-400/20 via-zinc-900 to-zinc-950">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.15),transparent_60%)]" />
           </div>
 
           <div className="px-6 pb-10 sm:px-8">
             {/* Avatar + action */}
             <div className="mb-6 flex items-end justify-between -mt-16">
-              <div className="relative h-32 w-32 rounded-full bg-zinc-900 p-2 shadow-lg">
-                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/10 bg-emerald-500/15 text-4xl font-black text-emerald-300">
+              <div className="relative h-32 w-32 rounded-full bg-navy-900 p-2 shadow-lg">
+                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/10 bg-gold-400/15 text-4xl font-black text-gold-300">
                   {seller.avatarUrl ? (
                     <img src={seller.avatarUrl} alt={seller.name} className="h-full w-full object-cover" />
                   ) : (
@@ -113,7 +113,7 @@ export default function SellerProfilePage() {
                   disabled={followingAction}
                   className={
                     isFollowing
-                      ? "btn-ghost !border-zinc-700 !bg-zinc-900 !text-zinc-300 hover:!bg-zinc-800"
+                      ? "btn-ghost !border-zinc-700 !bg-navy-900 !text-zinc-300 hover:!bg-navy-800"
                       : "btn-primary"
                   }
                 >
@@ -139,7 +139,7 @@ export default function SellerProfilePage() {
                   <Calendar size={15} className="text-zinc-600" /> Joined {new Date(seller.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })}
                 </span>
                 {seller.role === "SELLER" && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-amber-300">
+                  <span className="flex items-center gap-1.5 rounded-full bg-gold-400/10 px-2 py-0.5 text-amber-300">
                     <Star size={13} className="fill-current" /> Verified courier
                   </span>
                 )}
@@ -165,7 +165,7 @@ export default function SellerProfilePage() {
             {/* Bio */}
             <div>
               <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-zinc-100">About me</h3>
-              <p className="rounded-2xl border border-white/5 bg-zinc-950/60 p-6 leading-relaxed text-zinc-400">
+              <p className="rounded-2xl border border-white/5 bg-navy-950/60 p-6 leading-relaxed text-zinc-400">
                 {seller.bio || "This user hasn't written a biography yet."}
               </p>
             </div>

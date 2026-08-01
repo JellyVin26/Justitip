@@ -40,32 +40,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="flex min-h-screen bg-navy-950 text-zinc-100">
       {/* Left: brand panel (hidden on mobile) */}
       <div className="relative hidden w-1/2 overflow-hidden lg:block">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-zinc-950 to-zinc-950" />
-        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gold-400/20 via-zinc-950 to-zinc-950" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-gold-400/10 blur-[100px]" />
         <div className="relative flex h-full flex-col justify-between p-12">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400 text-navy-950">
               <Plane size={20} />
             </div>
             <span className="text-lg font-extrabold tracking-tight">
-              Jastip<span className="text-emerald-500">.</span>
+              Justitip<span className="text-gold-400">.</span>
             </span>
           </Link>
 
           <div>
             <h2 className="max-w-sm text-3xl font-extrabold leading-tight tracking-tight">
-              Welcome back to the world of jastip.
+              Welcome back to the world of justitip.
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
-              Sign in to track your orders, chat with jastipers, and keep your trips moving.
+              Sign in to track your orders, chat with justitipers, and keep your trips moving.
             </p>
           </div>
 
           <p className="text-xs text-zinc-500">
-            Travelers shop. Jastipers deliver.
+            Travelers shop. Justitipers deliver.
           </p>
         </div>
       </div>
@@ -75,18 +75,18 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link href="/" className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400 text-navy-950">
               <Plane size={20} />
             </div>
             <span className="text-lg font-extrabold tracking-tight">
-              Jastip<span className="text-emerald-500">.</span>
+              Justitip<span className="text-gold-400">.</span>
             </span>
           </Link>
 
           <h1 className="text-3xl font-extrabold tracking-tight">Sign in</h1>
           <p className="mt-2 text-sm text-zinc-400">
-            New to Jastip?{" "}
-            <Link href="/register" className="font-bold text-emerald-400 hover:text-emerald-300">
+            New to Justitip?{" "}
+            <Link href="/register" className="font-bold text-gold-400 hover:text-gold-300">
               Create an account
             </Link>
           </p>
@@ -111,7 +111,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="input-base !pl-11 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-base !pl-11 !pr-12 !bg-zinc-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
+                  className="input-base !pl-11 !pr-12 !bg-navy-900 !border-zinc-700 !text-zinc-100 !placeholder-zinc-500"
                 />
                 <button
                   type="button"
@@ -144,10 +144,10 @@ export default function LoginPage() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm text-zinc-400">
-                <input type="checkbox" className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-emerald-500" />
+                <input type="checkbox" className="h-4 w-4 rounded border-zinc-700 bg-navy-900 accent-gold-400" />
                 Remember me
               </label>
-              <button type="button" className="text-sm font-bold text-emerald-400 transition-colors hover:text-emerald-300">
+              <button type="button" className="text-sm font-bold text-gold-400 transition-colors hover:text-gold-300">
                 Forgot password?
               </button>
             </div>
@@ -158,9 +158,9 @@ export default function LoginPage() {
           </form>
 
           <p className="mt-8 text-center text-xs leading-relaxed text-zinc-500">
-            Demo accounts: <span className="font-semibold text-zinc-400">buyer@jastip.app</span> /{" "}
-            <span className="font-semibold text-zinc-400">seller@jastip.app</span> (password:{" "}
-            <span className="font-semibold text-zinc-400">jastip123</span>)
+            Demo accounts: <span className="font-semibold text-zinc-400">buyer@justitip.app</span> /{" "}
+            <span className="font-semibold text-zinc-400">seller@justitip.app</span> (password:{" "}
+            <span className="font-semibold text-zinc-400">justitip123</span>)
           </p>
         </div>
       </div>
