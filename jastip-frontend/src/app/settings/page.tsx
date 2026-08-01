@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
-import Navbar from '@/components/Navbar';
 import { User, Phone, MapPin, Globe, FileText, Camera, Check, AlertCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -124,7 +123,6 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <Navbar />
       
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-28">
         {/* Header navigation */}
