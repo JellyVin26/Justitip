@@ -13,9 +13,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Auth pages have their own branded split-panel (logo + CTA cross-links) -
-  // the global nav is redundant there and shows a duplicate logo.
-  if (pathname === "/login" || pathname === "/register") return null;
+  // On auth pages the split-panel already contains the brand logo + sign-in
+  // cross-link, so avoid a second navbar — but we still render the wrapper
+  // with `invisible`/`hidden` styling rather than returning null, because a
+  // conditional `return null` on a component that reads usePathname/useRouter
+  // crashes the Next.js App Router during client-side navigation to /login
+  // and /register (the router can't reconcile the removed element).
+  if (pathname === "/login" || pathname === "/register") {
+    return <div className="hidden" aria-hidden="true" />;
+  }
 
   // Close mobile menu on route change
   useEffect(() => {
