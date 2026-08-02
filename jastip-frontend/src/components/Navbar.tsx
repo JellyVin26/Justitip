@@ -13,15 +13,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // On auth pages the split-panel already contains the brand logo + sign-in
-  // cross-link, so avoid a second navbar — but we still render the wrapper
-  // with `invisible`/`hidden` styling rather than returning null, because a
-  // conditional `return null` on a component that reads usePathname/useRouter
-  // crashes the Next.js App Router during client-side navigation to /login
-  // and /register (the router can't reconcile the removed element).
-  if (pathname === "/login" || pathname === "/register") {
-    return <div className="hidden" aria-hidden="true" />;
-  }
+  const isSeller = user?.role === "SELLER";
+
+  // Keep the <nav> ALWAYS mounted (never return null / never swap shape below
+  // the route) because Next.js App Router client-side navigation to /login
+  // and /register crashes ("This page couldn't load") when the navbar
+  // unmounts or changes during the transition. On auth pages the split-panel
+  // already brands itself, so we hide the nav via CSS only (inert, visual
+  // none) — it stays in the tree but isn't seen.
+  const isAuthPage = pathname === "/login" || pathname === "/register";
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -45,8 +45,6 @@ export default function Navbar() {
     router.push("/");
   };
 
-  const isSeller = user?.role === "SELLER";
-
   const navLinks = isSeller
     ? [
         { href: "/explore", label: "Explore" },
@@ -62,7 +60,7 @@ export default function Navbar() {
       ];
 
   return (
-    <nav className="glass-nav sticky top-0 z-50 h-16">
+    <nav className={`glass-nav sticky top-0 z-50 h-16 ${isAuthPage ? "hidden" : ""}`}>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5">
