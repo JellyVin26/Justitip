@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${inter.variable} bg-zinc-950 font-sans antialiased`}>
         <AuthProvider>
           <Navbar />
-          <main className="min-h-screen pt-16">
+          <main className="min-h-screen">
             {children}
           </main>
         </AuthProvider>
